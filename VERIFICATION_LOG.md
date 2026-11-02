@@ -191,3 +191,36 @@ Manual checks:
 - Expert panel: not required at this gate (guide A7).
 AUTOMATIC CHECKS: ALL PASSED
 RESULT: PASSED
+
+## GATE 6: Grid join | run 1 | 2026-11-02 18:45
+### verify_zonal.R: PASS
+```
+|---------|---------|---------|---------|
+=========================================
+                                          
+cells: 61458 
+Warning message:
+In .local(x, y, ...) :
+  Polygons transformed to raster CRS (EPSG: 3035) . To avoid on-the-fly coordinate transformation, ensure that st_crs() returns the same result for both raster and polygon inputs.
+```
+### verify_zonal.py: PASS
+```
+lst_anom: compared 61195, max |diff| 0.000001 (tolerance 0.01), cells above tolerance 0, presence differs 0
+lst_cover_share: compared 61458, max |diff| 0.000000 (tolerance 0.001), cells above tolerance 0, presence differs 0
+tree_cover: compared 61458, max |diff| 0.000008 (tolerance 0.1), cells above tolerance 0, presence differs 0
+imperviousness: compared 61458, max |diff| 0.000004 (tolerance 0.1), cells above tolerance 0, presence differs 0
+elevation: compared 61458, max |diff| 0.000032 (tolerance 0.01), cells above tolerance 0, presence differs 0
+rasterstats (pixel centres) vs exactextract (exact shares), cells passing rule 4: mean |diff| 0.077 C, 90th percentile 0.176 C, max 0.881 C
+rows: 61458; passing rules 1 to 4: 51409; Model A sample: 12609
+RESULT: PASSED
+```
+Manual checks:
+- [x] Entry gate: Gate 5 PASSED.
+- [x] Python exactextract vs R exactextractr (cells rebuilt from IDs in R): within tolerance for every cell (max |diff| LST 0.000001 C, coverage share 0.000000, tree cover 0.000008, imperviousness 0.000004 percentage points, elevation 0.000032 m). rasterstats (pixel-centre method) differs by 0.077 C on average (max 0.881 C): reported. Planted error (+0.5 point in one R tree value): FAILED as expected, restored, PASSED.
+- [x] Row count = inhabited cells of the 11 cities (61,458). Exclusions table by reason (`05_analysis/results/step6_exclusions.csv`): rule 2 -9,739; rule 3 -8; rule 4 -302; passing rules 1 to 4: 51,409; covariates missing 0; Model A sample 12,609.
+- [x] No-data code 255 of the Copernicus layers: 0 cells touched (column max checked).
+- [x] No relationship between heat and social variables was computed (only per-variable summaries of the Model A sample, logged in the notebook as a description of the sample).
+- [x] LEARNING_NOTEBOOK.md chapter for Step 6 written (worked example: (2 x 1.0 + 4 x 0.5 + 6 x 0.25) / 1.75 = 3.14 C).
+- Expert panel: not required at this gate (guide A7: Steps 2 to 6 are reviewed at Gate 7).
+AUTOMATIC CHECKS: ALL PASSED
+RESULT: PASSED

@@ -1,0 +1,12 @@
+step,cells
+inhabited cells in the 11 cities (rule 1),61458
+removed: population < 10 (rule 2),9739
+removed: >= 50% permanent water (rule 3),8
+removed: < 70% of area with LST composite (rule 4),302
+cells passing rules 1 to 4,51409
+"  of which rent usable (present, not bracketed)",43029
+"  of which foreign usable (present, not bracketed)",34940
+"  of which age65 usable (present, not bracketed)",32179
+"  of which under18 usable (present, not bracketed)",27452
+removed: a covariate missing,0
+Model A sample (rule 5: all four social variables usable),12609
