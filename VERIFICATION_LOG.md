@@ -68,6 +68,10 @@ Manual checks:
 - [x] Facts used in the plan checked by code in this session: ST scale/offset and valid range (USGS guide Table 6-1, printed p. 12); scene centre times and paths (Earth Engine metadata); DWD "Sommertag" >= 25 C (DWD glossary); dense inverse in spreg ML variance step (source ml_error.py); hard_bound and lambda bounds (spreg utils.py); GM_Lag options; WCS NW DGM service answers; all 11 DOIs re-read on Crossref.
 - [x] Knowledge disclosure (Q8, Q18): no census value and no temperature value has been opened; only description files, metadata, footprints and fill bits.
 - [x] LEARNING_NOTEBOOK.md chapter for Step 1 written; arithmetic checked by code (44,947 -> 302.63 K -> 29.48 C; range 150.0 to 359.0 K; Holm example; bootstrap p example 0.013).
-- [ ] PENDING [MARIA]: reads and approves `00_protocol/preregistration.md`, then registers it on OSF; link and date to be written here. No join of social and heat data before this.
+- [x] [MARIA] approved `00_protocol/preregistration.md` (draft 6, with the 11 cities) in the chat on 2026-11-02: "J'approuve".
+- [x] OSF project https://osf.io/b3t8d/ (created 2026-11-02, private). Files uploaded: preregistration.md (OSF SHA-256 equals local 5819827ab3b654631fd492e1b83e5215b62b30786b799a70d771feaf9f9be2cb) and 00_setup/NOVELTY_REPORT.md.
+- [x] Registration form "Secondary Data Preregistration" filled from the approved file by script; read back from the OSF API: 24 of 24 fields identical (after undoing OSF's HTML escaping of <, > and &). Subjects (5), tags (9), licence CC BY 4.0.
+- [x] [MARIA] clicked Register: registration https://osf.io/cmxs2/, date_registered 2026-11-02T13:14:19 UTC; read back from the API after registration: 24 of 24 fields identical, archiving finished.
+- [ ] PENDING: OSF admin approval (email "Pending Registration - Admin Notification", 2026-11-02 13:14 UTC; approve by the link, or automatic after 48 hours from midnight EDT). Gate passes when the registration is public.
 AUTOMATIC CHECKS: ALL PASSED
-RESULT: PENDING (waiting for Maria's approval and the OSF registration)
+RESULT: PENDING (registration submitted, waiting for OSF approval and public status)
