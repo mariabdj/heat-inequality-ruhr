@@ -72,6 +72,7 @@ Manual checks:
 - [x] OSF project https://osf.io/b3t8d/ (created 2026-11-02, private). Files uploaded: preregistration.md (OSF SHA-256 equals local 5819827ab3b654631fd492e1b83e5215b62b30786b799a70d771feaf9f9be2cb) and 00_setup/NOVELTY_REPORT.md.
 - [x] Registration form "Secondary Data Preregistration" filled from the approved file by script; read back from the OSF API: 24 of 24 fields identical (after undoing OSF's HTML escaping of <, > and &). Subjects (5), tags (9), licence CC BY 4.0.
 - [x] [MARIA] clicked Register: registration https://osf.io/cmxs2/, date_registered 2026-11-02T13:14:19 UTC; read back from the API after registration: 24 of 24 fields identical, archiving finished.
-- [ ] PENDING: OSF admin approval (email "Pending Registration - Admin Notification", 2026-11-02 13:14 UTC; approve by the link, or automatic after 48 hours from midnight EDT). Gate passes when the registration is public.
+- [x] [MARIA] approved the registration from the OSF email ("C'est approuvé", 2026-11-02). Checked from the OSF API: public = true, pending approval = false, anonymous (logged-out) request returns 200, identifier doi:10.17605/OSF.IO/CMXS2.
+- OSF registration: https://osf.io/cmxs2/ , DOI https://doi.org/10.17605/OSF.IO/CMXS2 , registered 2026-11-02 13:14 UTC.
 AUTOMATIC CHECKS: ALL PASSED
-RESULT: PENDING (registration submitted, waiting for OSF approval and public status)
+RESULT: PASSED

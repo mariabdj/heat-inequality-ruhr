@@ -2,7 +2,7 @@
 
 Maria Boudjelal, independent researcher, Algiers, Algeria (ORCID 0009-0002-6434-784X)
 
-Status (November 2026): set-up and novelty check. The analysis plan will be preregistered on OSF before any heat and census data are combined.
+Status (November 2026): analysis plan preregistered on OSF before any data were opened: https://osf.io/cmxs2/ (DOI: https://doi.org/10.17605/OSF.IO/CMXS2), registered 2 November 2026.
 
 **Question.** In the Ruhr (Germany), are the 100 m census grid cells with lower rents, more foreign residents, more older people or more children hotter on summer days, as measured by Landsat land surface temperature, and how much of that gap goes with tree cover and sealed surfaces?
 
