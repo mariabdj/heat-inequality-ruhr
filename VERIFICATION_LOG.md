@@ -131,3 +131,39 @@ Manual checks:
 - Expert panel: not required at this gate (guide A7).
 AUTOMATIC CHECKS: ALL PASSED
 RESULT: PASSED
+
+## Step 4 decision record (before any temperature was converted) | 2026-11-02
+- Hot-day rule fixed in `01_data/data_register.csv` before the station data were downloaded: TXK >= 25.0 C, QN_4 in {2, 3, 5, 7, 8, 9, 10}. Station 01303: 736 June-August days 2018-2025, 0 missing, all QN_4 = 9, 268 hot days.
+- Stage 1 (flags only) first run discarded: the city outlines had been sent to Earth Engine in UTM coordinates, which Earth Engine reads as longitude/latitude, so the city mask was wrong (4.75 million core pixels). Files kept in `02_lst/discarded/`. No temperature was involved.
+- Stage 1 rerun: city pixels 1,878,332 (1,690.5 km2 vs VG250 1,681.3 km2); reference domain 1,840,185 pixels; core reference domain 1,759,285 (95.6%). 115 candidate scenes, 17 used (>= 80% valid core pixels), 16 hot-day and used.
+- Q23 check: 0.6% of the 51,711 cells have < 70% of their area covered by pixels with >= 5 valid hot-day observations (threshold 30%): hot-day rule kept, no fallback.
+
+## GATE 4: Land surface temperature | run 1 | 2026-11-02 17:29
+### verify_data_register.py: PASS
+```
+files on disk: 13; registered: 13
+RESULT: PASSED
+```
+### verify_lst_pixels.py: PASS
+```
+(a) scene 1_LC08_196024_20190629: 20 pixels, valid 20, validity agrees: True, max |diff| 0.00000 C (example DN 48526 -> 41.713 C)
+(a) scene 1_LC08_197024_20190823: 20 pixels, valid 19, validity agrees: True, max |diff| 0.00000 C (example DN 44400 -> 27.610 C)
+(a) scene 2_LC09_197024_20250815: 20 pixels, valid 19, validity agrees: True, max |diff| 0.00000 C (example DN 45856 -> 32.587 C)
+(b) scene 1_LC08_196024_20190629: 1739364 valid core pixels, numpy median 38.4555 C, pipeline median 38.4555 C, |diff| 0.0000
+(b) scene 1_LC08_197024_20190823: 1693538 valid core pixels, numpy median 31.8279 C, pipeline median 31.8279 C, |diff| 0.0000
+(b) scene 2_LC09_197024_20250815: 1503645 valid core pixels, numpy median 33.8070 C, pipeline median 33.8070 C, |diff| 0.0000
+(c) 20 composite pixels recomputed from 16 scenes: max |diff| 0.00000 C
+RESULT: PASSED
+```
+Manual checks:
+- [x] Entry gate: Gate 3 PASSED. Q23 decision logged above before any temperature was converted (hot-day rule kept, 0.6% < 30%).
+- [x] Independent check (guide: at least 3 scenes x 20 pixels from raw DN, within 0.01 C): 3 scenes x 20 pixels, max |diff| 0.00000 C, validity identical. Also exact medians (3 scenes, |diff| 0.0000 C) and 20 composite pixels recomputed from all 16 scenes (|diff| 0.00000 C, same observation counts).
+- [x] Two pipeline errors found by this check and fixed before any use, failed runs kept in `02_lst/discarded/`: (1) Earth Engine median is histogram-based (0.045 to 0.114 C off): medians now exact, computed locally with numpy on the downloaded scenes; (2) download outside a scene footprint returned 0 (unmask without sameFootprint=False), counted as observations at 0 C at the edges: fixed, composite recomputed. Same definitions as the preregistration (Q12.5, Q12.6); no deviation.
+- [x] Valid observations per pixel mapped (`05_analysis/results/figures/step4_lst_and_obs.png`); composite pixels with >= 5 observations: 5,620,452 (whole download rectangle).
+- [x] Scene balance reported (Q12.6): 16 hot-day scenes; Landsat 8: 9, Landsat 9: 7; path 196: 8, path 197: 8; years 2018: 2, 2019: 2, 2021: 1, 2023: 4, 2024: 3, 2025: 3 (none from 2020 and 2022). S14 covers the year imbalance.
+- [x] Visual check against the LANUK day map (typical summer day, averaged to our grid): same broad hot and cool areas (`05_analysis/results/figures/step4_lanuk_comparison.png`); Spearman correlation over 1,745,112 core pixels: 0.637.
+- [x] Note: the 80% scene rule used Earth Engine pixel sums that weight pixels cut by the region rectangle; the same weights enter numerator and denominator.
+- [x] LEARNING_NOTEBOOK.md chapter for Step 4 written; its arithmetic checked by code (48,526 -> 41.7128 C; anomaly +3.257 C; 45,750 -> 32.2244 C).
+- Expert panel: not required at this gate (guide A7: reviewed at Gate 7).
+AUTOMATIC CHECKS: ALL PASSED
+RESULT: PASSED
