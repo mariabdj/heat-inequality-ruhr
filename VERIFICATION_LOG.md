@@ -104,3 +104,30 @@ Manual checks:
 - Expert panel: not required at this gate (guide A7: internal step, reviewed at Gate 7).
 AUTOMATIC CHECKS: ALL PASSED
 RESULT: PASSED
+
+## GATE 3: Census data | run 1 | 2026-11-02 16:17
+### verify_data_register.py: PASS
+```
+files on disk: 8; registered: 8
+RESULT: PASSED
+```
+### verify_census_parse.py: PASS
+```
+official rent versions (2025 file we use vs 2024 file): cells differing 683, max |diff| 0.0100 EUR
+rent: both 45613, max |diff| 0.0000, values > 0.005 apart 0; official dash with no z22 value 0; other presence differences 0
+foreign: both 32742, max |diff| 0.0000, values > 0.005 apart 0; official dash with no z22 value 28716; other presence differences 0
+age65: both 50642, max |diff| 0.0000, values > 0.005 apart 0; official dash with no z22 value 10816; other presence differences 0
+under18: both 45499, max |diff| 0.0000, values > 0.005 apart 0; official dash with no z22 value 15959; other presence differences 0
+RESULT: PASSED
+```
+Manual checks:
+- [x] Entry gate: Gate 2 PASSED (2026-11-02).
+- [x] Python reader vs R z22: identical for every study-area cell (0 differences above 0.005) once both read the same file. Explained differences: (a) official dash ('–') = z22 no value (28,716 / 10,816 / 15,959 cells for foreign / 65+ / under 18); (b) z22 reads the rent-only file (Version 2, 30.09.2024), we read the preregistered rent + dwellings file (Version 2, 08.07.2025): the two official versions differ by exactly 0.01 EUR in 683 cells. Found by investigation (rent-only file downloaded and registered as "check only"); the comparison was changed to the same source, the tolerance (0.005) was not changed.
+- [x] Missingness table per variable and city (`05_analysis/results/step3_missingness.csv`): usable (present and not bracketed) among 51,711 cells: rent 43,283 (83.7%; 7,890 absent, 538 bracketed), foreign 35,152 (68.0%), 65+ 32,371 (62.6%), under 18 27,614 (53.4%); all four usable: 12,692.
+- [x] Distributions plotted per variable (`05_analysis/results/figures/step3_distributions.png`); no relationship with heat computed or looked at (no heat data exist yet).
+- [x] Observation (no change to the plan): bracketed shares are mostly small non-zero shares from small cells (median population 31 vs 66 for usable 65+ shares). Primary analysis stays as registered (brackets = missing); S1 (brackets included) will be reported with the same prominence in the discussion.
+- [x] Flags: only "" and "KLAMMERN" occur (script asserts no other flag); rent file has one flag column for rent and number of dwellings, applied to rent.
+- [x] LEARNING_NOTEBOOK.md chapter for Step 3 written.
+- Expert panel: not required at this gate (guide A7).
+AUTOMATIC CHECKS: ALL PASSED
+RESULT: PASSED
