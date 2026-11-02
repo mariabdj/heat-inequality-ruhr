@@ -1,0 +1,31 @@
+query_id,source,query,date,total_hits_reported,records_saved,raw_file
+Q01,OpenAlex,land surface temperature Ruhr,2026-11-02,3187,200,novelty_search/raw/Q01_openalex.json
+Q01,Crossref,land surface temperature Ruhr,2026-11-02,2800019,200,novelty_search/raw/Q01_crossref.json
+Q02,OpenAlex,urban heat social inequality Ruhr,2026-11-02,512,200,novelty_search/raw/Q02_openalex.json
+Q02,Crossref,urban heat social inequality Ruhr,2026-11-02,4869274,200,novelty_search/raw/Q02_crossref.json
+Q03,OpenAlex,heat exposure environmental justice Germany,2026-11-02,16653,200,novelty_search/raw/Q03_openalex.json
+Q03,Crossref,heat exposure environmental justice Germany,2026-11-02,3856121,200,novelty_search/raw/Q03_crossref.json
+Q04,OpenAlex,land surface temperature census grid Germany,2026-11-02,7486,200,novelty_search/raw/Q04_openalex.json
+Q04,Crossref,land surface temperature census grid Germany,2026-11-02,3272578,200,novelty_search/raw/Q04_crossref.json
+Q05,OpenAlex,land surface temperature Zensus 2022,2026-11-02,56,56,novelty_search/raw/Q05_openalex.json
+Q05,Crossref,land surface temperature Zensus 2022,2026-11-02,11702287,200,novelty_search/raw/Q05_crossref.json
+Q06,OpenAlex,heat vulnerability migration background Germany city,2026-11-02,13668,200,novelty_search/raw/Q06_openalex.json
+Q06,Crossref,heat vulnerability migration background Germany city,2026-11-02,2106997,200,novelty_search/raw/Q06_crossref.json
+Q07,OpenAlex,urban heat island socioeconomic Dortmund,2026-11-02,161,161,novelty_search/raw/Q07_openalex.json
+Q07,Crossref,urban heat island socioeconomic Dortmund,2026-11-02,1751948,200,novelty_search/raw/Q07_crossref.json
+Q08,OpenAlex,urban heat island Bochum,2026-11-02,609,200,novelty_search/raw/Q08_openalex.json
+Q08,Crossref,urban heat island Bochum,2026-11-02,1686478,200,novelty_search/raw/Q08_crossref.json
+Q09,OpenAlex,urban heat Essen Duisburg Gelsenkirchen,2026-11-02,34,34,novelty_search/raw/Q09_openalex.json
+Q09,Crossref,urban heat Essen Duisburg Gelsenkirchen,2026-11-02,1523106,200,novelty_search/raw/Q09_crossref.json
+Q10,OpenAlex,heat inequality rent foreigners Germany,2026-11-02,1302,200,novelty_search/raw/Q10_openalex.json
+Q10,Crossref,heat inequality rent foreigners Germany,2026-11-02,1100189,200,novelty_search/raw/Q10_crossref.json
+Q11,OpenAlex,Hitze soziale Ungleichheit Ruhrgebiet,2026-11-02,24,24,novelty_search/raw/Q11_openalex.json
+Q11,Crossref,Hitze soziale Ungleichheit Ruhrgebiet,2026-11-02,58348,200,novelty_search/raw/Q11_crossref.json
+Q12,OpenAlex,Umweltgerechtigkeit Hitze Stadt,2026-11-02,62,62,novelty_search/raw/Q12_openalex.json
+Q12,Crossref,Umweltgerechtigkeit Hitze Stadt,2026-11-02,25599,200,novelty_search/raw/Q12_crossref.json
+Q13,OpenAlex,Hitzebelastung Sozialstruktur Stadtteile,2026-11-02,5,5,novelty_search/raw/Q13_openalex.json
+Q13,Crossref,Hitzebelastung Sozialstruktur Stadtteile,2026-11-02,1406,200,novelty_search/raw/Q13_crossref.json
+Q14,OpenAlex,land surface temperature spatial regression neighbourhood deprivation Europe,2026-11-02,527,200,novelty_search/raw/Q14_openalex.json
+Q14,Crossref,land surface temperature spatial regression neighbourhood deprivation Europe,2026-11-02,4137287,200,novelty_search/raw/Q14_crossref.json
+Q15,OpenAlex,multiscale geographically weighted regression land surface temperature social,2026-11-02,2144,200,novelty_search/raw/Q15_openalex.json
+Q15,Crossref,multiscale geographically weighted regression land surface temperature social,2026-11-02,6428590,200,novelty_search/raw/Q15_crossref.json

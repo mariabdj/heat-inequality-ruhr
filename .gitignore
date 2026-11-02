@@ -1,0 +1,27 @@
+# Papers, manuals and handbooks: cite them, do not redistribute
+Documentation/
+
+# Python environment
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Raw and large data: registered in 01_data/data_register.csv, archived on OSF if allowed by the licence
+01_data/raw/
+01_data/processed/
+02_lst/exports/
+03_covariates/raw/
+04_grid_join/*.parquet
+*.tif
+*.gpkg
+
+# Raw search answers (large JSON)
+00_setup/novelty_search/raw/
+
+# R clutter
+.Rhistory
+.RData
+
+# Third-party reports kept for reading only
+00_setup/novelty_search/closest/

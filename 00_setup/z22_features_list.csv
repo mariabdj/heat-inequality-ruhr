@@ -1,0 +1,56 @@
+"theme","feature","english","german","z22","z11_100m","z11_1km","has_cat"
+"Population","population","Population","Bevölkerung",TRUE,TRUE,TRUE,FALSE
+"Population","citizens","Number of german citizens, 18 or older","Deutsche Staatsangehörige ab 18 Jahren",TRUE,FALSE,FALSE,FALSE
+"Population","foreigners","Share of foreigners","Ausländeranteil",TRUE,FALSE,TRUE,FALSE
+"Population","foreigners_from_18","Share of foreigners, 18 or older","Ausländeranteil ab 18 Jahren",TRUE,FALSE,FALSE,FALSE
+"Population","birth_country","Country of birth (groups)","Geburtsland (Gruppen)",TRUE,TRUE,FALSE,TRUE
+"Population","sex","Sex","Geschlecht",FALSE,TRUE,FALSE,TRUE
+"Population","women","Share of women","Frauenanteil",FALSE,FALSE,TRUE,FALSE
+"Population","religion","Religion","Religion",FALSE,TRUE,FALSE,TRUE
+"Population","citizenship","Citizenship","Staatsangehörigkeit",TRUE,TRUE,FALSE,TRUE
+"Population","citizenship_group","Citizenship (groups)","Staatsangehörigkeit (Gruppen)",TRUE,TRUE,FALSE,TRUE
+"Population","citizenship_origin","Citizenship by selected countries","Staatsangehörigkeit nach ausgewählten Ländern",FALSE,TRUE,FALSE,TRUE
+"Population","citizenship_total","Number of citizenships","Anzahl Staatsangehörigkeiten",FALSE,TRUE,FALSE,TRUE
+"Population","age_avg","Average age","Durchschnittsalter",TRUE,FALSE,TRUE,FALSE
+"Population","age_short","Age (five classes of years)","Alter in 5 Altersklassen",TRUE,TRUE,FALSE,TRUE
+"Population","age_long","Age (ten years age groups)","Alter in 10er-Jahresgruppen",TRUE,TRUE,FALSE,TRUE
+"Population","age_under_18","Share of people under 18","Anteil er unter 18-Jährigen",TRUE,FALSE,TRUE,FALSE
+"Population","age_from_65","Share of people 65 or older","Anteil der ab 65-Jährigen",TRUE,FALSE,TRUE,FALSE
+"Population","marital_status","Marital status","Familienstand",TRUE,TRUE,FALSE,TRUE
+"Families","families","Total number of families","Gesamtzahl der Familien",TRUE,TRUE,FALSE,FALSE
+"Families","family_type","Type of core family (by children)","Typ der Kernfamilie (nach Kindern)",TRUE,TRUE,FALSE,TRUE
+"Families","family_size","Size of core family","Größe der Kernfamilie",FALSE,TRUE,FALSE,TRUE
+"Households","households","Total number of private households","Gesamtzahl der Privathaushalte",TRUE,TRUE,FALSE,FALSE
+"Households","household_family","Private households by family types","Typ des privaten Haushalts (nach Familien)",FALSE,TRUE,FALSE,TRUE
+"Households","household_lifestyle","Private households by lifestyle","Typ des privaten Haushalts (nach Lebensform)",FALSE,TRUE,FALSE,TRUE
+"Households","household_senior","Private households by senior status","Seniorenstatus eines privaten Haushalts",FALSE,TRUE,FALSE,TRUE
+"Households","household_size_avg","Average household size","Durchschnittliche Haushaltsgröße",TRUE,FALSE,TRUE,FALSE
+"Households","household_size_group","Household size (groups)","Größe des privaten Haushalts",TRUE,TRUE,FALSE,TRUE
+"Dwellings","dwellings","Total number of dwellings","Gesamtzahl der Wohnungen",TRUE,TRUE,FALSE,FALSE
+"Dwellings","rent_avg","Average net cold rent","Durchschnittliche Nettokaltmiete",TRUE,FALSE,FALSE,FALSE
+"Dwellings","dwelling_occupancy","Use by household occupancy","Nutzung nach Belegung durch Haushalte",FALSE,TRUE,FALSE,TRUE
+"Dwellings","dwelling_ownership_home","Ownership of the dwelling","Eigentumsverhältnisse der Wohnung",FALSE,TRUE,FALSE,TRUE
+"Dwellings","dwelling_ownership_property","Dwellings by form of ownership","Wohnungen nach Eigentumsform des Gebäudes",FALSE,TRUE,FALSE,TRUE
+"Dwellings","owner_occupier","Share of owner occupiers","Eigentümerquote",TRUE,FALSE,FALSE,FALSE
+"Dwellings","vacancies","Share of vacancies","Leerstandsquote",TRUE,FALSE,TRUE,FALSE
+"Dwellings","market_vacancies","Share of market active vacancies","Marktaktive Leerstandsquote",TRUE,FALSE,FALSE,FALSE
+"Dwellings","inhabitant_space","Average living space per inhabitant","Durchschnittliche Wohnfläche je Bewohner",TRUE,FALSE,TRUE,FALSE
+"Dwellings","dwelling_space","Average living space per dwelling","Durchschnittliche Wohnfläche je Wohnung",TRUE,FALSE,TRUE,FALSE
+"Dwellings","floor_space","Floor space of the dwelling (10m² intervals)","Fläche der Wohnung (10m²-Intervalle)",TRUE,TRUE,FALSE,TRUE
+"Dwellings","dwelling_rooms","Dwellings by number of rooms","Wohnungen nach Zahl der Räume",TRUE,TRUE,FALSE,TRUE
+"Dwellings","dwelling_constr_year","Dwellings by construction year (microcensus classes)","Wohnungen nach Baujahr (in Mikrozensus-Klassen)",FALSE,TRUE,FALSE,TRUE
+"Dwellings","dwelling_building_dwellings","Dwellings by number of dwellings in the building","Wohnungen nach Anzahl der Wohnungen im Gebäude",FALSE,TRUE,FALSE,FALSE
+"Dwellings","dwelling_building_size","Dwellings by building type and size","Wohnungen nach Gebäudetyp (Größe)",TRUE,TRUE,FALSE,TRUE
+"Dwellings","dwelling_building_type","Dwellings by residential usage type","Wohnungen nach Art des Gebäudes",FALSE,TRUE,FALSE,TRUE
+"Dwellings","dwelling_building_design","Dwelling by building design","Wohnungen nach Gebäudetyp (Bauweise)",FALSE,TRUE,FALSE,TRUE
+"Dwellings","dwelling_heat_type","Dwellings by predominant heating type","Wohnungen nach überwiegender Heizungsart",TRUE,TRUE,FALSE,TRUE
+"Dwellings","dwelling_heat_src","Dwellings by energy source of heating","Wohnungen nach Energieträger der Heizung",TRUE,FALSE,FALSE,TRUE
+"Buildings","buildings","Total number of buildings","Gesamtzahl der Gebäude",TRUE,TRUE,FALSE,FALSE
+"Buildings","building_ownership_property","Buildings by form of ownership","Gebäude nach Eigentumsform des Gebäudes",FALSE,TRUE,FALSE,TRUE
+"Buildings","building_constr_year","Buildings by construction year (microcensus classes)","Gebäude nach Baujahr (in Mikrozensus-Klassen)",TRUE,TRUE,FALSE,TRUE
+"Buildings","building_dwellings","Residential buildings by number of dwellings in the building","Gebäude mit Wohnraum nach Anzahl der Wohnungen im Gebäude",TRUE,TRUE,FALSE,TRUE
+"Buildings","building_size","Residential buildings by building type and size","Gebäude mit Wohnraum nach Gebäudetyp (Größe)",TRUE,TRUE,FALSE,TRUE
+"Buildings","building_type","Buildings by residential usage type","Gebäude nach Art des Gebäudes",FALSE,TRUE,FALSE,TRUE
+"Buildings","building_design","Buildings by building design","Gebäude nach Gebäudetyp (Bauweise)",FALSE,TRUE,FALSE,TRUE
+"Buildings","building_heat_type","Buildings by predominant heating type","Gebäude nach überwiegender Heizungsart",TRUE,TRUE,FALSE,TRUE
+"Buildings","building_heat_src","Buildings by energy source of heating","Gebäude nach Energieträger der Heizung",TRUE,FALSE,FALSE,TRUE
