@@ -54,3 +54,20 @@ Manual checks:
 - [x] [MARIA] confirmed the question and the angle in the chat on 2026-11-02: "Oui, je confirme".
 AUTOMATIC CHECKS: ALL PASSED
 RESULT: PASSED
+
+## GATE 1: Preregistration | run 1 | 2026-11-02 14:05
+### verify_prereg.py: PASS
+```
+template questions checked: 25; census columns checked: 11; census files checked: 5
+RESULT: PASSED
+```
+Manual checks:
+- [x] Expert panel (guide A7, Part G roles for Gate 1: environmental epidemiologist, remote-sensing scientist, spatial econometrician): 6 rounds; 82 findings, each with its action in `00_protocol/expert_panel_log.md`; round 6: all three "No further problems".
+- [x] Every template item answered: Q1 to Q25 each present once (verify_prereg.py) and each matched to the van den Akker et al. (2021) question wording read from the template PDF.
+- [x] Every census variable exists with its exact column name: 11 backticked names checked against the 6 official description files; planted typo test (`AnteilUnter_18`) gave FAILED, file restored.
+- [x] Facts used in the plan checked by code in this session: ST scale/offset and valid range (USGS guide Table 6-1, printed p. 12); scene centre times and paths (Earth Engine metadata); DWD "Sommertag" >= 25 C (DWD glossary); dense inverse in spreg ML variance step (source ml_error.py); hard_bound and lambda bounds (spreg utils.py); GM_Lag options; WCS NW DGM service answers; all 11 DOIs re-read on Crossref.
+- [x] Knowledge disclosure (Q8, Q18): no census value and no temperature value has been opened; only description files, metadata, footprints and fill bits.
+- [x] LEARNING_NOTEBOOK.md chapter for Step 1 written; arithmetic checked by code (44,947 -> 302.63 K -> 29.48 C; range 150.0 to 359.0 K; Holm example; bootstrap p example 0.013).
+- [ ] PENDING [MARIA]: reads and approves `00_protocol/preregistration.md`, then registers it on OSF; link and date to be written here. No join of social and heat data before this.
+AUTOMATIC CHECKS: ALL PASSED
+RESULT: PENDING (waiting for Maria's approval and the OSF registration)
