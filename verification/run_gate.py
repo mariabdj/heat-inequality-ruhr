@@ -13,7 +13,8 @@ NAMES = {0: "Set-up and novelty", 1: "Preregistration", 2: "Study area and grid"
 # scripts are added to a gate when the step that needs them is built (guide, Part D)
 GATES = {
     0: [[PY, V / "verify_structure.py"], [PY, V / "verify_novelty_log.py"]],
-    1: [[PY, V / "verify_prereg.py"]], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [],
+    1: [[PY, V / "verify_prereg.py"]],
+    2: [[PY, V / "verify_data_register.py"], [PY, V / "verify_grid.py"]], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [],
     9: [[PY, V / "verify_public_release.py"]],
 }
 

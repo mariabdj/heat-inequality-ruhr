@@ -76,3 +76,31 @@ Manual checks:
 - OSF registration: https://osf.io/cmxs2/ , DOI https://doi.org/10.17605/OSF.IO/CMXS2 , registered 2026-11-02 13:14 UTC.
 AUTOMATIC CHECKS: ALL PASSED
 RESULT: PASSED
+
+## GATE 2: Study area and grid | run 1 | 2026-11-02 14:34
+### verify_data_register.py: PASS
+```
+files on disk: 3; registered: 3
+RESULT: PASSED
+```
+### verify_grid.py: PASS
+```
+1. cells checked: 61458; not in BKG grid: 0; max corner diff: 0, 0 m; max centre diff: 0, 0 m
+2. city differs from BKG municipality key: 269 cells (0.44%); by our city: {'Oberhausen': 50, 'Duisburg': 45, 'Dortmund': 37, 'Gelsenkirchen': 31, 'Bochum': 28, 'Essen': 23, 'Mülheim an der Ruhr': 16, 'Herne': 15, 'Hamm': 15, 'Hagen': 7, 'Bottrop': 2}
+3. BKG cells with centre in the 11 cities: 168177 -> 1681.8 km2; VG250 area: 1682.0 km2; diff 0.013%
+4. counts recomputed for 11 cities; total rule 3 cells: 51711
+RESULT: PASSED
+```
+Manual checks:
+- [x] Entry gate: Gate 1 PASSED (OSF https://osf.io/cmxs2/, 2026-11-02).
+- [x] Self-built cells vs BKG GeoGitter: all 61,458 inhabited cells of the 11 cities checked (guide asks for at least 1,000): 0 not found, corner and centre differences 0 m. Cell ID vs centre columns of the census file: 0 mismatches in 3,088,037 cells.
+- [x] Cells per city logged (`01_data/processed/step2_counts.csv`): rule 1 61,458; rule 2 51,719; rule 3 51,711 (3,261,441 inhabitants). Counted before any other census value or any heat value was opened (Q13).
+- [x] Study-area check: 168,177 BKG cells x 0.01 km2 = 1,681.8 km2 vs VG250 1,682.0 km2 (0.013%).
+- [x] City assignment differs from the BKG municipality key (VG25, 2019) for 269 cells (0.44%), all on city borders; the preregistered rule (centre in VG250 2026) is applied as written. (In the output above, "Mülheim" is shown with a broken character by the log encoding; the data are correct.)
+- [x] Every raw file registered with SHA-256 (verify_data_register.py). Planted-error test of verify_grid.py (one count changed): FAILED as expected, restored, PASSED.
+- [x] Deviation D1 logged before use (population column `Einwohner` instead of `Bevoelkerungszahl`, naming only).
+- [x] Rule 3 water share: Earth Engine ESA/WorldCover/v200, Map == 80, area-weighted mean at 10 m over each cell rectangle in EPSG:3035; values for all 51,719 cells passing rule 2 (0 missing).
+- [x] LEARNING_NOTEBOOK.md chapter for Step 2 written; its numbers recomputed by code (61,458 - 51,719 = 9,739; 51,719 - 51,711 = 8; 3,312,842 - 3,261,441 = 51,401).
+- Expert panel: not required at this gate (guide A7: internal step, reviewed at Gate 7).
+AUTOMATIC CHECKS: ALL PASSED
+RESULT: PASSED
