@@ -16,7 +16,8 @@ GATES = {
     1: [[PY, V / "verify_prereg.py"]],
     2: [[PY, V / "verify_data_register.py"], [PY, V / "verify_grid.py"]],
     3: [[PY, V / "verify_data_register.py"], [PY, V / "verify_census_parse.py"]],
-    4: [[PY, V / "verify_data_register.py"], [PY, V / "verify_lst_pixels.py"]], 5: [], 6: [], 7: [], 8: [],
+    4: [[PY, V / "verify_data_register.py"], [PY, V / "verify_lst_pixels.py"]],
+    5: [[PY, V / "verify_data_register.py"], [PY, V / "verify_covariates.py"]], 6: [], 7: [], 8: [],
     9: [[PY, V / "verify_public_release.py"]],
 }
 

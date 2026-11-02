@@ -167,3 +167,27 @@ Manual checks:
 - Expert panel: not required at this gate (guide A7: reviewed at Gate 7).
 AUTOMATIC CHECKS: ALL PASSED
 RESULT: PASSED
+
+## GATE 5: Covariates | run 1 | 2026-11-02 18:16
+### verify_data_register.py: PASS
+```
+files on disk: 18; registered: 18
+RESULT: PASSED
+```
+### verify_covariates.py: PASS
+```
+tree_cover_2022: files 1; cells 51711; missing or out of range 0; range 0.0 to 99.0
+imperviousness_2021: files 2; cells 51711; missing or out of range 0; range 0.0 to 100.0
+elevation_dgm: files 1; cells 51711; missing or out of range 0; range 14.8 to 406.3
+RESULT: PASSED
+```
+Manual checks:
+- [x] Entry gate: Gate 4 PASSED.
+- [x] Each layer registered with version, licence and SHA-256 (18 files, verify_data_register.py): Copernicus tree cover density 10 m reference year 2022 (preregistered year; 2018 to 2024 offered), imperviousness density 10 m 2021 (V01 R02, tiles E40N31 and E41N31), CLMS job 7188 archive; NRW terrain model (WCS NW DGM, 77 tiles, 10 m, dl-de/zero-2-0).
+- [x] Reprojection logged: tree cover and imperviousness delivered in EPSG:3035 (same as the cells): no reprojection. Terrain model in EPSG:25832: the raster is not resampled by us; cell polygons will be reprojected to EPSG:25832 for zonal statistics (Step 6). The 1 m to 10 m resampling of the terrain model was done by the NRW service (method not documented in the capabilities; elevation varies slowly at 100 m).
+- [x] Coverage: 0 of 51,711 cells without a valid value in any layer (verify_covariates.py). Special value 255 (no data, from the legend file clms_hrlvlcc_tcd_r10m.clr): 0 pixels inside the 11 cities for both Copernicus layers (16.8 million pixels each); Step 6 will still treat values above 100 as missing.
+- [x] Terrain model plausibility: 14.8 m (Rhine plain) to 406.3 m (Hagen hills) at cell centres.
+- [x] LEARNING_NOTEBOOK.md chapter for Step 5 written.
+- Expert panel: not required at this gate (guide A7).
+AUTOMATIC CHECKS: ALL PASSED
+RESULT: PASSED
