@@ -44,5 +44,5 @@ Other studies seen and judged further away (method or place differs): Friesen 20
 
 ## 5. Pending
 
-- [ ] **[MARIA]** confirms the angle in section 3.
+- [x] **[MARIA]** confirmed the angle in section 3 (2 Nov 2026).
 - [ ] Repeat the search (same script) right before the OSF preregistration.

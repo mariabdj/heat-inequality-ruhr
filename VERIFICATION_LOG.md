@@ -37,3 +37,20 @@ Manual checks:
 - [ ] PENDING [MARIA]: confirms the question and the angle (NOVELTY_REPORT.md section 3).
 AUTOMATIC CHECKS: ALL PASSED
 RESULT: PENDING (waiting for Maria's confirmation of the angle)
+
+## GATE 0: Set-up and novelty | run 2 | 2026-11-02 13:27
+### verify_structure.py: PASS
+```
+RESULT: PASSED (11 folders, 7 files present)
+```
+### verify_novelty_log.py: PASS
+```
+queries in script: 15; searches logged: 30; records saved: 5142; unique: 4508; candidates: 139
+RESULT: PASSED
+```
+Manual checks:
+- [x] Run 2 made after fixing the docstring warning of run 1 (no warning now); same numbers as run 1.
+- [x] All manual checks of run 1 still hold (no file of the novelty search changed since; first commit `Set up project structure and novelty check` by Maria Boudjelal, no-reply email; verify_public_release.py PASSED).
+- [x] [MARIA] confirmed the question and the angle in the chat on 2026-11-02: "Oui, je confirme".
+AUTOMATIC CHECKS: ALL PASSED
+RESULT: PASSED
