@@ -224,3 +224,332 @@ Manual checks:
 - Expert panel: not required at this gate (guide A7: Steps 2 to 6 are reviewed at Gate 7).
 AUTOMATIC CHECKS: ALL PASSED
 RESULT: PASSED
+
+## GATE 4: Land surface temperature | run 2 | 2026-11-02 19:49
+### verify_data_register.py: PASS
+```
+files on disk: 19; registered: 19
+RESULT: PASSED
+```
+### verify_lst_pixels.py: PASS
+```
+(d) reference-domain pixels outside the locally rebuilt pixel-centre city mask: 0; city pixels 1868073, reference pixels 1830655
+(d) water share, 2000 pixels: max |diff| 0.0000, decision flips beyond 0.02 of the threshold: 0
+(e) 1_LC08_196024_20180610: own valid share 0.000084, stage-1 0.000084
+(e) 1_LC08_197024_20180804: own valid share 0.914140, stage-1 0.914140
+(e) 2_LC09_196024_20250824: own valid share 0.007058, stage-1 0.007058
+(e) 1_LC08_196024_20190629: own valid share 0.988683, stage-1 0.988683
+(e) 1_LC08_197024_20190823: own valid share 0.962651, stage-1 0.962651
+(e) 2_LC09_197024_20250815: own valid share 0.854552, stage-1 0.854552
+(a) 1_LC08_196024_20190629: 60 pixels (20 invalid), validity agrees: True, max |diff| 0.00000 C
+(a) 1_LC08_197024_20190823: 60 pixels (22 invalid), validity agrees: True, max |diff| 0.00000 C
+(a) 2_LC09_197024_20250815: 60 pixels (24 invalid), validity agrees: True, max |diff| 0.00000 C
+(b) 1_LC08_196024_20190629: median from file 38.4794, stored 38.4794
+(b) 1_LC08_197024_20190823: median from file 31.8348, stored 31.8348
+(b) 2_LC09_197024_20250815: median from file 33.8138, stored 33.8138
+(c) 20 composite pixels from the scene files: max |diff| 0.000002 C
+RESULT: PASSED
+```
+Manual checks:
+- [x] Why this run: the Gate 7 expert panel (round 1) found that the city mask in Earth Engine used "any pixel touched" (reduceToImage) instead of the preregistered pixel-centre rule (Q12.4). Implementation error, not a change of plan: no deviation entry. Fixed in `02_lst/lst_pipeline.py` (touched pixels whose centre is outside, computed locally with rasterio, are removed); the Earth Engine mask now equals the local pixel-centre mask: 1,868,073 pixels, 0 differences. Old outputs kept in `02_lst/discarded/touched_city_mask/`.
+- [x] Candidate list frozen in `01_data/raw/landsat/candidate_scenes.csv` (115 ids, registered with SHA-256), so a later change of the Earth Engine catalogue cannot change the scene set.
+- [x] Stage 1 rerun (flags only, before any temperature): 115 candidates; 17 with >= 80% valid core pixels; 16 on hot days (same 16 as run 1). City pixels 1,868,073 (1,681.3 km2 = VG250 area 1,681.3 km2); reference domain 1,830,655; core 1,750,715 (95.6%). Core share per city: 100% except Duisburg 67.1% and Hamm 99.3% (`02_lst/stage1_core_share_by_city.csv`). Q23: 0.6% < 30%, hot-day rule kept (same decision).
+- [x] Stage 2 rerun: daily medians changed by +0.007 to +0.027 C (mean +0.020) against run 1; medians 30.03 to 40.09 C; composite pixels with >= 5 observations 5,620,452; month balance June 9, July 2, August 5 (`02_lst/scenes_balance_hot.csv`).
+- [x] Check strengthened (panel request): (d) domain and water share recomputed from raw WorldCover; (e) 80% shares recomputed from raw quality bands for 6 scenes (1e-6); (a) now 60 pixels per scene including invalid pixels. The pipeline's masks are not reused.
+- [x] The verification script itself had an error and was fixed: in its first run (d) FAILED (NaN values, 22 flips) because the water raster it writes inherited "nodata = 0" from the downloaded tiles, so every dry pixel was read as missing. Fixed (nodata = 255, never present); tolerance unchanged. Test: of the 2,000 sampled pixels 54 contain water and 32 are >= 50% water, so the check is not trivial; a planted error of 0.05 in 3 water pixels is caught (FAILED).
+- [x] Correction of run 1's last note ("the 80% scene rule used Earth Engine pixel sums that weight pixels"): the counts are whole-pixel counts on the 30 m grid (check (e) reproduces them exactly from raw bands). Run 1 is not edited.
+- [x] LANUK comparison rerun: Spearman 0.637 over 1,736,635 core pixels (`05_analysis/results/step4_lanuk_check.csv`).
+- [x] LEARNING_NOTEBOOK.md Step 4 updated (median 38.4794 C, anomaly +3.23 C checked by code: 3.2334; new traps: touched mask, wrong check).
+AUTOMATIC CHECKS: ALL PASSED
+RESULT: PASSED
+
+## GATE 6: Grid join | run 2 | 2026-11-02 19:59
+### verify_zonal.R: PASS
+```
+|---------|---------|---------|---------|
+=========================================
+                                          
+cells: 61458 
+Warning message:
+In .local(x, y, ...) :
+  Polygons transformed to raster CRS (EPSG: 3035) . To avoid on-the-fly coordinate transformation, ensure that st_crs() returns the same result for both raster and polygon inputs.
+```
+### verify_zonal.py: PASS
+```
+lst_anom: compared 61195, max |diff| 0.000001 (tolerance 0.01), cells above tolerance 0, presence differs 0
+lst_cover_share: compared 61458, max |diff| 0.000000 (tolerance 0.001), cells above tolerance 0, presence differs 0
+tree_cover: compared 61458, max |diff| 0.000008 (tolerance 0.1), cells above tolerance 0, presence differs 0
+imperviousness: compared 61458, max |diff| 0.000004 (tolerance 0.1), cells above tolerance 0, presence differs 0
+elevation: compared 61458, max |diff| 0.000032 (tolerance 0.01), cells above tolerance 0, presence differs 0
+rasterstats (pixel centres) vs exactextract (exact shares), cells passing rule 4: mean |diff| 0.077 C, 90th percentile 0.176 C, max 0.881 C
+rows: 61458; passing rules 1 to 4: 51409; Model A sample: 12609
+RESULT: PASSED
+```
+Manual checks:
+- [x] Not completed: this run was made before Gate 5 run 2 was logged. Superseded by Gate 6 run 3 below. The outputs above are kept as a record.
+AUTOMATIC CHECKS: ALL PASSED
+RESULT: NOT USED (superseded by run 3)
+
+## GATE 5: Covariates | run 2 | 2026-11-02 20:06
+### verify_data_register.py: PASS
+```
+files on disk: 19; registered: 19
+RESULT: PASSED
+```
+### verify_covariates.py: PASS
+```
+tree_cover_2022: files 1; cells 51711; missing or out of range 0; range 0.0 to 99.0
+imperviousness_2021: files 2; cells 51711; missing or out of range 0; range 0.0 to 100.0
+elevation_dgm: files 1; cells 51711; missing or out of range 0; range 14.8 to 406.3
+RESULT: PASSED
+```
+Manual checks:
+- [x] Entry gate: Gate 4 run 2 PASSED. Why this run: Steps 4 to 6 rerun after the city-mask fix (Gate 4 run 2). The covariate layers themselves did not change; files on disk 19, all registered (incl. the frozen Landsat candidate list).
+- [x] Same layers, versions, licences and coverage as run 1 (0 of 51,711 cells without a value; ranges unchanged).
+- [x] Change requested by the Gate 7 panel: the no-data code 255 of the Copernicus layers is now declared through small VRT files (`04_grid_join/nodata_vrt.py`, the raw files are not changed), instead of relying on "values above 100 = missing". Tested: identical means on the study cells; cells with a value above 100 after the declaration: 0 (Step 6 output).
+AUTOMATIC CHECKS: ALL PASSED
+RESULT: PASSED
+
+## GATE 6: Grid join | run 3 | 2026-11-02 20:06
+### verify_zonal.R: PASS
+```
+|---------|---------|---------|---------|
+=========================================
+                                          
+cells: 61458 
+Warning message:
+In .local(x, y, ...) :
+  Polygons transformed to raster CRS (EPSG: 3035) . To avoid on-the-fly coordinate transformation, ensure that st_crs() returns the same result for both raster and polygon inputs.
+```
+### verify_zonal.py: PASS
+```
+lst_anom: compared 61195, max |diff| 0.000001 (tolerance 0.01), cells above tolerance 0, presence differs 0
+lst_cover_share: compared 61458, max |diff| 0.000000 (tolerance 0.001), cells above tolerance 0, presence differs 0
+tree_cover: compared 61458, max |diff| 0.000008 (tolerance 0.1), cells above tolerance 0, presence differs 0
+imperviousness: compared 61458, max |diff| 0.000004 (tolerance 0.1), cells above tolerance 0, presence differs 0
+elevation: compared 61458, max |diff| 0.000032 (tolerance 0.01), cells above tolerance 0, presence differs 0
+rasterstats (pixel centres) vs exactextract (exact shares), cells passing rule 4: mean |diff| 0.077 C, 90th percentile 0.176 C, max 0.881 C
+rows: 61458; passing rules 1 to 4: 51409; Model A sample: 12609
+RESULT: PASSED
+```
+Manual checks:
+- [x] Not completed: `04_grid_join/step6_join.py` was changed after this run (Gate 7 round 2: one-path share per cell, extreme values on usable values only). Superseded by Gate 6 run 4. Outputs above kept as a record.
+AUTOMATIC CHECKS: ALL PASSED
+RESULT: NOT USED (superseded by run 4)
+
+## GATE 4: Land surface temperature | run 3 | 2026-11-02 21:00
+### verify_data_register.py: PASS
+```
+files on disk: 19; registered: 19
+RESULT: PASSED
+```
+### verify_lst_pixels.py: PASS
+```
+(d) reference-domain pixels outside the locally rebuilt pixel-centre city mask: 0; city pixels 1868073, reference pixels 1830655
+(d) water share, 2000 pixels: max |diff| 0.0000, decision flips beyond 0.02 of the threshold: 0
+(d) sampled city pixels whose reference-domain membership disagrees with the own water share: 0 (pixels >= 50% water in the sample: 32)
+(e) 1_LC08_196024_20180610: own valid share 0.000084, stage-1 0.000084
+(e) 1_LC08_197024_20180804: own valid share 0.914140, stage-1 0.914140
+(e) 2_LC09_196024_20250824: own valid share 0.007058, stage-1 0.007058
+(e) 1_LC08_196024_20190629: own valid share 0.988683, stage-1 0.988683
+(e) 1_LC08_197024_20190823: own valid share 0.962651, stage-1 0.962651
+(e) 2_LC09_197024_20250815: own valid share 0.854552, stage-1 0.854552
+(a) 1_LC08_196024_20190629: 60 pixels (20 invalid), validity agrees: True, max |diff| 0.00000 C
+(a) 1_LC08_197024_20190823: 60 pixels (22 invalid), validity agrees: True, max |diff| 0.00000 C
+(a) 2_LC09_197024_20250815: 60 pixels (24 invalid), validity agrees: True, max |diff| 0.00000 C
+(b) 1_LC08_196024_20190629: median from file 38.4794, stored 38.4794
+(b) 1_LC08_197024_20190823: median from file 31.8348, stored 31.8348
+(b) 2_LC09_197024_20250815: median from file 33.8138, stored 33.8138
+(c) 20 composite pixels from the scene files: max |diff| 0.000002 C
+RESULT: PASSED
+```
+Manual checks:
+- [x] Why this run: Gate 7 panel round 2 (remote-sensing reviewer) asked for (1) the frozen candidate list to be enforced and (2) check (d) to work in both directions. Verification script strengthened only (a new check added; no tolerance changed).
+- [x] Pipeline guard (`02_lst/lst_pipeline.py`): stops if `candidate_scenes.csv` is missing, or if the live Earth Engine catalogue's ids, LANDSAT_PRODUCT_ID or DATE_PRODUCT_GENERATED differ from the frozen file; the list can be written only by an explicit `freeze` command, which refuses to overwrite. Test: current catalogue matches (115 scenes); a planted change of one processing date is detected.
+- [x] New check (d), other direction: reference-domain membership of the 2,000 sampled city pixels agrees with the own water rule: 0 disagreements, with 32 pixels of >= 50% water in the sample (so the test is not empty).
+- [x] LST outputs not recomputed (the pipeline's computations did not change); all other checks give the same results as run 2.
+AUTOMATIC CHECKS: ALL PASSED
+RESULT: PASSED
+
+## GATE 6: Grid join | run 4 | 2026-11-02 21:16
+### verify_zonal.R: PASS
+```
+|---------|---------|---------|---------|
+=========================================
+                                          
+cells: 61458 
+Warning message:
+In .local(x, y, ...) :
+  Polygons transformed to raster CRS (EPSG: 3035) . To avoid on-the-fly coordinate transformation, ensure that st_crs() returns the same result for both raster and polygon inputs.
+```
+### verify_zonal.py: PASS
+```
+lst_anom: compared 61195, max |diff| 0.000001 (tolerance 0.01), cells above tolerance 0, presence differs 0
+lst_cover_share: compared 61458, max |diff| 0.000000 (tolerance 0.001), cells above tolerance 0, presence differs 0
+tree_cover: compared 61458, max |diff| 0.000008 (tolerance 0.1), cells above tolerance 0, presence differs 0
+imperviousness: compared 61458, max |diff| 0.000004 (tolerance 0.1), cells above tolerance 0, presence differs 0
+elevation: compared 61458, max |diff| 0.000032 (tolerance 0.01), cells above tolerance 0, presence differs 0
+rasterstats (pixel centres) vs exactextract (exact shares), cells passing rule 4: mean |diff| 0.077 C, 90th percentile 0.176 C, max 0.881 C
+rows: 61458; passing rules 1 to 4: 51409; Model A sample: 12609
+RESULT: PASSED
+```
+Manual checks:
+- [x] Entry gate: Gate 5 run 2 PASSED (Gate 4 run 3 PASSED before it). Why this run: Steps 4 to 6 rerun after the city-mask fix, and `step6_join.py` changed after the Gate 7 panel (rounds 1 and 2).
+- [x] Python vs R zonal statistics: same agreement as run 1 (max |diff| LST 0.000001 C, coverage 0.000000, tree 0.000008, imperviousness 0.000004, elevation 0.000032 m); the planted-error test of run 1 is still valid (verify_zonal.R unchanged).
+- [x] Row count 61,458; exclusions unchanged after the rerun: rule 2 -9,739; rule 3 -8; rule 4 -302; passing rules 1 to 4: 51,409; Model A 12,609; Model B 12,609 (`step6_exclusions.csv`).
+- [x] New reporting (panel): per city, losses to each rule and usable cells per variable (`step6_exclusions_by_city.csv`, totals equal the pooled table); one-path cells (Q12.5): 223 fully, 270 partly, 242 over half, 21 partly in Model A, all in Duisburg and Herne (counts reproduced independently by the remote-sensing reviewer); extreme values beyond 3 IQR on usable values (D6; `step6_extreme_values.csv`: LST 0, rent 249, foreign 51, 65+ 171, under 18 5, tree cover 629, imperviousness 0, elevation 17; kept, not removed); Model A vs all rule-4 cells (`step6_sample_comparison.csv`: 24.5% of cells, 43.7% of residents, population-weighted anomaly 3.59 vs 2.91 C, hotter in every city).
+- [x] No-data 255 declared through VRT files (raw files unchanged); 0 cells with a value above 100.
+- [x] Model A filter uses Model A covariates only; Model B adds tree cover and imperviousness.
+- [x] Rule-4 removals described (4 cities; 212 of 302 with no composite value; sealing similar to kept cells); not linked to industry (not checked).
+- [x] LEARNING_NOTEBOOK.md Step 6 chapter updated (selection numbers, S1 and S2 sizes, rule-4 limitation, one-path columns).
+- Expert panel: reviewed at Gate 7 (rounds 1 to 3, `00_protocol/expert_panel_log.md`).
+AUTOMATIC CHECKS: ALL PASSED
+RESULT: PASSED
+
+## GATE 7: Descriptive results | run 1 | 2026-11-03 10:19
+### verify_deciles.R: PASS
+```
+rent: n 43029, groups 10, values split across groups within a city: 0
+foreign: n 34940, groups 11, values split across groups within a city: 0
+age65: n 32179, groups 11, values split across groups within a city: 0
+under18: n 27452, groups 11, values split across groups within a city: 0
+RESULT: PASSED
+```
+### verify_step7.py: FAIL
+```
+.venv\Lib\site-packages\esda\moran.py:1398: RuntimeWarning: invalid value encountered in divide
+  self.z_sim = (self.Is - self.EI_sim) / self.seI_sim
+```
+Manual checks:
+- [x] Not a result: verify_step7.py printed nothing and returned an error code. Run alone afterwards, the same script on the same files gave exit code 0 and RESULT: PASSED; the stop is attributed to the machine (several heavy jobs and reviewer agents were running at the same time, likely memory). Kept as a record.
+AUTOMATIC CHECKS: FAILED
+RESULT: NOT USED (interrupted run)
+
+## GATE 7: Descriptive results | run 2 | 2026-11-04 10:15
+### verify_deciles.R: PASS
+```
+rent: n 43029, groups 10, values split across groups within a city: 0
+foreign: n 34940, groups 11, values split across groups within a city: 0
+age65: n 32179, groups 11, values split across groups within a city: 0
+under18: n 27452, groups 11, values split across groups within a city: 0
+RESULT: PASSED
+```
+### verify_step7.py: PASS
+```
+(a) lst_anom: n 51409, I own 0.7511404890, results.json 0.7511404890, islands 613 vs 613
+(b) lst_anom: own FDR threshold 0.0111849 vs 0.0111849; own counts {'HH': 6908, 'LH': 4, 'LL': 4447, 'HL': 4, 'not_significant': 39433, 'island': 613}; 9,999 permutations: 12014 significant, Jaccard 0.9187; equal: True
+(a) rent: n 43029, I own 0.4089207809, results.json 0.4089207809, islands 537 vs 537
+(b) rent: own FDR threshold 0.0042467 vs 0.0042467; own counts {'HH': 1657, 'LH': 127, 'LL': 1709, 'HL': 116, 'not_significant': 38883, 'island': 537}; 9,999 permutations: 4005 significant, Jaccard 0.8329; equal: True
+(a) foreign: n 34940, I own 0.6082380665, results.json 0.6082380665, islands 892 vs 892
+(b) foreign: own FDR threshold 0.0243054 vs 0.0243054; own counts {'HH': 4170, 'LH': 273, 'LL': 11551, 'HL': 557, 'not_significant': 17497, 'island': 892}; 9,999 permutations: 16639 significant, Jaccard 0.9881; equal: True
+(a) age65: n 32179, I own 0.2287735244, results.json 0.2287735244, islands 973 vs 973
+(b) age65: own FDR threshold 0.0014853 vs 0.0014853; own counts {'HH': 195, 'LH': 30, 'LL': 564, 'HL': 138, 'not_significant': 30279, 'island': 973}; 9,999 permutations: 949 significant, Jaccard 0.8465; equal: True
+(a) under18: n 27452, I own 0.2228042573, results.json 0.2228042573, islands 1287 vs 1287
+(b) under18: own FDR threshold 0.0011580 vs 0.0011580; own counts {'HH': 138, 'LH': 13, 'LL': 13, 'HL': 442, 'not_significant': 25559, 'island': 1287}; 9,999 permutations: 714 significant, Jaccard 0.8308; equal: True
+(c) rent: cells 43029 vs n 43029, zero group 0 vs 0, non-zero groups 10
+(c) foreign: cells 34940 vs n 34940, zero group 19490 vs 19490, non-zero groups 10
+(c) age65: cells 32179 vs n 32179, zero group 4147 vs 4147, non-zero groups 10
+(c) under18: cells 27452 vs n 27452, zero group 7635 vs 7635, non-zero groups 10
+RESULT: PASSED
+.venv\Lib\site-packages\esda\moran.py:1398: RuntimeWarning: invalid value encountered in divide
+  self.z_sim = (self.Is - self.EI_sim) / self.seI_sim
+.venv\Lib\site-packages\esda\moran.py:1398: RuntimeWarning: invalid value encountered in divide
+  self.z_sim = (self.Is - self.EI_sim) / self.seI_sim
+.venv\Lib\site-packages\esda\moran.py:1398: RuntimeWarning: invalid value encountered in divide
+  self.z_sim = (self.Is - self.EI_sim) / self.seI_sim
+.venv\Lib\site-packages\esda\moran.py:1398: RuntimeWarning: invalid value encountered in divide
+  self.z_sim = (self.Is - self.EI_sim) / self.seI_sim
+.venv\Lib\site-packages\esda\moran.py:1398: RuntimeWarning: invalid value encountered in divide
+  self.z_sim = (self.Is - self.EI_sim) / self.seI_sim
+.venv\Lib\site-packages\esda\moran.py:1398: RuntimeWarning: invalid value encountered in divide
+  self.z_sim = (self.Is - self.EI_sim) / self.seI_sim
+.venv\Lib\site-packages\esda\moran.py:1398: RuntimeWarning: invalid value encountered in divide
+  self.z_sim = (self.Is - self.EI_sim) / self.seI_sim
+.venv\Lib\site-packages\esda\moran.py:1398: RuntimeWarning: invalid value encountered in divide
+  self.z_sim = (self.Is - self.EI_sim) / self.seI_sim
+.venv\Lib\site-packages\esda\moran.py:1398: RuntimeWarning: invalid value encountered in divide
+  self.z_sim = (self.Is - self.EI_sim) / self.seI_sim
+.venv\Lib\site-packages\esda\moran.py:1398: RuntimeWarning: invalid value encountered in divide
+  self.z_sim = (self.Is - self.EI_sim) / self.seI_sim
+```
+Manual checks:
+- [x] Complete automatic run (all PASS), but the session ended before its manual checks were written. Superseded by run 4, which repeats the same checks on the same files.
+AUTOMATIC CHECKS: ALL PASSED
+RESULT: NOT USED (superseded by run 4)
+
+## GATE 7: Descriptive results | run 3 | 2026-11-04 10:43
+### verify_deciles.R: PASS
+```
+rent: n 43029, groups 10, values split across groups within a city: 0
+foreign: n 34940, groups 11, values split across groups within a city: 0
+age65: n 32179, groups 11, values split across groups within a city: 0
+under18: n 27452, groups 11, values split across groups within a city: 0
+RESULT: PASSED
+```
+### verify_step7.py: FAIL
+```
+.venv\Lib\site-packages\esda\moran.py:1398: RuntimeWarning: invalid value encountered in divide
+  self.z_sim = (self.Is - self.EI_sim) / self.seI_sim
+```
+Manual checks:
+- [x] Not a result: run from a command with a 10-minute limit, which stopped verify_step7.py before it finished (empty output). Superseded by run 4, run as a separate process.
+AUTOMATIC CHECKS: FAILED
+RESULT: NOT USED (interrupted run)
+
+## GATE 7: Descriptive results | run 4 | 2026-11-04 12:16
+### verify_deciles.R: PASS
+```
+rent: n 43029, groups 10, values split across groups within a city: 0
+foreign: n 34940, groups 11, values split across groups within a city: 0
+age65: n 32179, groups 11, values split across groups within a city: 0
+under18: n 27452, groups 11, values split across groups within a city: 0
+RESULT: PASSED
+```
+### verify_step7.py: PASS
+```
+(a) lst_anom: n 51409, I own 0.7511404890, results.json 0.7511404890, islands 613 vs 613
+(b) lst_anom: own FDR threshold 0.0111849 vs 0.0111849; own counts {'HH': 6908, 'LH': 4, 'LL': 4447, 'HL': 4, 'not_significant': 39433, 'island': 613}; 9,999 permutations: 12014 significant, Jaccard 0.9187; equal: True
+(a) rent: n 43029, I own 0.4089207809, results.json 0.4089207809, islands 537 vs 537
+(b) rent: own FDR threshold 0.0042467 vs 0.0042467; own counts {'HH': 1657, 'LH': 127, 'LL': 1709, 'HL': 116, 'not_significant': 38883, 'island': 537}; 9,999 permutations: 4005 significant, Jaccard 0.8329; equal: True
+(a) foreign: n 34940, I own 0.6082380665, results.json 0.6082380665, islands 892 vs 892
+(b) foreign: own FDR threshold 0.0243054 vs 0.0243054; own counts {'HH': 4170, 'LH': 273, 'LL': 11551, 'HL': 557, 'not_significant': 17497, 'island': 892}; 9,999 permutations: 16639 significant, Jaccard 0.9881; equal: True
+(a) age65: n 32179, I own 0.2287735244, results.json 0.2287735244, islands 973 vs 973
+(b) age65: own FDR threshold 0.0014853 vs 0.0014853; own counts {'HH': 195, 'LH': 30, 'LL': 564, 'HL': 138, 'not_significant': 30279, 'island': 973}; 9,999 permutations: 949 significant, Jaccard 0.8465; equal: True
+(a) under18: n 27452, I own 0.2228042573, results.json 0.2228042573, islands 1287 vs 1287
+(b) under18: own FDR threshold 0.0011580 vs 0.0011580; own counts {'HH': 138, 'LH': 13, 'LL': 13, 'HL': 442, 'not_significant': 25559, 'island': 1287}; 9,999 permutations: 714 significant, Jaccard 0.8308; equal: True
+(c) rent: cells 43029 vs n 43029, zero group 0 vs 0, non-zero groups 10
+(c) foreign: cells 34940 vs n 34940, zero group 19490 vs 19490, non-zero groups 10
+(c) age65: cells 32179 vs n 32179, zero group 4147 vs 4147, non-zero groups 10
+(c) under18: cells 27452 vs n 27452, zero group 7635 vs 7635, non-zero groups 10
+RESULT: PASSED
+.venv\Lib\site-packages\esda\moran.py:1398: RuntimeWarning: invalid value encountered in divide
+  self.z_sim = (self.Is - self.EI_sim) / self.seI_sim
+.venv\Lib\site-packages\esda\moran.py:1398: RuntimeWarning: invalid value encountered in divide
+  self.z_sim = (self.Is - self.EI_sim) / self.seI_sim
+.venv\Lib\site-packages\esda\moran.py:1398: RuntimeWarning: invalid value encountered in divide
+  self.z_sim = (self.Is - self.EI_sim) / self.seI_sim
+.venv\Lib\site-packages\esda\moran.py:1398: RuntimeWarning: invalid value encountered in divide
+  self.z_sim = (self.Is - self.EI_sim) / self.seI_sim
+.venv\Lib\site-packages\esda\moran.py:1398: RuntimeWarning: invalid value encountered in divide
+  self.z_sim = (self.Is - self.EI_sim) / self.seI_sim
+.venv\Lib\site-packages\esda\moran.py:1398: RuntimeWarning: invalid value encountered in divide
+  self.z_sim = (self.Is - self.EI_sim) / self.seI_sim
+.venv\Lib\site-packages\esda\moran.py:1398: RuntimeWarning: invalid value encountered in divide
+  self.z_sim = (self.Is - self.EI_sim) / self.seI_sim
+.venv\Lib\site-packages\esda\moran.py:1398: RuntimeWarning: invalid value encountered in divide
+  self.z_sim = (self.Is - self.EI_sim) / self.seI_sim
+.venv\Lib\site-packages\esda\moran.py:1398: RuntimeWarning: invalid value encountered in divide
+  self.z_sim = (self.Is - self.EI_sim) / self.seI_sim
+.venv\Lib\site-packages\esda\moran.py:1398: RuntimeWarning: invalid value encountered in divide
+  self.z_sim = (self.Is - self.EI_sim) / self.seI_sim
+```
+Manual checks:
+- [x] Entry gate: Gate 6 run 4 PASSED. Correction to Gate 6 run 4 (not edited, rule): its first manual check says Gate 4 run 3 passed "before" Gate 5 run 2; in fact Gate 4 run 3 (2026-11-02 21:00, checks strengthened only, LST outputs unchanged) came after Gate 5 run 2 (20:06). Both are PASSED, so the entry condition holds (expert panel finding G47).
+- [x] Same code and data as runs 2 and 3: no file under 02_lst, 04_grid_join, 05_analysis or verification changed between them (only LEARNING_NOTEBOOK.md and expert_panel_log.md text).
+- [x] Expert panel (rule A7, Part G), with a look back at Steps 2 to 6: remote-sensing scientist, spatial statistician, environmental-justice geographer; 5 rounds; 48 findings (G1 to G48), all accepted, G14 in a modified form (link with industry not claimed); round 5: all three "No further problems" (00_protocol/expert_panel_log.md). Fixes that changed earlier steps were rerun and logged: Gate 4 runs 2 and 3, Gate 5 run 2, Gate 6 run 4.
+- [x] Every number in the tables comes from results.json and the step7 CSV files written by 05_analysis/step7_descriptive.py; the decile means are recomputed in R (verify_deciles.R: 0 differences, 0 values split between groups); Moran's I, the FDR thresholds and all LISA counts are recomputed with an independent neighbour list and a hand-made Benjamini-Hochberg step (verify_step7.py: equal to 10 decimals, counts identical), including the exploratory 9,999-permutation run (D7).
+- [x] Clarifications and additions logged in 00_protocol/deviations.md: D2 (dash read as 0), D3 (estimand wording), D4 (decile tie rule), D5 (sample of the descriptive analyses), D6 (extreme-value rule), D7 (9,999-permutation LISA, exploratory), D8 (group-versus-rest comparison, exploratory). First decile outputs kept in 05_analysis/discarded/id_tie_rule/.
+- [x] Results are described as cells, not people, not adjusted and not causal (figure titles, results.json notes, notebook); LST is described as surface temperature, not air temperature.
+- [x] LEARNING_NOTEBOOK.md Step 7 chapter written (worked examples checked by code: Moran's I example I = 0.5; FDR back-calculation 0.0111849 x 50,796 / 0.05 = 11,363 = 6,908 + 4 + 4,447 + 4).
+AUTOMATIC CHECKS: ALL PASSED
+RESULT: PASSED

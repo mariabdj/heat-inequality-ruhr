@@ -134,3 +134,89 @@ Self-check: verify_prereg.py PASSED.
 EPI: "No further problems". RS: "No further problems". SE: "No further problems" (fixes #80 to #82 checked; Holm families, H3 rules, Q24 header and the S8, S10, S18 calls consistent).
 
 **Panel result: all three reviewers report no remaining problem in the same round (rule A7).** 82 findings over 6 rounds; every one accepted, accepted in a modified form, or not used with a written reason (#6 ST_QA cut, #12 image inspection, #15 Hausman test, #22 emissivity rule, #47 column name).
+
+# Gate 7 panel (Steps 2 to 7: grid, census, LST, covariates, join, descriptive results)
+
+## Gate 7, round 1 (2 November 2026)
+
+Reviewers: remote-sensing scientist (RS), spatial statistician (SS), environmental-justice geographer (EJ). Each worked read-only on the project files and reproduced numbers with their own scratch code.
+
+| # | From | Severity | Finding (short) | Action |
+|---|---|---|---|---|
+| G1 | SS, EJ | BLOCKER | Decile ties broken by cell ID (south to north): cells with the same value (above all 0) fell in different deciles, so part of the curve was geography; `top_minus_bottom_C` compared zero cells with the top decile; R check copied the same rule | Accepted. Separate zero group + city deciles of non-zero values with ties sharing a class (rank "min"); cells, population, median population per group; `top_minus_bottom_C` removed; R check rewritten with the new rule and a test that no value is split; D4 |
+| G2 | RS | MAJOR | City mask built with "any pixel touched", not the registered pixel-centre rule (Q12.4) | Accepted. Touched pixels with centre outside removed; EE mask = local mask (0 differences); Steps 4 to 7 rerun (Gate 4 run 2) |
+| G3 | RS | MAJOR | LST check reused the pipeline's own masks; no independent check of domain, 80% rule or selection; few invalid pixels tested | Accepted. Checks (d) and (e) added from raw bands; (a) includes invalid pixels and compares with the exported scene files |
+| G4 | RS | MAJOR | Candidate scene list not recorded (Q12.4), live query | Accepted. 115 ids frozen in `01_data/raw/landsat/candidate_scenes.csv`, registered with SHA-256, read by the pipeline |
+| G5 | EJ | MAJOR | Dash = 0 not in the registered text; zeros are 56% of usable foreign values | Accepted. D2; exploratory sensitivity "dash as missing" planned for Step 8; limitation |
+| G6 | EJ | MAJOR | Estimand says "non-bracketed rent value" but rule 5 needs all four variables; size of selection not disclosed; S2 adds only 1,006 cells | Accepted. D3; `step6_sample_comparison.csv` (Model A vs all rule-4 cells, overall and per city); notebook says S1 is the key check |
+| G7 | EJ, SS | MAJOR | Per-city losses (Q14) and extreme-value counts (Q15) missing | Accepted. `step6_exclusions_by_city.csv`, `step6_extreme_values.csv` |
+| G8 | SS | MAJOR | Foreign LISA dominated by zero cells | Accepted. Zero share per variable and number of LL cells with value 0 in results.json (foreign: 11,516 of 11,551 LL cells) |
+| G9 | SS | MAJOR | Folded one-sided pseudo p-values not stated; esda.fdr returns k·alpha/n | Accepted. Stated in the script header, results.json and caption |
+| G10 | RS | MINOR | Core share per city (Q12.4), one-path cells per city (Q12.5), scenes per month (Q12.6) not reported | Accepted. `stage1_core_share_by_city.csv`, `one_path_only` per city (223 cells, 222 in Duisburg), `scenes_balance_hot.csv` |
+| G11 | RS | MINOR | Log line on "weighted" 80% sums inaccurate | Accepted. Corrected in Gate 4 run 2 (run 1 not edited) |
+| G12 | RS | MINOR | Model A filter used Model B covariates | Accepted. Per-model covariate lists in `step6_join.py` |
+| G13 | RS | MINOR | No-data 255 handled by "any pixel > 100 -> cell missing" | Accepted. No-data declared through VRT files; raw files unchanged |
+| G14 | RS | MINOR | Cells removed by rule 4 clustered (cloud-distance discs, maybe industry) | Accepted in modified form: described (4 cities, 212 with no composite value, sealing similar to kept cells); the link with industry was not checked (no registered land-use layer) and is not claimed |
+| G15 | EJ | MINOR | Notebook: bracketed values remove the low non-zero range, not "the middle"; no-bias claim needs linearity and homogeneity | Accepted. Corrected with numbers (median 9.4%) |
+| G16 | EJ | MINOR | Notebook: missing rent "mostly owner-occupied" unverified | Accepted. Reworded (no rented dwelling or secrecy) |
+| G17 | EJ | MINOR | Population-weighted deciles are not group exposure; captions must not say "foreign residents are exposed" | Accepted. Exploratory group-weighted mean (share x population) added and labelled; captions say "cells, not people" |
+| G18 | EJ | MINOR | p_sim = 0.001 is the floor | Accepted. Reported as p <= .001 |
+| G19 | SS, EJ | MINOR | LISA map: legend, outlines, scale bar, plain titles, n/I/islands; holes from missing data; rent HH = advantaged | Accepted |
+| G20 | SS | MINOR | Global Moran without seed | Accepted. numpy seed 20261102 set before each call (esda.Moran has no seed argument) |
+| G21 | SS | MINOR | Decile figure: n per variable, pooling note | Accepted |
+| G22 | SS | MINOR | Global I keeps islands in n | Accepted. I without islands also reported |
+| G23 | EJ | MINOR | Sample of the descriptive analyses not registered | Accepted. D5 |
+
+Found while fixing: the new water-share check (d) itself declared 0 as no-data; fixed and tested with a planted error (Gate 4 run 2).
+
+## Gate 7, round 2 (2 November 2026)
+
+All round 1 actions checked by the reviewer who raised them, each with own code: RS rebuilt the pixel-centre mask (0 reference pixels outside), rechecked the water rule in both directions on 10,000 pixels (0 wrong decisions) and rebuilt the whole composite from the 16 scene files (n_obs identical everywhere, max |diff| 4.5e-6 C); SS reproduced every decile group (100% membership match), every LISA count and FDR threshold for the four census variables; EJ reproduced the decile table and the Model A selection numbers.
+
+| # | From | Severity | Finding (short) | Action |
+|---|---|---|---|---|
+| G24 | EJ, SS | MAJOR | Zero group mostly measures cell size (97% of usable cells under 30 residents have foreign = 0; median 17 to 29 residents vs 86 to 144 in deciles); its city mix differs; figure placed it as the low end | Accepted. Zero point shown apart, labelled "dash (0 or changed to 0), median N inhabitants, not comparable"; median population printed at every point; caption; zero share by city in results.json; notebook warning |
+| G25 | SS | MAJOR | With 999 permutations, LISA significance for rent, 65+, under 18 sits at the p floor and changes with the seed (Jaccard 0.76 to 0.88) | Accepted. 999 kept (registered); caption and results.json say so; exploratory rerun with 9,999 permutations, counts and Jaccard reported (D7) |
+| G26 | EJ | MINOR | Per-decile group-weighted column adds nothing; "Hsu style" wording | Accepted. Replaced by overall group vs rest means, exploratory, with caveats; header reworded |
+| G27 | EJ, SS | MINOR | 55.7% should be 55.8% (19,490 / 34,940) | Accepted |
+| G28 | EJ | MINOR | D3 wording on the sample number misleading | Accepted. Reworded (12,609 unchanged by the rerun) |
+| G29 | EJ | MINOR | Extreme-value rule not stated; counted bracketed values | Accepted. D6; usable values only |
+| G30 | EJ | MINOR | Notebook Step 1 "owner-occupied areas", Step 5 "> 100 as missing" out of date; Step 6 selection without numbers | Accepted. Reworded; Model A 24.5% of cells, 43.7% of residents, +0.68 C (hotter in every city) |
+| G31 | SS, EJ | MINOR | LL cells with value 0 not shown on the map panels | Accepted. In the panel titles |
+| G32 | SS | MINOR | Islands drawn as "not significant" | Accepted. Own colour and legend entry |
+| G33 | SS | MINOR | verify_step7 (b) did not recompute the LISA | Accepted. Own neighbour list, hand-made BH threshold, own quadrants, exact match required |
+| G34 | RS | MINOR | Frozen candidate list not enforced (live query filtered; re-freezes if file missing) | Accepted. Pipeline stops if the file is missing or if the live catalogue's ids, product ids or processing dates differ; freezing only by an explicit "freeze" command that refuses to overwrite. Planted change of a processing date detected |
+| G35 | RS | MINOR | One-path count only for cells fully one-path | Accepted. Pixel-level one-path raster; per city: fully, partly (> 0%), over half, and partly in Model A |
+| G36 | RS | MINOR | Check (d) one-directional | Accepted. Added: reference-domain membership of the 2,000 sampled city pixels must match the own water rule (outside 0.02 of the threshold) |
+
+## Gate 7, round 3 (2 November 2026)
+
+No BLOCKER or MAJOR finding from any reviewer. All round 2 actions confirmed with own code: RS reproduced the one-path raster exactly and the per-city counts; SS ran verify_step7.py (PASSED) and rechecked every worked example of the Step 7 notebook chapter; EJ reproduced every number of the Step 7 chapter and the Step 6 selection numbers.
+
+| # | From | Severity | Finding (short) | Action |
+|---|---|---|---|---|
+| G37 | EJ | MINOR | Notebook lines on missing rent still say "owner-occupied areas" (Step 1 and Step 7) | Accepted. "No rented dwelling (only owner-occupied or empty dwellings) or withheld for confidentiality; we cannot tell which" |
+| G38 | EJ | MINOR | D6 said no relationship had been seen, untrue for the round 2 correction | Accepted. Corrected |
+| G39 | EJ | MINOR | Group-vs-rest comparison has no deviation entry | Accepted. D8 |
+| G40 | EJ | MINOR | Caveat should say pooled and not adjusted | Accepted (results.json and notebook) |
+| G41 | EJ | MINOR | Median-population label clipped at the top of one panel | Accepted. Margin added |
+| G42 | EJ | MINOR | "Nothing yet." at the top of deviations.md stale | Accepted |
+| G43 | RS | MINOR | Notebook silent on the frozen candidate list, reverse water check and one-path columns | Accepted. Step 4 and Step 6 chapters extended |
+| G44 | SS | MINOR | "not_significant" included the islands, unlike the map | Accepted. Islands counted under their own key |
+| G45 | SS | MINOR | Folded pseudo p definition missing the + 1 | Accepted |
+| G46 | SS | MINOR | 9,999-permutation numbers not rechecked | Accepted. verify_step7.py (b) now also checks the exploratory count and Jaccard |
+
+## Gate 7, round 4 (3 November 2026)
+
+SS: "No further problems" (islands key, +1 in the folded pseudo p, 9,999-permutation recheck all confirmed; verify_step7.py PASSED). EJ: "No further problems" (G37 to G42 confirmed). RS: G43 confirmed; two MINOR points:
+
+| # | From | Severity | Finding (short) | Action |
+|---|---|---|---|---|
+| G47 | RS | MINOR | Gate 6 run 4 manual check says Gate 4 run 3 passed "before" Gate 5 run 2, but Gate 4 run 3 (21:00) came after Gate 5 run 2 (20:06) | Accepted. Run 4 is not edited (rule); correction recorded in the Gate 7 entry of VERIFICATION_LOG.md |
+| G48 | RS | MINOR | Notebook Step 6: "223 fully and 270 partly" reads as separate groups; duplicate bullet | Accepted. "270 at least partly one-path, including 223 fully one-path"; duplicate removed |
+
+## Gate 7, round 5 (3 November 2026)
+
+RS: "No further problems" (G48 fixed; G47 to be recorded in the Gate 7 entry). SS: "No further problems" (Step 7 outputs unchanged since the round 4 check). EJ: "No further problems".
+
+**Panel result: all three reviewers report no remaining problem in the same round (rule A7).** 48 findings over 5 rounds at Gate 7; all accepted (G14 in a modified form: the link with industry was not claimed).

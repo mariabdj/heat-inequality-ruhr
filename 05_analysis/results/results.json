@@ -1,0 +1,601 @@
+{
+  "step7": {
+    "n_rule4": 51409,
+    "notes": "descriptive; cells not people; p_sim = 0.001 means p <= .001 with 999 permutations",
+    "deciles": {
+      "rent": {
+        "n": 43029,
+        "zero_cells": 0,
+        "zero_share": 0.0,
+        "zero_share_by_city": {
+          "Bochum": 0.0,
+          "Bottrop": 0.0,
+          "Dortmund": 0.0,
+          "Duisburg": 0.0,
+          "Essen": 0.0,
+          "Gelsenkirchen": 0.0,
+          "Hagen": 0.0,
+          "Hamm": 0.0,
+          "Herne": 0.0,
+          "M\u00fclheim an der Ruhr": 0.0,
+          "Oberhausen": 0.0
+        },
+        "groups": [
+          {
+            "group": "01",
+            "cells": 4348.0,
+            "population": 269942.0,
+            "median_population": 48.0,
+            "mean_value_pw": 4.799374384126962,
+            "pw_mean_lst_anom": 2.5436362995062645
+          },
+          {
+            "group": "02",
+            "cells": 4348.0,
+            "population": 315935.0,
+            "median_population": 60.0,
+            "mean_value_pw": 5.319114849573489,
+            "pw_mean_lst_anom": 3.160891986930969
+          },
+          {
+            "group": "03",
+            "cells": 4317.0,
+            "population": 334679.0,
+            "median_population": 65.0,
+            "mean_value_pw": 5.571771398862791,
+            "pw_mean_lst_anom": 3.2717781289218
+          },
+          {
+            "group": "04",
+            "cells": 4298.0,
+            "population": 341139.0,
+            "median_population": 66.0,
+            "mean_value_pw": 5.762537997707678,
+            "pw_mean_lst_anom": 3.3355867894538114
+          },
+          {
+            "group": "05",
+            "cells": 4298.0,
+            "population": 332216.0,
+            "median_population": 65.0,
+            "mean_value_pw": 5.96890661497339,
+            "pw_mean_lst_anom": 3.2776300143525883
+          },
+          {
+            "group": "06",
+            "cells": 4302.0,
+            "population": 325794.0,
+            "median_population": 63.0,
+            "mean_value_pw": 6.174697907266555,
+            "pw_mean_lst_anom": 3.2067921101771977
+          },
+          {
+            "group": "07",
+            "cells": 4279.0,
+            "population": 308223.0,
+            "median_population": 61.0,
+            "mean_value_pw": 6.404588820431959,
+            "pw_mean_lst_anom": 3.02360618747243
+          },
+          {
+            "group": "08",
+            "cells": 4305.0,
+            "population": 290673.0,
+            "median_population": 57.0,
+            "mean_value_pw": 6.707028378968807,
+            "pw_mean_lst_anom": 2.915491774200931
+          },
+          {
+            "group": "09",
+            "cells": 4261.0,
+            "population": 257974.0,
+            "median_population": 51.0,
+            "mean_value_pw": 7.16547283834805,
+            "pw_mean_lst_anom": 2.671824254876574
+          },
+          {
+            "group": "10",
+            "cells": 4273.0,
+            "population": 222697.0,
+            "median_population": 43.0,
+            "mean_value_pw": 8.415216909073765,
+            "pw_mean_lst_anom": 2.311889856015507
+          }
+        ]
+      },
+      "foreign": {
+        "n": 34940,
+        "zero_cells": 19490,
+        "zero_share": 0.5578133943903835,
+        "zero_share_by_city": {
+          "Bochum": 0.6384,
+          "Bottrop": 0.7376,
+          "Dortmund": 0.5675,
+          "Duisburg": 0.4275,
+          "Essen": 0.55,
+          "Gelsenkirchen": 0.4072,
+          "Hagen": 0.5792,
+          "Hamm": 0.6792,
+          "Herne": 0.4658,
+          "M\u00fclheim an der Ruhr": 0.629,
+          "Oberhausen": 0.57
+        },
+        "groups": [
+          {
+            "group": "01",
+            "cells": 1544.0,
+            "population": 193859.0,
+            "median_population": 116.0,
+            "mean_value_pw": 10.395077453200523,
+            "pw_mean_lst_anom": 3.3313485727343526
+          },
+          {
+            "group": "02",
+            "cells": 1560.0,
+            "population": 166229.0,
+            "median_population": 95.0,
+            "mean_value_pw": 14.654803072869354,
+            "pw_mean_lst_anom": 3.2688080606332246
+          },
+          {
+            "group": "03",
+            "cells": 1544.0,
+            "population": 157497.0,
+            "median_population": 91.0,
+            "mean_value_pw": 17.84152701321295,
+            "pw_mean_lst_anom": 3.301201114873903
+          },
+          {
+            "group": "04",
+            "cells": 1530.0,
+            "population": 150622.0,
+            "median_population": 86.0,
+            "mean_value_pw": 20.974371605741524,
+            "pw_mean_lst_anom": 3.347927913040599
+          },
+          {
+            "group": "05",
+            "cells": 1571.0,
+            "population": 154755.0,
+            "median_population": 89.0,
+            "mean_value_pw": 24.190532971471033,
+            "pw_mean_lst_anom": 3.3262399940918232
+          },
+          {
+            "group": "06",
+            "cells": 1534.0,
+            "population": 157779.0,
+            "median_population": 91.0,
+            "mean_value_pw": 28.122469530165613,
+            "pw_mean_lst_anom": 3.5355753133013983
+          },
+          {
+            "group": "07",
+            "cells": 1529.0,
+            "population": 164451.0,
+            "median_population": 97.0,
+            "mean_value_pw": 32.44058345647032,
+            "pw_mean_lst_anom": 3.6933473481020123
+          },
+          {
+            "group": "08",
+            "cells": 1546.0,
+            "population": 171409.0,
+            "median_population": 101.0,
+            "mean_value_pw": 38.097648198169296,
+            "pw_mean_lst_anom": 3.7668427503500763
+          },
+          {
+            "group": "09",
+            "cells": 1543.0,
+            "population": 180015.0,
+            "median_population": 103.0,
+            "mean_value_pw": 46.268566286142814,
+            "pw_mean_lst_anom": 4.0204814436270055
+          },
+          {
+            "group": "10",
+            "cells": 1549.0,
+            "population": 194904.0,
+            "median_population": 108.0,
+            "mean_value_pw": 62.95430350326315,
+            "pw_mean_lst_anom": 4.252227209339566
+          },
+          {
+            "group": "zero",
+            "cells": 19490.0,
+            "population": 660850.0,
+            "median_population": 29.0,
+            "mean_value_pw": 0.0,
+            "pw_mean_lst_anom": 1.7791063836474852
+          }
+        ]
+      },
+      "age65": {
+        "n": 32179,
+        "zero_cells": 4147,
+        "zero_share": 0.12887286739799247,
+        "zero_share_by_city": {
+          "Bochum": 0.1379,
+          "Bottrop": 0.1587,
+          "Dortmund": 0.1349,
+          "Duisburg": 0.108,
+          "Essen": 0.1212,
+          "Gelsenkirchen": 0.1242,
+          "Hagen": 0.1459,
+          "Hamm": 0.2099,
+          "Herne": 0.1019,
+          "M\u00fclheim an der Ruhr": 0.1074,
+          "Oberhausen": 0.1007
+        },
+        "groups": [
+          {
+            "group": "01",
+            "cells": 2802.0,
+            "population": 444149.0,
+            "median_population": 144.0,
+            "mean_value_pw": 9.887589795316437,
+            "pw_mean_lst_anom": 4.096365963495449
+          },
+          {
+            "group": "02",
+            "cells": 2803.0,
+            "population": 331783.0,
+            "median_population": 104.0,
+            "mean_value_pw": 14.85060238167718,
+            "pw_mean_lst_anom": 3.6285692560313803
+          },
+          {
+            "group": "03",
+            "cells": 2810.0,
+            "population": 279333.0,
+            "median_population": 86.0,
+            "mean_value_pw": 18.08267941847186,
+            "pw_mean_lst_anom": 3.2709159630451476
+          },
+          {
+            "group": "04",
+            "cells": 2819.0,
+            "population": 245549.0,
+            "median_population": 76.0,
+            "mean_value_pw": 21.03408431718313,
+            "pw_mean_lst_anom": 3.042872538523741
+          },
+          {
+            "group": "05",
+            "cells": 2796.0,
+            "population": 219991.0,
+            "median_population": 68.0,
+            "mean_value_pw": 23.89823665513589,
+            "pw_mean_lst_anom": 2.8551898199679897
+          },
+          {
+            "group": "06",
+            "cells": 2814.0,
+            "population": 201278.0,
+            "median_population": 63.0,
+            "mean_value_pw": 26.856667594073873,
+            "pw_mean_lst_anom": 2.7445911339171407
+          },
+          {
+            "group": "07",
+            "cells": 2822.0,
+            "population": 190554.0,
+            "median_population": 59.0,
+            "mean_value_pw": 30.03984303661954,
+            "pw_mean_lst_anom": 2.646452219914174
+          },
+          {
+            "group": "08",
+            "cells": 2769.0,
+            "population": 172503.0,
+            "median_population": 55.0,
+            "mean_value_pw": 33.90507121615276,
+            "pw_mean_lst_anom": 2.526604793894298
+          },
+          {
+            "group": "09",
+            "cells": 2797.0,
+            "population": 160808.0,
+            "median_population": 49.0,
+            "mean_value_pw": 39.68902455101736,
+            "pw_mean_lst_anom": 2.4271420491809197
+          },
+          {
+            "group": "10",
+            "cells": 2800.0,
+            "population": 161416.0,
+            "median_population": 44.0,
+            "mean_value_pw": 58.99740762997473,
+            "pw_mean_lst_anom": 2.378808213163131
+          },
+          {
+            "group": "zero",
+            "cells": 4147.0,
+            "population": 103777.0,
+            "median_population": 17.0,
+            "mean_value_pw": 0.0,
+            "pw_mean_lst_anom": 1.7857505218816814
+          }
+        ]
+      },
+      "under18": {
+        "n": 27452,
+        "zero_cells": 7635,
+        "zero_share": 0.2781218126183885,
+        "zero_share_by_city": {
+          "Bochum": 0.3236,
+          "Bottrop": 0.3459,
+          "Dortmund": 0.2965,
+          "Duisburg": 0.2154,
+          "Essen": 0.2414,
+          "Gelsenkirchen": 0.2148,
+          "Hagen": 0.3372,
+          "Hamm": 0.3833,
+          "Herne": 0.2477,
+          "M\u00fclheim an der Ruhr": 0.2969,
+          "Oberhausen": 0.2697
+        },
+        "groups": [
+          {
+            "group": "01",
+            "cells": 1988.0,
+            "population": 257195.0,
+            "median_population": 118.0,
+            "mean_value_pw": 10.445462159062188,
+            "pw_mean_lst_anom": 3.6749790568821834
+          },
+          {
+            "group": "02",
+            "cells": 1986.0,
+            "population": 215097.0,
+            "median_population": 96.0,
+            "mean_value_pw": 13.915554377792345,
+            "pw_mean_lst_anom": 3.3876058851894775
+          },
+          {
+            "group": "03",
+            "cells": 1977.0,
+            "population": 202271.0,
+            "median_population": 89.0,
+            "mean_value_pw": 16.013068803733606,
+            "pw_mean_lst_anom": 3.40052201273294
+          },
+          {
+            "group": "04",
+            "cells": 2024.0,
+            "population": 198703.0,
+            "median_population": 85.0,
+            "mean_value_pw": 17.867763898884263,
+            "pw_mean_lst_anom": 3.3155195727347224
+          },
+          {
+            "group": "05",
+            "cells": 1967.0,
+            "population": 190421.0,
+            "median_population": 83.0,
+            "mean_value_pw": 19.628068700405944,
+            "pw_mean_lst_anom": 3.2707073251353456
+          },
+          {
+            "group": "06",
+            "cells": 1953.0,
+            "population": 187163.0,
+            "median_population": 80.0,
+            "mean_value_pw": 21.456639025875837,
+            "pw_mean_lst_anom": 3.365246666910109
+          },
+          {
+            "group": "07",
+            "cells": 2055.0,
+            "population": 196518.0,
+            "median_population": 80.0,
+            "mean_value_pw": 23.587367620268886,
+            "pw_mean_lst_anom": 3.3537190678791684
+          },
+          {
+            "group": "08",
+            "cells": 1912.0,
+            "population": 188057.0,
+            "median_population": 81.0,
+            "mean_value_pw": 26.134203300063284,
+            "pw_mean_lst_anom": 3.3434497187511814
+          },
+          {
+            "group": "09",
+            "cells": 1985.0,
+            "population": 191709.0,
+            "median_population": 74.0,
+            "mean_value_pw": 29.791084456128825,
+            "pw_mean_lst_anom": 3.224450292803977
+          },
+          {
+            "group": "10",
+            "cells": 1970.0,
+            "population": 175297.0,
+            "median_population": 63.0,
+            "mean_value_pw": 37.65236855165804,
+            "pw_mean_lst_anom": 3.1336301632230845
+          },
+          {
+            "group": "zero",
+            "cells": 7635.0,
+            "population": 208616.0,
+            "median_population": 20.0,
+            "mean_value_pw": 0.0,
+            "pw_mean_lst_anom": 1.7306105460358265
+          }
+        ]
+      }
+    },
+    "moran": {
+      "lst_anom": {
+        "n": 51409,
+        "islands": 613,
+        "components": 1092,
+        "I": 0.7511404890149231,
+        "p_sim": 0.001,
+        "I_without_islands": 0.7754051693436526,
+        "zero_share": 0.0
+      },
+      "rent": {
+        "n": 43029,
+        "islands": 537,
+        "components": 1077,
+        "I": 0.4089207808855516,
+        "p_sim": 0.001,
+        "I_without_islands": 0.41307797977838906,
+        "zero_share": 0.0
+      },
+      "foreign": {
+        "n": 34940,
+        "islands": 892,
+        "components": 1859,
+        "I": 0.6082380664680695,
+        "p_sim": 0.001,
+        "I_without_islands": 0.6116100077360136,
+        "zero_share": 0.5578133943903835
+      },
+      "age65": {
+        "n": 32179,
+        "islands": 973,
+        "components": 1871,
+        "I": 0.2287735243817203,
+        "p_sim": 0.001,
+        "I_without_islands": 0.2365104912154667,
+        "zero_share": 0.12887286739799247
+      },
+      "under18": {
+        "n": 27452,
+        "islands": 1287,
+        "components": 2675,
+        "I": 0.22280425729938966,
+        "p_sim": 0.001,
+        "I_without_islands": 0.2297504708234437,
+        "zero_share": 0.2781218126183885
+      }
+    },
+    "lisa": {
+      "lst_anom": {
+        "fdr_threshold": 0.011184935821718246,
+        "HH": 6908,
+        "LH": 4,
+        "LL": 4447,
+        "HL": 4,
+        "not_significant": 39433,
+        "island": 613,
+        "LL_cells_with_value_0": 0,
+        "islands_excluded": 613,
+        "exploratory_9999_permutations": {
+          "significant": 12014,
+          "significant_999": 11363,
+          "jaccard_with_999": 0.9186638214051215,
+          "HH": 7523,
+          "LH": 7,
+          "LL": 4480,
+          "HL": 4
+        }
+      },
+      "rent": {
+        "fdr_threshold": 0.004246681728325332,
+        "HH": 1657,
+        "LH": 127,
+        "LL": 1709,
+        "HL": 116,
+        "not_significant": 38883,
+        "island": 537,
+        "LL_cells_with_value_0": 0,
+        "islands_excluded": 537,
+        "exploratory_9999_permutations": {
+          "significant": 4005,
+          "significant_999": 3609,
+          "jaccard_with_999": 0.8329321136254213,
+          "HH": 1632,
+          "LH": 131,
+          "LL": 2096,
+          "HL": 146
+        }
+      },
+      "foreign": {
+        "fdr_threshold": 0.024305392387218048,
+        "HH": 4170,
+        "LH": 273,
+        "LL": 11551,
+        "HL": 557,
+        "not_significant": 17497,
+        "island": 892,
+        "LL_cells_with_value_0": 11516,
+        "islands_excluded": 892,
+        "exploratory_9999_permutations": {
+          "significant": 16639,
+          "significant_999": 16551,
+          "jaccard_with_999": 0.9881394512998682,
+          "HH": 4228,
+          "LH": 284,
+          "LL": 11567,
+          "HL": 560
+        }
+      },
+      "age65": {
+        "fdr_threshold": 0.0014852912901365122,
+        "HH": 195,
+        "LH": 30,
+        "LL": 564,
+        "HL": 138,
+        "not_significant": 30279,
+        "island": 973,
+        "LL_cells_with_value_0": 499,
+        "islands_excluded": 973,
+        "exploratory_9999_permutations": {
+          "significant": 949,
+          "significant_999": 927,
+          "jaccard_with_999": 0.8464566929133859,
+          "HH": 188,
+          "LH": 29,
+          "LL": 593,
+          "HL": 139
+        }
+      },
+      "under18": {
+        "fdr_threshold": 0.0011580355436652016,
+        "HH": 138,
+        "LH": 13,
+        "LL": 13,
+        "HL": 442,
+        "not_significant": 25559,
+        "island": 1287,
+        "LL_cells_with_value_0": 0,
+        "islands_excluded": 1287,
+        "exploratory_9999_permutations": {
+          "significant": 714,
+          "significant_999": 606,
+          "jaccard_with_999": 0.8307905686546463,
+          "HH": 231,
+          "LH": 27,
+          "LL": 13,
+          "HL": 443
+        }
+      }
+    },
+    "group_vs_rest_exploratory": {
+      "foreign": {
+        "group_members_est": 510654.1011000001,
+        "group_mean_lst_anom": 3.779223746609779,
+        "rest_mean_lst_anom": 2.8980528974554054,
+        "caveats": "usable cells only (bracketed left out); dash cells count as 0 members; pooled across cities; not adjusted; cells, not people"
+      },
+      "age65": {
+        "group_members_est": 576761.5826999999,
+        "group_mean_lst_anom": 2.8721464685297184,
+        "rest_mean_lst_anom": 3.1575408412654467,
+        "caveats": "usable cells only (bracketed left out); dash cells count as 0 members; pooled across cities; not adjusted; cells, not people"
+      },
+      "under18": {
+        "group_members_est": 420841.8621,
+        "group_mean_lst_anom": 3.3137533323417805,
+        "rest_mean_lst_anom": 3.181147231916835,
+        "caveats": "usable cells only (bracketed left out); dash cells count as 0 members; pooled across cities; not adjusted; cells, not people"
+      }
+    }
+  }
+}

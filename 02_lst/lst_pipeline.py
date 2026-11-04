@@ -30,7 +30,10 @@ region = ee.Geometry.Rectangle([float(bbox_utm[0]) - 300, float(bbox_utm[1]) - 3
                                "EPSG:32632", False)
 
 
-def candidates():
+CAND_LIST = ROOT / "01_data/raw/landsat/candidate_scenes.csv"   # fixed list (Q12.4), written once by freeze_candidates()
+
+
+def candidates_query():
     """Q12.1: Landsat 8 and 9 Tier 1 L2SP, path 196 or 197, row 24, June to August 2018 to 2025."""
     col = ee.ImageCollection("LANDSAT/LC08/C02/T1_L2").merge(ee.ImageCollection("LANDSAT/LC09/C02/T1_L2"))
     return (col.filter(ee.Filter.inList("WRS_PATH", [196, 197])).filter(ee.Filter.eq("WRS_ROW", 24))
@@ -38,9 +41,47 @@ def candidates():
             .filter(ee.Filter.eq("PROCESSING_LEVEL", "L2SP")))
 
 
+def freeze_candidates():
+    q = candidates_query()
+    rows = {k: q.aggregate_array(k).getInfo() for k in ["system:index", "LANDSAT_PRODUCT_ID", "DATE_PRODUCT_GENERATED", "WRS_PATH", "SPACECRAFT_ID"]}
+    CAND_LIST.parent.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame(rows).rename(columns={"system:index": "id"}).to_csv(CAND_LIST, index=False)
+
+
+def candidates():
+    ids = pd.read_csv(CAND_LIST).id.tolist()
+    return candidates_query().filter(ee.Filter.inList("system:index", ids))
+
+
+if len(sys.argv) > 1 and sys.argv[1] == "freeze":
+    if CAND_LIST.is_file():
+        sys.exit(f"{CAND_LIST} exists: the candidate list is frozen and must not be rewritten")
+    freeze_candidates()
+    sys.exit(0)
+if not CAND_LIST.is_file():
+    sys.exit(f"{CAND_LIST} missing: the frozen candidate list is required (Q12.4)")
 CAND = candidates()
+# the live catalogue must still match the frozen list (same scenes, same processing version)
+_frozen = pd.read_csv(CAND_LIST).sort_values("id").reset_index(drop=True)
+_live = pd.DataFrame({k: CAND.aggregate_array(k).getInfo() for k in ["system:index", "LANDSAT_PRODUCT_ID", "DATE_PRODUCT_GENERATED"]}
+                     ).rename(columns={"system:index": "id"}).sort_values("id").reset_index(drop=True)
+if len(_live) != len(_frozen) or not _live.equals(_frozen[["id", "LANDSAT_PRODUCT_ID", "DATE_PRODUCT_GENERATED"]].astype(_live.dtypes.to_dict())):
+    sys.exit("the Earth Engine catalogue no longer matches the frozen candidate list: stop and check")
 PROJ = CAND.first().select("QA_PIXEL").projection()
 GRID = {"crs": "EPSG:32632", "crsTransform": PROJ.getInfo()["transform"]}
+_tr = GRID["crsTransform"]
+# download grid: the native 30 m grid over the cities' bounding box + 300 m
+X0 = _tr[2] + np.floor((bbox_utm[0] - 300 - _tr[2]) / 30) * 30
+Y1 = _tr[5] + np.ceil((bbox_utm[3] + 300 - _tr[5]) / 30) * 30
+NX = int(np.ceil((bbox_utm[2] + 300 - X0) / 30)); NY = int(np.ceil((Y1 - (bbox_utm[1] - 300)) / 30))
+
+
+def local_city_mask(all_touched=False):
+    """Q12.4 pixel-centre rule, computed locally on the download grid (rasterio)."""
+    from rasterio.features import rasterize
+    from rasterio.transform import from_origin
+    return rasterize([(g, 1) for g in cities.geometry], out_shape=(NY, NX), transform=from_origin(X0, Y1, 30, 30),
+                     fill=0, all_touched=all_touched, dtype="uint8").astype(bool)
 
 
 def on_grid(img):
@@ -48,7 +89,14 @@ def on_grid(img):
 
 
 # Q12.4: reference domain = pixel centre in the 11 cities and < 50% permanent water (exact 10 m overlap)
-city_mask = on_grid(fc_cities.reduceToImage(["one"], ee.Reducer.first()).unmask(0).gt(0))
+# Earth Engine rasterises polygons with "any pixel touched"; the pixels touched but with their centre outside the
+# cities (computed locally) are sent as points and removed, so the mask follows the pixel-centre rule.
+_touch = on_grid(fc_cities.reduceToImage(["one"], ee.Reducer.first()).unmask(0).gt(0))
+_fr = np.argwhere(local_city_mask(True) & ~local_city_mask(False))
+_fringe_pts = ee.FeatureCollection([ee.Feature(ee.Geometry.Point([float(X0 + (c + 0.5) * 30), float(Y1 - (r + 0.5) * 30)], "EPSG:32632"), {"one": 1})
+                                    for r, c in _fr])
+_fringe = on_grid(_fringe_pts.reduceToImage(["one"], ee.Reducer.first()).unmask(0).gt(0))
+city_mask = _touch.And(_fringe.Not())
 water10 = ee.ImageCollection("ESA/WorldCover/v200").first().select("Map").eq(80).unmask(0)
 water_share = on_grid(water10.reduceResolution(ee.Reducer.mean(), maxPixels=64))
 ref_domain = city_mask.And(water_share.lt(0.5))
@@ -93,6 +141,17 @@ def stage1():
     dom = ee.Image.cat(ref_domain.rename("ref"), core_ref.rename("core_ref"), city_mask.rename("city")).reduceRegion(
         ee.Reducer.sum(), region, crs=GRID["crs"], crsTransform=GRID["crsTransform"], maxPixels=1e9).getInfo()
     print(f"candidate scenes: {len(t)}; used (>= 80% valid core pixels): {int(t.used.sum())}; hot-day and used: {int((t.used & t.hot_day).sum())}")
+    # Q12.4: core share per city (local, from the downloaded domain rasters)
+    from rasterio.features import rasterize
+    from rasterio.transform import from_origin
+    cid = rasterize([(g, i + 1) for i, g in enumerate(cities.geometry)], out_shape=(NY, NX), transform=from_origin(X0, Y1, 30, 30),
+                    fill=0, all_touched=False, dtype="uint8")
+    rr, _ = download(ee.Image.cat(ref_domain.unmask(0), core_ref.unmask(0)).toFloat(), "domain_ref_core.tif")
+    shares = pd.DataFrame([{"city": cities.GEN.iloc[i], "ref_pixels": int(((cid == i + 1) & (rr[0] == 1)).sum()),
+                            "core_ref_pixels": int(((cid == i + 1) & (rr[1] == 1)).sum())} for i in range(len(cities))])
+    shares["core_share"] = shares.core_ref_pixels / shares.ref_pixels
+    shares.to_csv(OUT / "stage1_core_share_by_city.csv", index=False)
+    print(shares.round(3).to_string(index=False))
     print(f"city pixels: {dom['city']:.0f} ({dom['city'] * 900 / 1e6:.1f} km2, VG250 area {cities.area.sum() / 1e6:.1f} km2); reference domain: {dom['ref']}; core reference domain: {dom['core_ref']} "
           f"({dom['core_ref'] / dom['ref']:.1%} of the reference domain)")
     # Q23: share of cells passing rules 1-3 with < 70% of their area covered by pixels with >= 5 valid hot-day observations
@@ -129,10 +188,7 @@ def download(img, name=None):
     """Download an image on the native grid in 1024-pixel tiles with computePixels; return (array, profile); optionally save."""
     import io, rasterio
     from rasterio.merge import merge
-    tr = GRID["crsTransform"]
-    x0 = tr[2] + np.floor((bbox_utm[0] - 300 - tr[2]) / 30) * 30
-    y1 = tr[5] + np.ceil((bbox_utm[3] + 300 - tr[5]) / 30) * 30
-    nx = int(np.ceil((bbox_utm[2] + 300 - x0) / 30)); ny = int(np.ceil((y1 - (bbox_utm[1] - 300)) / 30))
+    x0, y1, nx, ny = X0, Y1, NX, NY
     tiles, step = [], 1024
     for oy in range(0, ny, step):
         for ox in range(0, nx, step):
@@ -159,7 +215,7 @@ def stage2(which="hot"):
     sel = t[t.used & (t.hot_day if which == "hot" else True)].reset_index(drop=True)
     core, prof = download(core_ref.unmask(0).toFloat().rename("core_ref"), "core_ref_domain.tif")
     core = core[0] == 1
-    total, count, meds = None, None, []
+    total, count, meds, cpath = None, None, [], {}
     for sid in sel.id:
         img = CAND.filter(ee.Filter.eq("system:index", sid)).first()
         # sameFootprint=False: pixels outside the scene footprint become -999 (missing), not 0
@@ -171,14 +227,22 @@ def stage2(which="hot"):
         anom = np.where(valid, lst - med, 0.0)
         total = anom if total is None else total + anom
         count = valid.astype(np.int32) if count is None else count + valid
+        path = int(sel.loc[sel.id == sid, "path"].iloc[0])
+        cpath[path] = valid.astype(np.int32) if path not in cpath else cpath[path] + valid
         print(f"  {sid}: median {med:.4f} C over {int((valid & core).sum())} pixels")
     sel["median_c"] = meds
     sel.to_csv(OUT / f"scenes_used_{which}.csv", index=False)
     mean = np.where(count >= 5, total / np.maximum(count, 1), np.nan).astype(np.float32)   # Q12.6: pixels with < 5 obs missing
-    prof.update(count=2, dtype="float32", nodata=np.nan)
+    prof.update(count=4, dtype="float32", nodata=np.nan)
+    zero = np.zeros_like(count)
     with rasterio.open(OUT / "exports" / f"lst_anomaly_{which}.tif", "w", **prof) as dst:
         dst.write(mean, 1); dst.write(count.astype(np.float32), 2)
-        dst.set_band_description(1, "anom_mean_C"); dst.set_band_description(2, "n_obs")
+        dst.write(cpath.get(196, zero).astype(np.float32), 3); dst.write(cpath.get(197, zero).astype(np.float32), 4)
+        for b, n in enumerate(["anom_mean_C", "n_obs", "n_obs_path196", "n_obs_path197"], 1):
+            dst.set_band_description(b, n)
+    bal = sel.assign(year=sel.date.str[:4], month=sel.date.str[5:7]).groupby(["year", "month", "path", "spacecraft"]).size()
+    bal.rename("scenes").reset_index().to_csv(OUT / f"scenes_balance_{which}.csv", index=False)
+    print("scenes per month:", sel.date.str[5:7].value_counts().sort_index().to_dict())
     print(f"scenes: {len(sel)}; medians (C): min {min(meds):.2f}, max {max(meds):.2f}; "
           f"composite pixels with >= 5 obs: {int((count >= 5).sum())}")
 

@@ -8,5 +8,6 @@ cells passing rules 1 to 4,51409
 "  of which foreign usable (present, not bracketed)",34940
 "  of which age65 usable (present, not bracketed)",32179
 "  of which under18 usable (present, not bracketed)",27452
-removed: a covariate missing,0
+removed: a Model A covariate missing,0
 Model A sample (rule 5: all four social variables usable),12609
+Model B sample (Model A + tree cover and imperviousness present),12609
