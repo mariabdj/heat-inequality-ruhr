@@ -1960,3 +1960,9 @@ Manual checks (run 4, after the changes for submission to Urban Climate):
 - [x] [MARIA] approval of run 1 still covers these changes: content and claims unchanged, caveats restored; Maria asked on 5 November 2026 for the submission to be prepared ("fais tout toi-même") and made the OSF data component public and created its DOI herself.
 AUTOMATIC CHECKS: ALL PASSED
 RESULT: PASSED
+
+### Publication record (5 November 2026)
+- Data: analysis table deposited on OSF, public, CC BY 4.0, DOI 10.17605/OSF.IO/FSV6C (Maria made it public and created the DOI). SHA-256 of the three files on OSF checked equal to the local files.
+- Preprint: submitted to EarthArXiv (no. 15976); declined by the moderators the same day ("outside the subjects we cover"). Nothing was posted there.
+- Journal: submitted to Urban Climate (Elsevier), research article, subscription route, 5 November 2026 18:15, through submit.elsevier.com. Files: manuscript (Word), highlights, title page, cover letter, supplementary tables S0 and S1. Data link to the OSF DOI. Opted in to Elsevier's free SSRN preprint service (posted after the journal's desk review). Maria accepted the terms, made every declaration and clicked the final submit herself.
+- Change made for the journal before submission: title shortened to 20 words (", Germany" removed; journal limit). verify_manuscript_numbers.py: PASSED after the change.

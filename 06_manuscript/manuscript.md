@@ -1,4 +1,4 @@
-# Where is the surface hotter? Rent, foreign citizens and summer heat on the 100 m census grid of the Ruhr, Germany
+# Where is the surface hotter? Rent, foreign citizens and summer heat on the 100 m census grid of the Ruhr
 
 **Maria Boudjelal**
 Independent researcher, Algiers, Algeria. ORCID: https://orcid.org/0009-0002-6434-784X

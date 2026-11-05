@@ -71,7 +71,8 @@ tp = (f"# {title}\n\n**Author:** Maria Boudjelal\n\n**Affiliation:** Independent
       "**Funding.** This research did not receive any specific grant from funding agencies in the public, commercial, or "
       "not-for-profit sectors.\n\n"
       "**Declaration of competing interest.** The author declares that she has no known competing financial interests or "
-      "personal relationships that could have appeared to influence the work reported in this paper.\n")
+      "personal relationships that could have appeared to influence the work reported in this paper.\n\n"
+      "**Acknowledgements.** " + ack + "\n")
 (OUT / "Title_page.md").write_text(tp, encoding="utf-8")
 
 q = r"C:\Program Files\Quarto\bin\quarto.exe"
