@@ -1550,3 +1550,118 @@ RESULT: PASSED
 ## Publication record: local paths removed (5 November 2026)
 
 - Before the first push, the absolute local folder path printed in front of Python warnings in earlier gate outputs was replaced by the path relative to the project folder, in this file and in every earlier version of it in the git history (git filter-branch on VERIFICATION_LOG.md only; nothing else changed; backup bundle kept locally). No result, verdict or other text was changed. verify_public_release.py now also rejects local Windows paths and private context words.
+
+## Step 9, check record: air temperature data for D17 (5 November 2026)
+
+- 01_data/step9_hostrada.py downloaded 11 monthly HOSTRADA v1.0 files (2 m air temperature, hourly, 1 km, EPSG:3034; about 165 MB each) and the dataset description, and registered all 12 in 01_data/data_register.csv with SHA-256 (licence GeoNutzV, attribution DWD). Bands were selected by their time value (assert: exact match), values scaled by 0.1 to C, fill -9999 set to missing.
+- 1,562 HOSTRADA cells have their centre inside the 11 cities (reference for the median). City median air temperature over the 16 days: 22.6 to 32.2 C by day (mean of 10:00 and 11:00 UTC), 14.6 to 23.5 C at night (mean of 01:00 and 02:00 UTC of the next day).
+- Composites per 100 m census cell (value of the HOSTRADA cell holding the cell centre): all 61,458 cells have a value; day anomaly -1.75 to 0.75 C (SD 0.31), night anomaly -2.84 to 3.87 C (SD 1.18). The air-temperature contrasts between places are much smaller than the LST contrasts (LST anomaly SD about 2 C), as expected (Venter et al. 2021).
+
+## Step 9, check record: exploratory checks D17 and D18, and the revised article (5 November 2026)
+
+- 05_analysis/step9_checks.py (detached run; results.json "step9_checks", step9_checks.csv), Q19 rule throughout, no verdict counts for a hypothesis:
+  - D18a, six regressors as 3 x 3 window means (12,609 cells, lambda 0.76): foreign share 0.93 C [0.68, 1.34] supported; 65+ -0.26 [-0.47, -0.12] and under 18 -0.19 [-0.87, -0.05] negative; rent inconclusive.
+  - D18b: Spearman correlation of the number of valid observations with foreign share 0.054, rent 0.055, imperviousness 0.051; Model A on the 12,124 cells with >= 12 of 16 observations: foreign share 0.48 C, supported (as primary).
+  - D17, 1 km Model A (742 cells), HOSTRADA air temperature: day foreign share 0.02 C [0.005, 0.09] "supported but practically negligible"; night 0.46 C [0.26, 1.09] supported, 65+ -0.17 and under 18 -0.31 negative. LST on the same cells: 0.53 C. Resident gap (foreign minus others): day 0.04 (Model A cells) / 0.08 C (all usable cells); night 0.26 / 0.46 C.
+- verify_manuscript_numbers.py extended with an independent recomputation of the air-temperature resident gaps and the observation correlations (from the cell files, not from results.json): identical. Run: 45 recomputed numbers PASS; 188 printed values present. verify_references.py: PASSED (Krähenmann 2018 and the two REAL CORP DataCite DOIs pass; Arraiz year MANUAL as recorded; LANUK and USGS guide have no DOI, checked by hand at Step 1).
+- Article rebuilt from the revised template (round 1 fixes J1 to J12, section 3.7 with D17 and D18), submission version rendered with the use-of-AI section, acknowledgements and declaration.
+
+## GATE 9: Writing and publication | run 1 | 2026-11-05 15:38
+### verify_manuscript_numbers.py: PASS
+```
+PASS    n_rule1: article 61458.0, recomputed 61458.0
+PASS    n_rule4: article 51409.0, recomputed 51409.0
+PASS    n_A: article 12609.0, recomputed 12609.0
+PASS    pop_rule4: article 3241368.0, recomputed 3241368.0
+PASS    pop_A: article 1416492.0, recomputed 1416492.0
+PASS    share_cells_A: article 24.52683382287148, recomputed 24.52683382287148
+PASS    share_pop_A: article 43.70043759301628, recomputed 43.70043759301628
+PASS    lst_pw_A: article 3.5898124947108747, recomputed 3.5898124947108747
+PASS    lst_pw_rule4: article 2.9079654850787344, recomputed 2.9079654850787344
+PASS    n_scenes: article 16.0, recomputed 16.0
+PASS    scene_med_min: article 30.030046463012695, recomputed 30.030046463012695
+PASS    scene_med_max: article 40.08586120605469, recomputed 40.08586120605469
+PASS    b_for: article 0.10595688448244862, recomputed 0.10595688448244862
+PASS    p_for: article 0.008, recomputed 0.008
+PASS    p_rent: article 0.7593546647381094, recomputed 0.7593546647381094
+PASS    e_for: article 0.47756886973929247, recomputed 0.4775688697392925
+PASS    e_rent: article 0.03515540837794816, recomputed 0.03515540837794816
+PASS    e_for_lo: article 0.3797259780926431, recomputed 0.3797259780926432
+PASS    e_for_hi: article 1.1691219542373985, recomputed 1.1691219542373987
+PASS    p90_for: article 45.072, recomputed 45.07200000000001
+PASS    p10_rent: article 5.05, recomputed 5.05
+PASS    p90_rent: article 7.24, recomputed 7.24
+PASS    eols_for: article 0.9724907490425683, recomputed 0.9724907490425685
+PASS    ratio_for: article 2.0363361405308025, recomputed 2.0363361405308025
+PASS    h3_rent: article 0.124165595119306, recomputed 0.124165595119306
+PASS    h3_for: article 0.07466385061486411, recomputed 0.07466385061486411
+PASS    expo_for: article 37.79816192327444, recomputed 37.79816192327444
+PASS    expo_rest: article 22.585445159195583, recomputed 22.585445159195583
+PASS    exp_gap: article 15.212716764078857, recomputed 15.21271676407886
+PASS    rc_A_pooled: article 0.49725109940961865, recomputed 0.49725109940961865
+PASS    dg_sem1: article 0.1611892072835713, recomputed 0.1611892072835713
+PASS    s10_sup: article 3.0, recomputed 3.0
+PASS    s10_pos: article 11.0, recomputed 11.0
+PASS    s3_for: article 1.0088599757367018, recomputed 1.0088599757367018
+PASS    mg_r2: article 0.8796898038616509, recomputed 0.8796898038616509
+PASS    mg_aicc: article 741.8782048245397, recomputed 741.8782048245397
+PASS    bw_intercept: article 30.0, recomputed 30.0
+PASS    moran_lst: article 0.7511404890149231, recomputed 0.7511404890149231
+PASS    islands: article 1712.0, recomputed 1712.0
+note    air_day_gapA: not used in the article
+PASS    air_day_gapAll: article 0.07756794064911521, recomputed 0.07756794064911521
+PASS    air_night_gapA: article 0.2629251308806897, recomputed 0.2629251308806897
+PASS    air_night_gapAll: article 0.45716534147088494, recomputed 0.45716534147088494
+note    d18b_cor_max: not used in the article
+note    n_sens_for: not used in the article
+note    n_sens_for_sup: not used in the article
+checked: 46 recomputed, 194 names present in the text
+typed numbers in the template (manual check): 00, 0, 0.0001, 0.05, 0.3, 1, 01, 1,, 2,, 2, 2.0, 02, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 4.0, 4, 4.1, 4.2, 4.3, 4.4, 4.5, 5, 8,, 8, 9, 10, 11, 12, 15, 16, 18, 20, 21, 24,, 25, 27, 30, 42, 50, 60, 65, 70, 80, 90, 95, 96, 100, 196, 197, 197,, 275, 300, 999, 1619, 2007, 2008, 2010, 2013, 2014, 2017, 2018, 2019, 2020, 2021,, 2021, 2022,, 2022, 2023, 2024, 2026,, 2026, 3035, 32632
+RESULT: PASSED
+```
+### verify_references.py: PASS
+```
+PASS    10.1016/j.ijdrr.2026.106299: title words 100%, year 2026 vs 2026, first author anderson
+PASS    10.1073/pnas.1920490117: title words 100%, year 2019 vs 2019, first author anguelovski
+MANUAL  10.1111/j.1467-9787.2009.00618.x: year 2010 (issue 50(2)) not on Crossref, which has only online 2009
+PASS    10.1088/1748-9326/ab3b99: title words 100%, year 2019 vs 2019, first author chakraborty
+PASS    10.1088/1748-9326/ae929e: title words 100%, year 2026 vs 2026, first author chawla
+PASS    10.3390/rs61111244: title words 100%, year 2014 vs 2014, first author cook
+PASS    10.1080/07474938.2013.741020: title words 100%, year 2013 vs 2013, first author drukker
+PASS    10.1080/24694452.2017.1352480: title words 100%, year 2017 vs 2017, first author fotheringham
+PASS    10.48494/REALCORP2026.4148: title words 100%, year 2026 vs 2026, first author friesen
+PASS    10.1038/s41467-021-22799-5: title words 100%, year 2021 vs 2021, first author hsu
+PASS    10.1016/j.healthplace.2019.102243: title words 100%, year 2020 vs 2020, first author jia
+PASS    10.1016/j.heliyon.2023.e16185: title words 100%, year 2023 vs 2023, first author klopfer
+PASS    10.1177/00420980231224224: title words 100%, year 2024 vs 2024, first author konig
+PASS    10.1007/s00704-016-2003-7: title words 100%, year 2018 vs 2016/2018, first author krahenmann
+PASS    10.48494/realcorp2026.0144: title words 100%, year 2026 vs 2026, first author kuhnl
+MANUAL  no DOI: LANUK NRW (2026). *Klimaanalyse NRW 2026: Methoden- und Ergebnis�berblick*. Fachbericht 171. Landesamt f�r Nat
+PASS    10.3390/ijgi8060269: title words 100%, year 2019 vs 2019, first author oshan
+PASS    10.1016/j.econlet.2008.09.003: title words 100%, year 2008 vs 2008, first author pace
+MANUAL  no DOI: U.S. Geological Survey. *Landsat 8-9 Collection 2 (C2) Level 2 Science Product (L2SP) Guide*, LSDS-1619, versi
+PASS    10.15626/MP.2020.2625: title words 100%, year 2021 vs 2021, first author akker
+PASS    10.1126/sciadv.abb9569: title words 100%, year 2021 vs 2021, first author venter
+PASS    10.1016/S0140-6736(07)61602-X: title words 100%, year 2007 vs 2007, first author elm
+CHECK   cited in text but no entry (or not a citation): ('august', '2018')
+CHECK   cited in text but no entry (or not a citation): ('copernicus', '2022')
+CHECK   cited in text but no entry (or not a citation): ('density', '2021')
+CHECK   cited in text but no entry (or not a citation): ('density', '2022')
+CHECK   cited in text but no entry (or not a citation): ('keller', '2026')
+CHECK   cited in text but no entry (or not a citation): ('may', '2022')
+CHECK   cited in text but no entry (or not a citation): ('worldcover', '2021')
+RESULT: PASSED
+```
+### verify_public_release.py: PASS
+```
+RESULT: PASSED (no AI traces in shareable files or git history; all commits by Maria)
+```
+Manual checks:
+- [x] Expert panel (A7): 5 rounds; all three reviewers (urban-climate journal reviewer, environmental-justice scholar, science editor) reported "No further problems" in round 5. Evidence: 00_protocol/expert_panel_log.md, Gate 9 rounds 1 to 5.
+- [x] All numbers checked by script: verify_manuscript_numbers.py above (45 numbers recomputed independently, every printed value present). Numbers typed in the template listed by the script and checked by hand: section numbers, design settings from the preregistration (10 residents, 70%, 80%, 25 C, 0.3 C, 999, 1 km), scene times (10:21, 10:27 UTC, about 10:50 solar time), counts (18 deviations, two consecutive-day pairs), three rounded check results (0.0001 SE from verify_models.R, about 0.05 from step9_checks, beyond 2 km from step8_residual_correlogram.csv) and figures quoted from other studies (275 districts, about 60%, sixfold, 96% and 80%), each checked against its source in this session or by the panel.
+- [x] All references checked by script: verify_references.py above (Crossref or DataCite). MANUAL items: LANUK Fachbericht 171 and the USGS guide have no DOI (checked by hand at Step 1, files in Documentation/); Arraiz et al. year 2010 (issue 50(2); Crossref and OpenAlex have only the online date 2009; recorded in the round 1 check record). CHECK lines are false positives (month names, dataset names, the second author of Chawla et al.).
+- [x] verify_public_release.py PASSED (above): no AI trace, no private context word, no local path, in the shareable files or the git history; all commits by Maria.
+- [x] LEARNING_NOTEBOOK.md: Step 9 chapter written (12 sections, worked examples with real numbers).
+- [ ] [MARIA] reads the final article (06_manuscript/submission/Boudjelal_heat_inequality_Ruhr.pdf) and confirms the use-of-AI statement is true for her, then approves publication (article in the repository, preprint, OSF data deposit). Not done yet.
+AUTOMATIC CHECKS: ALL PASSED
+RESULT: OPEN (waiting for the [MARIA] item; all other checks passed)

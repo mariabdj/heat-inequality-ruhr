@@ -90,7 +90,7 @@ for a_, v, colr, title in [(ax[0], "foreign10", BLUE, "a  Foreign share (H2)"), 
     s = sig(d).values
     a_.scatter(d.effect_P10_P90[s], y[s], s=22, color=colr, zorder=3, edgecolor="white", linewidth=0.8)
     a_.scatter(d.effect_P10_P90[~s], y[~s], s=22, facecolor="white", edgecolor=colr, linewidth=1.2, zorder=3)
-    a_.set_title(title, loc="left"); a_.set_xlabel("P10 → P90 difference in LST anomaly (°C)")
+    a_.set_title(title, loc="left"); a_.set_xlabel("P10 → P90 difference (°C)")
     a_.set_yticks(y); a_.set_yticklabels([LABEL.get(o, o) for o in order]); a_.grid(axis="x", color=GRID, lw=0.5); a_.set_axisbelow(True)
 save(fig, "fig2_effects")
 
@@ -107,7 +107,7 @@ for a_, v, colr, title in [(ax[0], "foreign10", BLUE, "a  Foreign share"), (ax[1
     a_.scatter(d.effect_P10_P90[s], y[s], s=22, color=colr, zorder=3, edgecolor="white", linewidth=0.8)
     a_.scatter(d.effect_P10_P90[~s], y[~s], s=22, facecolor="white", edgecolor=colr, linewidth=1.2, zorder=3)
     a_.set_yticks(y); a_.set_yticklabels([f"{n} (n = {int(d.loc[n, 'n']):,})" for n in names])
-    a_.set_title(title, loc="left"); a_.set_xlabel("P10 → P90 difference in LST anomaly (°C)")
+    a_.set_title(title, loc="left"); a_.set_xlabel("P10 → P90 difference (°C)")
     a_.grid(axis="x", color=GRID, lw=0.5); a_.set_axisbelow(True)
 save(fig, "fig3_cities")
 
@@ -125,10 +125,11 @@ for yi, v in zip(y, dec.implied_resident_gap_C):
 short = {"raw slope, population-weighted (identity: equals the observed pooled gap)": "raw slope, population-weighted (= observed gap)",
          "plus elevation and log population (single-variable OLS)": "city + elevation + log population (OLS)",
          "same, population-weighted": "same, population-weighted",
+         "single-variable SEM (step-1 lambda)": "same, spatial error model (first λ)",
          "full Model A OLS (adds rent, 65+, under 18)": "full model, OLS (adds rent, 65+, under 18)",
-         "full Model A SEM, step-1 lambda (reported)": "full model, SEM, step-1 lambda (reported)",
-         "full Model A SEM, step-2b lambda (exploratory)": "full model, SEM, step-2b lambda",
-         "full Model A SEM, iterated lambda (exploratory)": "full model, SEM, iterated lambda"}
+         "full Model A SEM, step-1 lambda (reported)": "full model, spatial error model, first λ (Table 1)",
+         "full Model A SEM, step-2b lambda (exploratory)": "full model, spatial error model, λ reported by software",
+         "full Model A SEM, iterated lambda (exploratory)": "full model, spatial error model, iterated λ"}
 ax.set_yticks(y); ax.set_yticklabels([short.get(x, x) for x in dec.step]); ax.set_xlim(0, max(dec.implied_resident_gap_C.max(), obs) * 1.15)
 ax.set_xlabel("Implied heat gap between foreign and other residents (°C)")
 ax.grid(axis="x", color=GRID, lw=0.5); ax.set_axisbelow(True)

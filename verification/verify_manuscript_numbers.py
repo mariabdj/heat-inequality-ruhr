@@ -53,6 +53,16 @@ own = {
     "mg_r2": J["step8_mgwr"]["r2"], "mg_aicc": J["step8_mgwr"]["aicc"], "bw_intercept": J["step8_mgwr"]["bandwidths"]["intercept"],
     "moran_lst": J["step7"]["moran"]["lst_anom"]["I"], "islands": J["step8a"]["W_model_A"]["islands"],
 }
+# D17 and D18 (exploratory): air-temperature resident gaps and observation correlations, recomputed from the cell files
+air = t.merge(pd.read_csv(ROOT / "01_data/processed/air_temperature_cells.csv"), on="gitter_id_100m")
+def gap(d, col):
+    m_ = d.foreign / 100 * d.einwohner_n
+    return np.average(d[col], weights=m_) - np.average(d[col], weights=d.einwohner_n - m_)
+use_f = air.rule4 & air.foreign_in_file.fillna(False).astype(bool) & ~air.foreign_br.fillna(False).astype(bool)
+for col in ("air_day", "air_night"):
+    own[f"{col}_gapA"] = gap(air[air.sample_model_A], col); own[f"{col}_gapAll"] = gap(air[use_f], col)
+from scipy.stats import spearmanr
+own["d18b_cor_max"] = max(abs(spearmanr(A.lst_nobs_mean, A[c])[0]) for c in ("foreign", "rent", "imperviousness"))
 fs = pd.concat([b8, c8]); fs = fs[(fs.variable == "foreign10") & fs.verdict.notna() & ~fs.analysis.str.startswith(("S10", "S8"))]
 own["n_sens_for"] = len(fs); own["n_sens_for_sup"] = int((fs.verdict == "supported").sum())
 for k, v in own.items():

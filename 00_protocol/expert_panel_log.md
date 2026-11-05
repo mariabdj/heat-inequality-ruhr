@@ -336,3 +336,44 @@ Reviewers: journal reviewer in urban climate and remote sensing (UC), environmen
 | J10 | ED | MAJOR | Abstract: unclear "reduction"; 0.16 C missing; H2 undefined; 0.31 below the interval unexplained; too long (ED 5, 8, 9; EJ 5, 14, 16) | Accepted. Abstract rewritten (both 0.88 and 0.50 C; lambda note; under 300 words) |
 | J11 | UC | MINOR | Overpass about 10:50 local solar time, "late morning"; full mask; scene funnel and table (115, 51, 17, 16; June-heavy; no 2020, 2022); consecutive-day pairs; observations per cell; one-path cells; ST_QA (median 2.21 K, 7.7% > 3 K); emissivity; LANUK check described as agreement with a model; Fig 1a claim about roads and industry not visible; EPSG:32632 extraction; Hamm tree cover; Anderson and Hasler paraphrase; Venter scale (UC 7 to 17) | Accepted. Supplementary Table S0 (scenes); D18b; text fixes; Hamm tree cover inspected |
 | J12 | ED, EJ | MINOR | Jargon glosses; "larger cells"; "22 of 22" wording and S17 identical to the primary by construction; "exactly"; S2/S3 labels; Table S1 internal codes; 4.1 "every city" without "significant in 3"; rent = housing price, not income; Chawla night-time air finding; rent Delta*_SEM direction unclear; 0.15 vs 0.16; 2.8 vs 2.9 wording (ED 10 to 18, 20 to 23; EJ 12, 13, 15, 17 to 20) | Accepted |
+
+## Gate 9, round 2 (5 November 2026)
+
+All three reviewers recomputed numbers (Table 1, Table 2, H3, resident-gap chain, D17, D18, sensitivity counts: all match) and checked the cited PDFs. No BLOCKER. EJ: 10 of 11 writing obligations respected. UC: D17 band selection, georeferencing (day anomaly vs elevation rho -0.87), night window and 1 km join sound.
+
+| # | From | Severity | Finding (short) | Action |
+|---|---|---|---|---|
+| K1 | EJ, UC | MAJOR | Night air result framed as an observed, independent confirmation: HOSTRADA is interpolated with a modelled urban heat island and land-cover predictors, and Chawla et al. used the same product; "clear" overclaims; day result is not evidence of equal exposure; intervals optimistic at its effective resolution | Accepted. 3.7, abstract, 4.4 and conclusion reworded ("modelled", "points the same way"); same-product statement; intervals and day-result caveats. Model B night fit not added (would be a new post-hoc analysis) |
+| K2 | EJ | MAJOR | Sample caveat missing in 4.3 (writing obligation 4) | Accepted |
+| K3 | ED | MAJOR | 0.48 C attributed to "reported lambda 0.78": the coefficients are at the first lambda; 0.78 gives 0.35 C | Accepted. 3.2 rewritten; Table 1 caption; Fig 4 label "(Table 1)" |
+| K4 | ED, EJ | MAJOR | Abstract about 400 words; unclear "this gap"; causal "because of density" | Accepted. Rewritten (305 words without headings) |
+| K5 | ED | MAJOR | AI statement: "read, revised and approved all of it" covers the code; "every number ... by script" not literal; "full text" not true for all claims | Accepted. Narrowed and made exact; Maria to confirm it before submission |
+| K6 | EJ, UC, ED | MINOR | Klopfer: positive in all eight, significant in five; Kühnl misdescribed; König "potentially important"; "pooled" sensitivity; 0.46 and 0.26 duplicates; "about 0.05"; SDs on different samples; sensor scale described two ways; 0.16 C without the resolution hedge; Hamm tree cover not in the article; D17/D18 not in Table S1; S18 units in 3.3; S17 by construction; Table 2 S18 note; "own 95% interval" vs hull; Fig 2 axis titles; "internal review" wording; "Section 2.9" capital | Accepted, all. Round 1 bookkeeping: UC 6 (Chawla unit, metric, rent definition) was handled under J12 |
+
+## Gate 9, round 3 (5 November 2026)
+
+No BLOCKER. EJ: all 11 writing obligations met in the body; K1, K2, K4, K6 resolved (Klopfer, Kühnl, König, Chawla, Friesen, Anderson and Hasler wording re-checked in the PDFs). ED: K3 to K6 resolved; every printed number checked against numbers_used.json and the result files. UC: K1 resolved in the body; standard deviations now on the same cells (0.30 / 1.12 / 2.17).
+
+| # | From | Severity | Finding (short) | Action |
+|---|---|---|---|---|
+| L1 | UC, EJ, ED | MAJOR (UC) / MINOR | Abstract "no difference by day" contradicts 3.7 (day effect 0.02 C, "supported but practically negligible") | Accepted. "practically negligible ... when it varies little inside cities" |
+| L2 | UC, EJ, ED | MINOR | 0.16 C hedge: unclear referent ("this last value"), doubling of the coefficient over-read (the smoothed share has a smaller exposure gap, about 11 points, so about 0.25 C), abstract without hedge; abstract 0.31 C without "not covered by the interval" | Accepted. Exposure gap of the smoothed share and the implied gap computed in step9_checks.py; text and abstract updated |
+| L3 | UC | MINOR | HOSTRADA effective resolution and land-cover predictors stated as facts without a source in the project | Accepted. DWD description (effective resolution depends on station density and predictors; urban heat island) and Chawla et al.'s description of the product cited |
+| L4 | EJ | MINOR | König cited for "workers' housing near industry", which he does not support for within-city patterns | Accepted. Presented as the author's own reading |
+| L5 | ED | MINOR | "21 fits" includes S17; Fig 4 labels "SEM"/"lambda"; AI statement item 2 parenthesis incomplete | Accepted |
+
+## Gate 9, round 4 (5 November 2026)
+
+No BLOCKER, no MAJOR. UC: L1 to L3 fixed (HOSTRADA wording checked against the DWD description and Chawla et al. Sect. 2.3.1; 0.2235 x 1.1297 = 0.2525 C). EJ: L1, L2, L4 fixed; all 11 writing obligations hold (forbidden phrases searched: none). ED: L1, L2, L5 fixed; 20 distinct sensitivity fits recounted from Table S1; AI statement item 2 true as far as checkable; abstract length acceptable for the listed venues.
+
+| # | From | Severity | Finding (short) | Action |
+|---|---|---|---|---|
+| N1 | UC, EJ, ED | MINOR | "Lower bound" too firm: one exploratory check; and 0.10 C (iterated lambda) is lower than the 0.16 C called a lower bound | Accepted. "probably an underestimate" / "probably too low"; abstract gives 0.10 to 0.16 C |
+| N2 | ED | MINOR | 3.3 "every preregistered sensitivity analysis" includes S10 (8 of 11 cities inconclusive) | Accepted. "every pooled preregistered sensitivity analysis" |
+| N3 | ED | MINOR | Optional abstract trims | Two safe trims applied (no caveat removed) |
+
+## Gate 9, round 5 (5 November 2026)
+
+UC: "No further problems" (N1 to N3 fixed; numbers re-checked against numbers_used.json). EJ: "No further problems" (all 11 writing obligations hold; abstract trims removed no caveat). ED: "No further problems" (abstract numbers checked; house rules; public and submission versions differ only in Section 2.9, acknowledgements, declaration and image paths).
+
+**Panel result: all three reviewers report no remaining problem in the same round (rule A7).** Gate 9: about 75 findings over 5 rounds (J1 to J12, K1 to K6, L1 to L5, N1 to N3, grouped), all accepted; two exploratory checks added on the panel's request with Maria's approval (D17, D18).

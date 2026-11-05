@@ -5819,5 +5819,544 @@
     ],
     "residual_correlogram_note": "Moran's I of OLS residuals still positive at 2 to 3 km (0.024): range beyond 3 km; 1 and 2 km blocks are shorter, so bootstrap intervals may be too narrow (limitation, mainly for H3)",
     "islands_note": "1,712 of 12,609 Model A cells (13.6%) have no neighbour (3,029 components); S20 drops them"
+  },
+  "step9_checks": {
+    "D18a_smoothed_3x3": {
+      "n": 12609,
+      "islands": 1712,
+      "lambda_het": 0.7646522357097538,
+      "P10_P90": {
+        "rent": [
+          5.255467664644901,
+          7.0197332338128
+        ],
+        "foreign10": [
+          0.0,
+          4.169473892773894
+        ],
+        "age65_10": [
+          1.2261960196779964,
+          3.2055873153734145
+        ],
+        "under18_10": [
+          1.1413465563631087,
+          2.6169284499064402
+        ]
+      },
+      "inference": [
+        {
+          "n": 12609,
+          "variable": "rent",
+          "beta": -0.013729851780915955,
+          "beta_ols": 0.22508194100662593,
+          "p_het": 0.7478374840686304,
+          "p_hom": 0.9600579941432497,
+          "p_boot": 0.002,
+          "p_max": 0.9600579941432497,
+          "ci_lo_hull": -0.09743488821559006,
+          "ci_hi_hull": 0.3215918062290023,
+          "same_side": false,
+          "p_holm": 0.9600579941432497,
+          "effect_P10_P90": 0.024223104766848573,
+          "effect_ci_lo": -0.5673733510563432,
+          "effect_ci_hi": 0.17190101851448855,
+          "negligible_region": false,
+          "verdict": "not supported (inconclusive)"
+        },
+        {
+          "n": 12609,
+          "variable": "foreign10",
+          "beta": 0.22354839151495487,
+          "beta_ols": 0.25592070491740404,
+          "p_het": 1.2009167695876836e-12,
+          "p_hom": 1.3710117362909748e-48,
+          "p_boot": 0.002,
+          "p_max": 0.002,
+          "ci_lo_hull": 0.16188217180268852,
+          "ci_hi_hull": 0.3221390567674931,
+          "same_side": true,
+          "p_holm": 0.008,
+          "effect_P10_P90": 0.9320791821932014,
+          "effect_ci_lo": 0.674963489036848,
+          "effect_ci_hi": 1.3431503870348698,
+          "negligible_region": false,
+          "verdict": "supported"
+        },
+        {
+          "n": 12609,
+          "variable": "age65_10",
+          "beta": -0.13018321387790982,
+          "beta_ols": -0.16807183749054552,
+          "p_het": 0.00018375298658983665,
+          "p_hom": 5.802786260099928e-14,
+          "p_boot": 0.002,
+          "p_max": 0.002,
+          "ci_lo_hull": -0.23836579671374997,
+          "ci_hi_hull": -0.06196551924040372,
+          "same_side": true,
+          "p_holm": 0.008,
+          "effect_P10_P90": -0.25768352039558967,
+          "effect_ci_lo": -0.4718191832067002,
+          "effect_ci_hi": -0.12265400941770208,
+          "negligible_region": false,
+          "verdict": "negative"
+        },
+        {
+          "n": 12609,
+          "variable": "under18_10",
+          "beta": -0.12944559622012974,
+          "beta_ols": -0.48980514105597417,
+          "p_het": 0.00828023251257188,
+          "p_hom": 1.3576510315754567e-08,
+          "p_boot": 0.002,
+          "p_max": 0.00828023251257188,
+          "ci_lo_hull": -0.5918337041698453,
+          "ci_hi_hull": -0.03335748532332533,
+          "same_side": true,
+          "p_holm": 0.01656046502514376,
+          "effect_P10_P90": -0.19100757798134457,
+          "effect_ci_lo": -0.8732990978617042,
+          "effect_ci_hi": -0.04922170135723628,
+          "negligible_region": false,
+          "verdict": "negative"
+        }
+      ],
+      "exposure_gap_points_smoothed": 11.297155260128537,
+      "implied_resident_gap_C": 0.2525460887096446,
+      "note": "P10/P90 of the smoothed variables on the Model A cells; compare effects with Table 1 (Q20 percentiles of the unsmoothed variables)"
+    },
+    "D18b_nobs": {
+      "spearman_with_nobs": {
+        "foreign": 0.054386022979328597,
+        "rent": 0.05473483937238952,
+        "imperviousness": 0.05103008511656857
+      },
+      "nobs_quantiles": {
+        "0.0": 4.73,
+        "0.1": 14.0,
+        "0.5": 16.0,
+        "0.9": 16.0,
+        "1.0": 16.0
+      },
+      "share_cells_nobs_ge_12": 0.961535411214212,
+      "model_nobs_ge_12": {
+        "n": 12124,
+        "islands": 1636,
+        "lambda_het": 0.780755791123448,
+        "P10_P90": {
+          "rent": [
+            5.05,
+            7.24
+          ],
+          "foreign10": [
+            0.0,
+            4.5072
+          ],
+          "age65_10": [
+            0.8448000000000001,
+            3.571
+          ],
+          "under18_10": [
+            0.0,
+            2.8812000000000006
+          ]
+        },
+        "inference": [
+          {
+            "n": 12124,
+            "variable": "rent",
+            "beta": -0.005663827934949767,
+            "beta_ols": 0.101756783538806,
+            "p_het": 0.7012215326180704,
+            "p_hom": 0.7674779009291294,
+            "p_boot": 0.002,
+            "p_max": 0.7674779009291294,
+            "ci_lo_hull": -0.03459766040491737,
+            "ci_hi_hull": 0.1546461123983919,
+            "same_side": false,
+            "p_holm": 1.0,
+            "effect_P10_P90": 0.012403783177539991,
+            "effect_ci_lo": -0.3386749861524783,
+            "effect_ci_hi": 0.07576887628676907,
+            "negligible_region": false,
+            "verdict": "not supported (inconclusive)"
+          },
+          {
+            "n": 12124,
+            "variable": "foreign10",
+            "beta": 0.10651995184510915,
+            "beta_ols": 0.2174040432476593,
+            "p_het": 3.8378355559820616e-21,
+            "p_hom": 9.680835840361897e-34,
+            "p_boot": 0.002,
+            "p_max": 0.002,
+            "ci_lo_hull": 0.08439637606420568,
+            "ci_hi_hull": 0.26050034300872366,
+            "same_side": true,
+            "p_holm": 0.008,
+            "effect_P10_P90": 0.480106726956276,
+            "effect_ci_lo": 0.3803913461965878,
+            "effect_ci_hi": 1.1741271460089193,
+            "negligible_region": false,
+            "verdict": "supported"
+          },
+          {
+            "n": 12124,
+            "variable": "age65_10",
+            "beta": -0.003203668887508695,
+            "beta_ols": -0.08119142257785925,
+            "p_het": 0.8098450560145111,
+            "p_hom": 0.518671304113048,
+            "p_boot": 0.002,
+            "p_max": 0.8098450560145111,
+            "ci_lo_hull": -0.12670837239421395,
+            "ci_hi_hull": 0.02289157021119086,
+            "same_side": false,
+            "p_holm": 1.0,
+            "effect_P10_P90": -0.008733842121126203,
+            "effect_ci_lo": -0.34543236482110606,
+            "effect_ci_hi": 0.06240699870974852,
+            "negligible_region": false,
+            "verdict": "inconclusive"
+          },
+          {
+            "n": 12124,
+            "variable": "under18_10",
+            "beta": -0.02414215736377066,
+            "beta_ols": -0.2804045635969959,
+            "p_het": 0.16417940539378562,
+            "p_hom": 0.021961112378135205,
+            "p_boot": 0.002,
+            "p_max": 0.16417940539378562,
+            "ci_lo_hull": -0.34173964067682,
+            "ci_hi_hull": 0.009871836692752909,
+            "same_side": false,
+            "p_holm": 0.49253821618135685,
+            "effect_P10_P90": -0.06955838379649604,
+            "effect_ci_lo": -0.984620252718054,
+            "effect_ci_hi": 0.028442735879159686,
+            "negligible_region": false,
+            "verdict": "inconclusive"
+          }
+        ]
+      }
+    },
+    "D17_air_temperature": {
+      "air_day": {
+        "resident_gap_foreign": {
+          "model_A_cells": 0.0427304417042432,
+          "all_usable_foreign_cells": 0.07756794064911521
+        },
+        "model_1km": {
+          "n": 742,
+          "islands": 5,
+          "lambda_het": 0.7550177590974364,
+          "P10_P90": {
+            "rent": [
+              5.305688207247298,
+              6.901062804537104
+            ],
+            "foreign10": [
+              0.6810388873305283,
+              3.661482345275522
+            ],
+            "age65_10": [
+              1.38811211146711,
+              2.8692200974957465
+            ],
+            "under18_10": [
+              1.3451094495449976,
+              2.3990027066412014
+            ]
+          },
+          "inference": [
+            {
+              "n": 742,
+              "variable": "rent",
+              "beta": 0.004179452504264246,
+              "beta_ols": 0.007553106160981125,
+              "p_het": 0.3184464647532341,
+              "p_hom": 0.20039661928174923,
+              "p_boot": 0.09,
+              "p_max": 0.3184464647532341,
+              "ci_lo_hull": -0.004031525484271182,
+              "ci_hi_hull": 0.020235638721220972,
+              "same_side": false,
+              "p_holm": 0.48699498327752155,
+              "effect_P10_P90": -0.006667792355882441,
+              "effect_ci_lo": -0.03228342397576991,
+              "effect_ci_hi": 0.006431793345932727,
+              "negligible_region": true,
+              "verdict": "practically negligible"
+            },
+            {
+              "n": 742,
+              "variable": "foreign10",
+              "beta": 0.0078607093727225,
+              "beta_ols": 0.021796156822639107,
+              "p_het": 0.013529696683726895,
+              "p_hom": 0.0046103262051689214,
+              "p_boot": 0.002,
+              "p_max": 0.013529696683726895,
+              "ci_lo_hull": 0.0016218322610994903,
+              "ci_hi_hull": 0.030573738349805576,
+              "same_side": true,
+              "p_holm": 0.040589090051180686,
+              "effect_P10_P90": 0.023428399824737666,
+              "effect_ci_lo": 0.0048337793524781125,
+              "effect_ci_hi": 0.0911232984496,
+              "negligible_region": true,
+              "verdict": "supported but practically negligible"
+            },
+            {
+              "n": 742,
+              "variable": "age65_10",
+              "beta": -0.005105056447756035,
+              "beta_ols": -0.018046262949925024,
+              "p_het": 0.22322264792572144,
+              "p_hom": 0.24349749163876078,
+              "p_boot": 0.004,
+              "p_max": 0.24349749163876078,
+              "ci_lo_hull": -0.029511769886937416,
+              "ci_hi_hull": 0.0035145773162334176,
+              "same_side": false,
+              "p_holm": 0.48699498327752155,
+              "effect_P10_P90": -0.0075611398738984455,
+              "effect_ci_lo": -0.04371011806138244,
+              "effect_ci_hi": 0.005205468530588407,
+              "negligible_region": true,
+              "verdict": "practically negligible"
+            },
+            {
+              "n": 742,
+              "variable": "under18_10",
+              "beta": -0.023857313951202358,
+              "beta_ols": -0.06264478803703948,
+              "p_het": 0.00011511140194236417,
+              "p_hom": 0.00010766504539064626,
+              "p_boot": 0.002,
+              "p_max": 0.002,
+              "ci_lo_hull": -0.07931509220223817,
+              "ci_hi_hull": -0.011731646405884677,
+              "same_side": true,
+              "p_holm": 0.008,
+              "effect_P10_P90": -0.02514306230559936,
+              "effect_ci_lo": -0.0835896408579025,
+              "effect_ci_hi": -0.012363903041798775,
+              "negligible_region": true,
+              "verdict": "negative but practically negligible"
+            }
+          ]
+        }
+      },
+      "lst_same_1km_cells": {
+        "n": 742,
+        "islands": 5,
+        "lambda_het": 0.24311459442751876,
+        "P10_P90": {
+          "rent": [
+            5.305688207247298,
+            6.901062804537104
+          ],
+          "foreign10": [
+            0.6810388873305283,
+            3.661482345275522
+          ],
+          "age65_10": [
+            1.38811211146711,
+            2.8692200974957465
+          ],
+          "under18_10": [
+            1.3451094495449976,
+            2.3990027066412014
+          ]
+        },
+        "inference": [
+          {
+            "n": 742,
+            "variable": "rent",
+            "beta": 0.2092801261160992,
+            "beta_ols": 0.2123775739742795,
+            "p_het": 0.057271238597579856,
+            "p_hom": 0.0011122864659105366,
+            "p_boot": 0.16,
+            "p_max": 0.16,
+            "ci_lo_hull": -0.06090767639214415,
+            "ci_hi_hull": 0.4250288616295981,
+            "same_side": false,
+            "p_holm": 0.16,
+            "effect_P10_P90": -0.3338801969232315,
+            "effect_ci_lo": -0.6780802489588645,
+            "effect_ci_hi": 0.09717055969597478,
+            "negligible_region": false,
+            "verdict": "not supported (inconclusive)"
+          },
+          {
+            "n": 742,
+            "variable": "foreign10",
+            "beta": 0.17794466931669842,
+            "beta_ols": 0.2061093299963706,
+            "p_het": 0.0031657206241106524,
+            "p_hom": 0.0005941305422866258,
+            "p_boot": 0.002,
+            "p_max": 0.0031657206241106524,
+            "ci_lo_hull": 0.05976391833801853,
+            "ci_hi_hull": 0.32273186126629033,
+            "same_side": true,
+            "p_holm": 0.009497161872331957,
+            "effect_P10_P90": 0.5303540255411391,
+            "effect_ci_lo": 0.17812297943170616,
+            "effect_ci_hi": 0.9618840645815263,
+            "negligible_region": false,
+            "verdict": "supported"
+          },
+          {
+            "n": 742,
+            "variable": "age65_10",
+            "beta": -0.25856041017484804,
+            "beta_ols": -0.26892557032228065,
+            "p_het": 0.0038252986144793125,
+            "p_hom": 0.0025518941314584234,
+            "p_boot": 0.008,
+            "p_max": 0.008,
+            "ci_lo_hull": -0.44348957033756875,
+            "ci_hi_hull": -0.08333916607814004,
+            "same_side": true,
+            "p_holm": 0.016,
+            "effect_P10_P90": -0.38295588838080735,
+            "effect_ci_lo": -0.6568559443473818,
+            "effect_ci_hi": -0.12343430442730005,
+            "negligible_region": false,
+            "verdict": "negative"
+          },
+          {
+            "n": 742,
+            "variable": "under18_10",
+            "beta": -0.6763076677521078,
+            "beta_ols": -0.751179496347611,
+            "p_het": 8.383395996811408e-08,
+            "p_hom": 1.3896494943335613e-08,
+            "p_boot": 0.002,
+            "p_max": 0.002,
+            "ci_lo_hull": -1.0126333940052463,
+            "ci_hi_hull": -0.42894003734927255,
+            "same_side": true,
+            "p_holm": 0.008,
+            "effect_P10_P90": -0.7127560907664062,
+            "effect_ci_lo": -1.0672075058525725,
+            "effect_ci_hi": -0.45205701306099216,
+            "negligible_region": false,
+            "verdict": "negative"
+          }
+        ]
+      },
+      "air_night": {
+        "resident_gap_foreign": {
+          "model_A_cells": 0.2629251308806897,
+          "all_usable_foreign_cells": 0.45716534147088494
+        },
+        "model_1km": {
+          "n": 742,
+          "islands": 5,
+          "lambda_het": 0.749785568310514,
+          "P10_P90": {
+            "rent": [
+              5.305688207247298,
+              6.901062804537104
+            ],
+            "foreign10": [
+              0.6810388873305283,
+              3.661482345275522
+            ],
+            "age65_10": [
+              1.38811211146711,
+              2.8692200974957465
+            ],
+            "under18_10": [
+              1.3451094495449976,
+              2.3990027066412014
+            ]
+          },
+          "inference": [
+            {
+              "n": 742,
+              "variable": "rent",
+              "beta": 0.02124423153791999,
+              "beta_ols": 0.05363881591783807,
+              "p_het": 0.6053250769569204,
+              "p_hom": 0.49347635973874615,
+              "p_boot": 0.214,
+              "p_max": 0.6053250769569204,
+              "ci_lo_hull": -0.05933253918464257,
+              "ci_hi_hull": 0.15789825257045045,
+              "same_side": false,
+              "p_holm": 0.6053250769569204,
+              "effect_P10_P90": -0.03389250733454049,
+              "effect_ci_lo": -0.2519068611073464,
+              "effect_ci_hi": 0.09465762580788076,
+              "negligible_region": true,
+              "verdict": "practically negligible"
+            },
+            {
+              "n": 742,
+              "variable": "foreign10",
+              "beta": 0.15506609863757143,
+              "beta_ols": 0.27094284578331135,
+              "p_het": 5.973792712974831e-06,
+              "p_hom": 2.0238283957011586e-08,
+              "p_boot": 0.002,
+              "p_max": 0.002,
+              "ci_lo_hull": 0.08793368804658104,
+              "ci_hi_hull": 0.3643732813189108,
+              "same_side": true,
+              "p_holm": 0.008,
+              "effect_P10_P90": 0.4621657392334029,
+              "effect_ci_lo": 0.26208138527140834,
+              "effect_ci_hi": 1.0859939625568984,
+              "negligible_region": false,
+              "verdict": "supported"
+            },
+            {
+              "n": 742,
+              "variable": "age65_10",
+              "beta": -0.11162796632186114,
+              "beta_ols": -0.31797952132337787,
+              "p_het": 0.021577865899535555,
+              "p_hom": 0.00941557725254868,
+              "p_boot": 0.002,
+              "p_max": 0.021577865899535555,
+              "ci_lo_hull": -0.45969234148386834,
+              "ci_hi_hull": -0.01640703410762573,
+              "same_side": true,
+              "p_holm": 0.04315573179907111,
+              "effect_P10_P90": -0.16533307238344422,
+              "effect_ci_lo": -0.6808539980879604,
+              "effect_ci_hi": -0.02430058924384869,
+              "negligible_region": false,
+              "verdict": "negative"
+            },
+            {
+              "n": 742,
+              "variable": "under18_10",
+              "beta": -0.29780590626970743,
+              "beta_ols": -0.7559895409064025,
+              "p_het": 4.182028704013289e-06,
+              "p_hom": 8.808554812263758e-07,
+              "p_boot": 0.002,
+              "p_max": 0.002,
+              "ci_lo_hull": -0.960148902821916,
+              "ci_hi_hull": -0.17097327431046694,
+              "same_side": true,
+              "p_holm": 0.008,
+              "effect_P10_P90": -0.31385563654106874,
+              "effect_ci_lo": -1.0118944544923356,
+              "effect_ci_hi": -0.18018758093946072,
+              "negligible_region": false,
+              "verdict": "negative"
+            }
+          ]
+        }
+      }
+    }
   }
 }

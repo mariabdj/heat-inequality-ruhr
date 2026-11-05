@@ -62,7 +62,13 @@ for raw, scaled in [("foreign", "foreign10"), ("age65", "age65_10"), ("under18",
 S["elevation"] = [np.nanmean(r4.elevation.values[idx]) for idx in nb]
 S["ln_pop"] = [np.log(pop[idx].sum()) for idx in nb]
 out["D18a_smoothed_3x3"] = fit("D18a 3x3 smoothed regressors", S)
-out["D18a_smoothed_3x3"]["note"] = "P10/P90 of the smoothed variables on the Model A cells; compare effects with Table 1 (Q20 percentiles of the unsmoothed variables)"
+memA = A.foreign / 100 * A.einwohner_n
+gap_s = float(np.average(S.foreign10, weights=memA) - np.average(S.foreign10, weights=A.einwohner_n - memA))   # per 10 points
+b_s = next(r for r in out["D18a_smoothed_3x3"]["inference"] if r["variable"] == "foreign10")["beta"]
+out["D18a_smoothed_3x3"]["exposure_gap_points_smoothed"] = 10 * gap_s
+out["D18a_smoothed_3x3"]["implied_resident_gap_C"] = b_s * gap_s
+print(f"D18a exposure gap of the smoothed share {10 * gap_s:.2f} points; implied resident gap {b_s * gap_s:.3f} C")
+out["D18a_smoothed_3x3"]["note"] ="P10/P90 of the smoothed variables on the Model A cells; compare effects with Table 1 (Q20 percentiles of the unsmoothed variables)"
 
 # ---- D18b: observations per cell ---------------------------------------------------------------------------------
 cor = {v: float(spearmanr(A.lst_nobs_mean, A[c], nan_policy="omit")[0]) for v, c in [("foreign", "foreign"), ("rent", "rent"), ("imperviousness", "imperviousness")]}
