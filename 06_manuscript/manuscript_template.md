@@ -1,0 +1,244 @@
+# Where is the surface hotter? Rent, foreign citizens and summer heat on the 100 m census grid of the Ruhr, Germany
+
+**Maria Boudjelal**
+Independent researcher, Algiers, Algeria. ORCID: https://orcid.org/0009-0002-6434-784X
+
+**Preregistration:** https://doi.org/10.17605/OSF.IO/CMXS2 (registered 2 November 2026, before any census or temperature value was opened).
+
+## Abstract
+
+**Background.** US studies found hotter surfaces in poorer neighbourhoods; a German 1 km study found foreign citizens in hotter areas, with mixed results for rent. To my knowledge, no study has tested this with a regression on a 100 m census grid.
+
+**Methods.** I joined the Zensus 2022 100 m grid with a daytime land surface temperature (LST) composite from {{n_scenes}} hot-day Landsat scenes ({{first_year}} to {{last_year}}) in the 11 independent cities of the Ruhr, for rent per m² and the shares of foreign citizens, of residents aged 65+ and under 18. The preregistered model is a spatial error model with city fixed effects, elevation and log population, on the {{n_A}} cells with all four census values ({{share_cells_A}}% of the cells, {{share_pop_A}}% of the residents; denser and hotter than average). Three inference methods must agree.
+
+**Results.** Between cells at the 10th and the 90th percentile of the foreign share (0% and {{p90_for}}%), the adjusted difference was {{e_for}} °C (95% interval {{e_for_lo}} to {{e_for_hi}}), and as low as {{e_for_it}} °C with other estimates of the spatial dependence (not covered by the interval). It held in all pooled sensitivity analyses and was positive in all 11 cities, significant in {{s10_sup}}. For rent and age, the models disagree: inconclusive. The estimated foreign residents lived in cells {{rc_all_pooled}} °C hotter than other residents ({{rc_A_pooled}} °C on the primary-model cells); in the spatial model, at equal density and elevation, the {{rc_A_pooled}} °C gap was {{dg_semit}} to {{dg_sem1}} °C, probably an underestimate, most of the drop coming when density was added. Modelled air temperature (1 km, exploratory) showed a practically negligible difference by day, when it varies little inside cities, and a positive one at night.
+
+**Conclusion.** In the denser part of the Ruhr, daytime surface heat goes with where foreign citizens live more clearly than with rent or age. The results describe cells, not people, and surface temperature, not the air or indoor temperature people live with.
+
+**Keywords:** urban heat; environmental justice; land surface temperature; Zensus 2022; spatial error model; Ruhr
+
+## 1. Introduction
+
+Inside a city, summer heat is uneven: a sealed square full of asphalt and roofs can be several degrees hotter at the surface than a park a few hundred metres away. If the people who live in the hottest blocks are also the people with the fewest means to cool their homes or leave the city, heat becomes a question of justice as well as of climate.
+
+Studies from the United States found that poorer neighbourhoods are hotter in most of the cities they looked at (Chakraborty et al., 2019; Hsu et al., 2021). In Germany, Chawla, Keller and Benz (2026) compared 1 km cells within districts with MODIS surface temperature and air temperature: foreigners lived in hotter areas, with significant disparities for both measures in more than half of the cities, while rent per resident gave mixed patterns. König (2024) found that non-nationals in German cities live closer to industrial air pollution and further from green space, with no inequality by socio-economic status, and pointed to housing-market discrimination as a potentially important driver. Recent work has started to use the 100 m census grid: Friesen et al. (2026) found residents of foreign nationality over-represented where access to cool spots is poor in about 60% of Bavarian cities, and Kühnl et al. (2026) modelled heat-wave air temperature at 100 m from citizen-science measurements, land cover and LST, and combined it with census age data for Hamm (one of the cities studied here), Augsburg and Zwickau.
+
+In the Ruhr, the old coal and steel region where I chose to look, Klopfer and Pfeiffer (2023) correlated one Landsat scene from 2018 with the share of non-German residents in 275 districts of eight cities. They called the result ambiguous: the correlation was significant in five cities and not in three. The state environment agency maps where sensitive groups live on top of modelled heat (LANUK, 2026), and Anderson and Hasler (2026), who built a heat risk index for the districts of Bochum, wrote that future studies could compare district results with 100 m census grids.
+
+Here I test the question with a preregistered regression on the 100 m grid of all 11 independent cities, many summer scenes and a spatial model. A 100 m census cell separates a block of flats from the park next to it. The thermal sensor records at 100 m, but its signal spreads into the neighbouring cells, so the results are about city blocks and their immediate surroundings. I ask three questions, fixed before any data were opened:
+
+- **RQ1.** Is summer daytime land surface temperature higher in cells with lower rent (H1) and with a higher share of foreign citizens (H2)?
+- **RQ2.** Is it related to the shares of residents aged 65 and over and under 18 (no direction predicted)?
+- **RQ3.** How much do the associations of RQ1 change when tree cover and sealed surfaces are taken into account (H3: they move toward zero)?
+
+All three are questions about places. None of them is a causal question, and none describes individual people.
+
+## 2. Data and methods
+
+### 2.1 Study area and design
+
+The study area is the 11 independent cities (kreisfreie Städte) of the Regionalverband Ruhr: Bochum, Bottrop, Dortmund, Duisburg, Essen, Gelsenkirchen, Hagen, Hamm, Herne, Mülheim an der Ruhr and Oberhausen. The design is cross-sectional and ecological: the unit is one inhabited 100 m cell of the INSPIRE grid (EPSG:3035), in which the models are fitted. The analysis plan, including every sensitivity analysis, was registered on OSF on 2 November 2026 (van den Akker et al., 2021, template). Changes made later are listed in Section 2.8. The report follows STROBE for cross-sectional studies (von Elm et al., 2007) with the spatial items of ISLE-ReSt (Jia et al., 2020).
+
+### 2.2 Cells and sample
+
+A cell was included if (1) its centre lies in one of the 11 cities (BKG VG250 boundaries), (2) it has at least 10 residents, (3) less than half of its area is permanent water (ESA WorldCover 2021, class 80), and (4) at least 70% of its area is covered by the heat composite. Of {{n_rule1}} inhabited cells, {{n_rm_pop}} had fewer than 10 residents, {{n_rm_water}} were mostly water and {{n_rm_lst}} lacked heat data, leaving **{{n_rule4}} cells** with {{pop_rule4}} residents. In addition, each model uses only the cells where its census variables are present and not marked as uncertain. For the primary model this means all four census values: **{{n_A}} cells** with {{pop_A}} residents.
+
+This sample is not a random part of the Ruhr. It holds {{share_cells_A}}% of the cells but {{share_pop_A}}% of the residents, because small cells often have a suppressed or uncertain value. Its cells have more residents (median {{medpop_A}} against {{medpop_rule4}}), are more sealed (median imperviousness {{imp_med_A}}% against {{imp_med_rule4}}%) and are hotter (population-weighted mean anomaly {{lst_pw_A}} °C against {{lst_pw_rule4}} °C) than all included cells. The results of the primary model are therefore about the denser part of the Ruhr.
+
+### 2.3 Surface heat
+
+I used Landsat 8 and 9 Collection 2 Level 2 surface temperature (USGS, LSDS-1619; Cook et al., 2014), produced by USGS with emissivity from the ASTER Global Emissivity Database, from Google Earth Engine: paths 196 and 197, row 24, June to August {{first_year}} to {{last_year}}. Of {{n_cand}} candidate scenes, {{n_hotday}} were taken on hot days (daily maximum air temperature of at least 25 °C at the DWD station Essen-Bredeney), and {{n_scenes}} of these had at least 80% valid pixels in a fixed core area of the 11 cities. A pixel was invalid if flagged as fill, cloud (including dilated and medium-confidence cloud), cloud shadow, cirrus or snow, if its temperature was outside the valid range, or if it lay less than 1 km from a cloud. The {{n_scenes}} scenes ({{n_scenes_l8}} Landsat 8, {{n_scenes_l9}} Landsat 9; {{n_p196}} from path 196 and {{n_p197}} from path 197; {{n_june}} from June) are listed in Supplementary Table S0. There is no usable hot-day scene from 2020 or from 2022, the census year. The images were taken at about 10:21 (path 196) and 10:27 (path 197) UTC, which is about 10:50 local solar time: late morning, before the daily peak of surface temperature.
+
+Hot days differ in overall temperature: the median surface temperature of the core area ranged from {{scene_med_min}} to {{scene_med_max}} °C across the scenes. To compare places and not days, I subtracted from each pixel the median of the valid core pixels of the same scene. This **LST anomaly** says how much warmer or cooler a place is than the middle of the 11 cities on that day. The composite is the mean anomaly of each 30 m pixel over the scenes in which it was valid (at least 5 observations). The value of a cell is the mean of the composite inside it, weighted by exact pixel overlap (exactextract), computed in the native Landsat grid (EPSG:32632) with the cells reprojected as polygons. The Landsat thermal band is recorded at 100 m and delivered at 30 m, so a cell's value contains some signal from its neighbours. The median uncertainty reported by USGS for the retained pixels (ST_QA) was {{stqa_med}} K, and {{stqa_gt3}}% exceeded 3 K (sensitivity S16 masks them). {{onepath_only}} included cells were seen only from one orbit path and {{onepath_partly}} partly ({{onepath_A}} of them in the primary sample). As a comparison with an independent source, the composite agrees with the modelled day map of the state agency (LANUK, 2026), a model driven by land use, with a pixel-level Spearman correlation of {{lanuk_rho}}.
+
+### 2.4 Census variables
+
+From the Zensus 2022 (reference day 15 May 2022, published by Destatis on the 100 m grid) I used the average net cold rent per m² of rented dwellings, the share of foreign citizens, the share aged 65 and over and the share aged under 18. **Foreign citizens** (Ausländer) are residents without German nationality; people with German and another nationality count as German. This is a legal status, not migration background, which the grid data do not report, and it groups very different people, from long-settled families to recent arrivals. The **estimated number of foreign residents** of a cell is its share times its population, and the "other residents" are the rest. Rent per m² measures the price of housing, not household income: a low value can mean social housing or old buildings. Shares enter the models per 10 percentage points and rent per 1 EUR/m². The census marks some values in brackets (uncertain) and perturbs small counts for confidentiality (Cell-Key Method). Bracketed values are treated as missing in the primary analysis (sensitivity S1 includes them). A dash means "zero, or changed to zero" and is read as 0 (an exploratory analysis treats it as missing). Rent exists only where rented dwellings exist, so its absence is not random.
+
+### 2.5 Covariates
+
+All models include elevation (mean of the Geobasis NRW terrain model in the cell; higher ground is cooler and the Ruhr rises to the south), the natural log of the number of residents (density) and 10 city dummies, so that every comparison is within a city. Model B adds tree cover (Copernicus Tree Cover Density, 2022) and imperviousness (Copernicus Imperviousness Density, 2021), as % of the cell. The data do not cover the same moment: census 2022, land cover 2021 and 2022, heat {{first_year}} to {{last_year}}.
+
+### 2.6 Models and inference
+
+**Model A** regresses the cell LST anomaly on the four census variables, elevation, log population and the city dummies. Neighbouring cells share influences that are not in the model (a wind corridor, a large building, and the blur of the thermal sensor), so their errors are not independent. In ordinary least squares (OLS), the residuals were strongly clustered (Moran's I {{ols_moran}}), and the robust Lagrange multiplier tests (tests on the OLS residuals that compare an error model with a lag model) favoured an error model ({{lm_err}} against {{lm_lag}}). The primary estimator is therefore a **spatial error model**, u = λWu + ε: the error of a cell u is partly the average error of its neighbours (Wu, weighted by λ) and partly its own (ε). It is estimated by GMM, a method that does not assume normal errors, with standard errors that allow the error spread to differ between cells (Arraiz et al., 2010; spreg). W gives equal weight to each included cell that touches the cell (by an edge or a corner); {{islands}} cells ({{islands_pct}}%) have no included neighbour.
+
+Because each method has its own weak point, the preregistered rule combines three: two GMM fits (Drukker et al., 2013), one allowing and one not allowing the error spread to differ between cells, and an OLS bootstrap that resamples whole 1 km blocks within each city ({{n_blocks}} blocks, 999 replicates). For each variable, the largest of the three p-values is corrected for four tests with the Holm method, and the reported 95% interval is the hull of the three intervals (the smallest range that covers all three). Because the bootstrap interval is centred on the OLS estimate, the hull is often lopsided around the spatial estimate; it is deliberately wide. A hypothesis is supported only if the Holm-adjusted p is below .05 and all three intervals lie on the expected side of zero. Effects are reported as the expected difference between cells at the 10th and the 90th percentile of each variable (P10 to P90), with the sign of rent reversed so that a positive value always means "hotter where the disadvantage is". An effect whose whole interval lies within ±0.3 °C is called practically negligible; this threshold is a judgement fixed in advance. Variance inflation factors were all below {{vif_max}}.
+
+The preregistration also asks for **single-variable models**: each census variable alone, adjusted only for elevation, log population and city, on its own usable cells. They describe the pattern before the census variables are adjusted for each other.
+
+**H3** compares the OLS coefficients of rent and of the foreign share between Model A and Model B on the same cells: Δ* = sign(β_A) × (β_A − β_B), positive when the coefficient moves toward zero, with a one-sided block-bootstrap test and a Holm correction for two tests. This is a change in estimate, not a mediation effect: tree cover and sealing can be causes, consequences or companions of where people live.
+
+### 2.7 Sensitivity and local analyses
+
+The preregistration lists 20 sensitivity analyses (S1 to S20), all reported in Supplementary Table S1. Grouped by the threat they address, they change: the census handling (S1 uncertain values included, S2 rent left out, S11 other population thresholds); the weighting (S3, by population); the heat measure (S4 hot-day rule relaxed, which adds one scene; S5 absolute temperature; S6 and S6b one satellite or one orbit path; S12 to S16 other scene and pixel rules); the scale (S7, 1 km grid); the spatial model (S8 lag model, S9 nearest-neighbour weights, S18 spatial Durbin error model, S20 cells without neighbours dropped); the bootstrap blocks (S19); the land-cover covariates (S17, a 300 m window; this changes Model B only, so for Model A it repeats the primary result); and the city (S10, each city alone). The heat-measure checks reuse the same satellite and largely the same scenes, so they test processing choices, not the sensor. To see where relationships differ inside the region, I fitted a multiscale geographically weighted regression (MGWR; Fotheringham et al., 2017; Oshan et al., 2019) of Model B on the 1 km grid ({{mg_n}} cells), as a descriptive tool.
+
+### 2.8 Deviations from the preregistration and checks
+
+Eighteen deviations are listed with their dates and reasons in the repository (`00_protocol/deviations.md`). The ones that touch results are: S3 was fitted by population-weighted OLS with the block bootstrap, because the GMM estimators offer no weights (D9); the MGWR bandwidth search was started at 20 instead of 42 neighbours so that the optimum could be reached (D15); S7 effects are also shown with 1 km percentiles (D13); the share of permanent water had to be computed for small cells before S11 could run (D12). The planned comparison with ECOSTRESS afternoon temperature was not done (D16). Two exploratory checks were added after an internal check of this article and written down before they were run: the same analysis with air temperature by day and by night (D17), and with the regressors smoothed to the scale of the thermal sensor (D18). Every key number was computed a second time by separate code: the cell values in R (exactextractr) and Python, the spatial error models by writing out the two-step GMM by hand in R, and MGWR with GWmodel in R. This reproduced the coefficients within 0.0001 standard errors and the standard errors to the reported precision. The plan and every check are in the public repository.
+
+### 2.9 Use of AI tools
+
+[USE OF AI TOOLS: written in the submitted version.]
+
+## 3. Results
+
+### 3.1 Heat and population across the Ruhr
+
+Among the included cells, surface heat is strongly clustered (Figure 1a; Moran's I {{moran_lst}}). The share of foreign citizens is also clustered (Moran's I {{moran_foreign}}; Figure 1b). Rent ({{moran_rent}}) and the age shares ({{moran_age65}} and {{moran_under18}}) are less clustered. Without any model, the estimated foreign residents lived in cells with a mean anomaly of {{grp_foreign_members}} °C and the other residents in cells with {{grp_foreign_rest}} °C (all {{n_use_foreign}} cells with a usable foreign share, pooled across cities).
+
+![(a) Summer daytime LST anomaly of the {{n_rule4}} included cells: how much warmer (red) or cooler (blue) the surface is than the median of the 11 cities in the same image, averaged over {{n_scenes}} hot-day scenes. (b) Share of foreign citizens in the {{n_use_foreign}} cells where it is usable. In both panels, grey marks areas inside the cities without an included cell or without a usable value (for example industrial land, roads, forests and small cells). Lines: city boundaries.](../05_analysis/results/figures/fig1_maps.png)
+
+### 3.2 Main results
+
+Table 1 gives the primary results. A higher share of foreign citizens went with a hotter surface: {{b_for}} °C per 10 percentage points, so {{e_for}} °C between the 10th and the 90th percentile (95% interval {{e_for_lo}} to {{e_for_hi}}; Holm-adjusted p = {{p_for}}). **H2 is supported.** For rent the effect was {{e_rent}} °C ({{e_rent_lo}} to {{e_rent_hi}}), and the age shares were close to zero too: **H1 and RQ2 are inconclusive.** As Section 3.3 shows, this is because the methods disagree, not because all of them find nothing.
+
+**Table 1.** Model A, spatial error model ({{n_A}} cells). β per unit (rent: 1 EUR/m²; shares: 10 percentage points), with the hull of the three 95% intervals and the Holm-adjusted p. Effect: expected difference in LST anomaly between cells at P10 and P90 (rent: P90 to P10, so that positive means hotter where rent is low). With other estimates of λ (see below), the foreign-share effect was {{e_for_2b}} and {{e_for_it}} °C, below this interval: the interval does not include the uncertainty about λ.
+
+| Variable | P10 to P90 | β (95% interval) | p (Holm) | Effect, °C (95% interval) | Verdict |
+|----------------|--------------|------------------------|-------|----------------------|------------------|
+| Rent (EUR/m²) | {{p10_rent}} to {{p90_rent}} | {{b_rent}} ({{b_rent_lo}} to {{b_rent_hi}}) | {{p_rent}} | {{e_rent}} ({{e_rent_lo}} to {{e_rent_hi}}) | H1: inconclusive |
+| Foreign citizens (%) | {{p10_for}} to {{p90_for}} | {{b_for}} ({{b_for_lo}} to {{b_for_hi}}) | {{p_for}} | {{e_for}} ({{e_for_lo}} to {{e_for_hi}}) | H2: supported |
+| Aged 65+ (%) | {{p10_a65}} to {{p90_a65}} | {{b_a65}} ({{b_a65_lo}} to {{b_a65_hi}}) | {{p_a65}} | {{e_a65}} ({{e_a65_lo}} to {{e_a65_hi}}) | inconclusive |
+| Under 18 (%) | {{p10_u18}} to {{p90_u18}} | {{b_u18}} ({{b_u18_lo}} to {{b_u18_hi}}) | {{p_u18}} | {{e_u18}} ({{e_u18_lo}} to {{e_u18_hi}}) | inconclusive |
+
+Two things in Table 1 need care. First, OLS and the spatial model disagree: all four OLS coefficients (rent {{bols_rent}}, foreign share {{bols_for}}, 65+ {{bols_a65}}, under 18 {{bols_u18}}) lie outside the spatial model's own 95% interval (not the hull of Table 1, which includes the OLS bootstrap interval); they are larger in size for every variable, and for rent the sign is the opposite. This pattern is usually read as a sign that the model leaves something out (Pace and LeSage, 2008); I did not run a formal test, so the comparison is descriptive. The quantity being estimated depends on the estimator, and neither set of coefficients is simply "correct". Second, the coefficients are computed at a first estimate of λ. The λ that the software reports ({{lam_2b}}) comes from a later step, and at that value the foreign-share effect is {{e_for_2b}} °C; iterated to convergence (λ = {{lam_it}}), it is {{e_for_it}} °C. I therefore read the adjusted foreign-share effect as about {{e_for_it}} to {{e_for}} °C.
+
+The single-variable models give the same picture for the foreign share once the sample is the same. On all {{sv_for_n}} cells with a usable foreign share, its single-variable effect was small ({{sv_for}} °C, {{sv_for_lo}} to {{sv_for_hi}}, within ±0.3 °C). On the {{n_A}} primary-model cells it was {{sv_A_sem}} °C, close to the adjusted {{e_for}} °C: adding rent and the age shares barely changes it in the spatial model (in OLS it moves from {{rc_A_sv_ols}} to {{eols_for}} °C). The difference between {{sv_for}} and {{e_for}} °C therefore comes from the sample, the denser cells, and not from the adjustment. Elevation and log population, which are in both models, already take out about half of the raw gradient (Section 3.5).
+
+### 3.3 Robustness, and where the methods disagree
+
+The foreign-share association held in every pooled preregistered sensitivity analysis with a verdict: it was supported in the primary model, in all {{n_sens_distinct}} distinct preregistered sensitivity fits with a verdict (S6b and S11 each have two versions), in S17, which repeats the primary model by construction, and in the exploratory one, with effects in °C from {{sens_for_min}} to {{sens_for_max}} (S15 is on a standardised scale). The smallest effects came from including uncertain values (S1), from nearest-neighbour weights (S9) and from dropping cells without neighbours (S20, {{s20_for}} °C). The largest came from weighting by population (S3, {{s3_for}} °C), which gives the dense cells more weight. The spatial lag model (S8) gave a total effect of {{s8_for}} °C with an interval above zero. On the 1 km grid (S7, {{s7_for_n}} cells) it was also supported; with 1 km percentiles it is {{s7_for_1km}} °C.
+
+![P10 to P90 differences in LST anomaly and their 95% intervals, primary model and sensitivity analyses in °C. Filled: Holm-adjusted p < .05 with the whole interval on one side of zero. Grey band: ±0.3 °C (practically negligible). Rent with its sign reversed: positive means hotter where rent is low. S17 changes Model B only, so for Model A it repeats the primary result. Last row: exploratory analysis with census dashes treated as missing. S7 (1 km), S8 (lag model), S10 (single cities) and S15 (standardised scale) are in Table 2, Figure 3 and Supplementary Table S1.](../05_analysis/results/figures/fig2_effects.png)
+
+For rent and the age shares, the methods disagree (Table 2). The spatial error model finds almost nothing. The analyses that compare cells across whole neighbourhoods find the opposite of H1 for rent, hotter where rent is high: OLS, population weights (S3, "contradicted"), the lag model (S8: {{s8_rent}} °C, {{s8_rent_lo}} to {{s8_rent_hi}}), the 1 km grid (S7: {{s7_rent}} °C, interval crossing zero) and the cell plus its neighbours in S18 ({{s18_rent_eff}} °C, {{s18_rent_eff_lo}} to {{s18_rent_eff_hi}}). They also find cooler cells where more older people and more children live (S7: {{s7_a65}} and {{s7_u18}} °C; S8: {{s8_a65}} and {{s8_u18}} °C). City by city, rent supported H1 only in Mülheim an der Ruhr ({{mul_rent}} °C, {{mul_rent_lo}} to {{mul_rent_hi}}); in Dortmund the interval lay on the other side ({{dor_rent}} °C, {{dor_rent_lo}} to {{dor_rent_hi}}), though not significant after Holm. As Chawla et al. (2026) note, high rents can mark cool green areas as well as hot central ones, so a single straight line may not capture rent. None of this supports H1.
+
+**Table 2.** Where the methods disagree: P10 to P90 effects in °C with 95% intervals (rent with its sign reversed: positive means hotter where rent is low). OLS: the coefficient with its block-bootstrap interval. S18: the cell plus the average of its neighbours, descriptive; the preregistered S18 verdict uses the cell alone ({{s18_for_beta_eff}} °C for the foreign share; Supplementary Table S1).
+
+{{tab_disagree}}
+
+City by city (S10, Figure 3), the foreign-share association was positive in all {{s10_pos}} cities and significant in {{s10_sup}} (Dortmund, Essen and Hagen). The single cities have between {{s10_nmin}} and {{s10_nmax}} cells, so wide intervals are expected.
+
+![P10 to P90 differences in each city alone (S10), with 95% intervals. Filled: Holm-adjusted p < .05 within that city with the whole interval on one side of zero.](../05_analysis/results/figures/fig3_cities.png)
+
+### 3.4 Tree cover and sealed surfaces (H3)
+
+Adding tree cover and imperviousness changed both OLS coefficients in the direction of H3: Δ* = {{h3_rent}} (95% interval {{h3_rent_lo}} to {{h3_rent_hi}}) for rent and {{h3_for}} ({{h3_for_lo}} to {{h3_for_hi}}) for the foreign share, both with Holm-adjusted p = {{h3_for_p}}. **H3 is supported for the OLS estimate.** For the foreign share, about a third of the OLS coefficient ({{h3_for_R}}%) goes with tree cover and sealing; for rent, the coefficient crossed zero (from {{bols_rent}} to {{bB_ols_rent}}), so a share is not meaningful. In the spatial error model the picture is different: with its own sign, Δ* is {{h3sem_for}} for the foreign share, so its coefficient did not move toward zero; for rent ({{h3sem_rent}}) the direction is unclear, because its spatial coefficient is indistinguishable from zero. Because neighbouring cells share thermal signal, this within-neighbourhood comparison is close to what the sensor can resolve (Section 3.7).
+
+### 3.5 From cells to residents
+
+The P10 to P90 effect compares two cells far apart on the foreign share (0% and {{p90_for}}%). Residents are spread over many cells: on the primary-model cells, the average foreign resident lives in a cell with {{expo_for}}% foreign citizens and the average other resident in a cell with {{expo_rest}}%, a gap of {{exp_gap}} points. The mean anomaly of the cells where the estimated foreign residents live was {{rc_A_pooled}} °C higher than that of the other residents ({{rc_A_within}} °C when compared within each city; a different quantity from the {{e_for}} °C cell contrast). On all {{n_use_foreign}} cells with a usable foreign share, the observed gap is larger, {{rc_all_pooled}} °C: that sample adds many small cells, which are cooler on average (Section 2.2).
+
+By construction, the observed gap equals the population-weighted slope of heat on the foreign share times the {{exp_gap}}-point gap (Figure 4). Adding the city changes it little; adding elevation and log population more than halves it, about {{dg_lp_share}}% of that drop through log population (density). Adding rent and the age shares raises it slightly in OLS, and the spatial model brings it down to {{dg_sem1}} °C ({{dg_semit}} °C at the iterated λ). These spatial values are probably too low: when the regressors are smoothed to the scale of the thermal signal (Section 3.7), the spatial coefficient roughly doubles (from {{b_for}} to {{d18a_b_for}} per 10 points), and with the smaller exposure gap of the smoothed share ({{d18a_expgap}} points) the implied gap is about {{d18a_implied}} °C.
+
+![The heat gap between the estimated foreign and other residents on the {{n_A}} primary-model cells: the observed gap (dashed line) and the gap implied by the slope of each model times the {{exp_gap}}-point exposure gap. Unweighted: each cell counts once; population-weighted: each resident counts once. First λ (used in Table 1), the λ reported by the software and the iterated λ are three estimates of the spatial error parameter (Section 3.2). Exploratory.](../05_analysis/results/figures/fig4_resident_gap.png)
+
+Which of these numbers describes the disparity depends on what one holds fixed. The observed {{rc_all_pooled}} °C and {{rc_A_pooled}} °C are what the two groups live with, as far as daytime surface heat goes. The smaller numbers compare residents at equal density and elevation, inside the same neighbourhood. Density may be part of how the gap arises (dense, sealed blocks are hot and are where many foreign citizens live), so removing it is not neutral.
+
+### 3.6 Local patterns (MGWR)
+
+On the 1 km grid, MGWR fitted much better than OLS on the same cells (R² {{mg_r2}} against {{mg_ols_r2}}; AICc {{mg_aicc}} against {{mg_ols_aicc}}). The intercept was very local (bandwidth {{bw_intercept}} of {{mg_n}} neighbours): it captures local heat that the variables do not explain. The foreign share, rent, the under-18 share and log population had bandwidths of {{bw_foreign10}}, the largest reached and close to the upper end of the search ({{mg_n}}): their relationship with heat is regional rather than local. The foreign-share coefficient was positive and significant in {{mg_for_sig}}% of the local fits. Imperviousness had the most local relationship among the covariates (bandwidth {{bw_imperviousness}}).
+
+### 3.7 Exploratory checks
+
+Two checks were added after an internal check of this article and written down before they were run (deviations D17 and D18). Neither has a preregistered verdict.
+
+**Air temperature by day and by night (D17).** I repeated the 1 km version of Model A (as in S7, {{air_n1km}} cells) with the anomaly of 2 m air temperature from the DWD HOSTRADA grids (Krähenmann et al., 2018) on the same 16 dates: by day at the time of the satellite image (mean of 10:00 and 11:00 UTC) and in the following night (mean of 01:00 and 02:00 UTC). HOSTRADA is not a measurement in each cell: it is interpolated from weather stations with satellite and model data, with special attention to the urban heat island (DWD dataset description), and, as Chawla et al. (2026) describe it, with elevation and land-cover data; so its pattern inside the cities partly reflects these predictors. It is the same product that Chawla et al. (2026) used, so it does not independently confirm their result. Its effective resolution depends on the station density and the predictors (DWD dataset description) and is probably coarser than 1 km, so the intervals below are probably too narrow. Air temperature varies much less between places than surface temperature (standard deviation across the included cells {{air_day_sd}} °C by day and {{air_night_sd}} °C at night, against {{lst_sd}} °C for the LST anomaly). By day, the foreign-share effect on air temperature was practically negligible ({{air_day_for}} °C, {{air_day_for_lo}} to {{air_day_for_hi}}), against {{lst1km_for}} °C for LST on the same 1 km cells; this shows how little this product varies inside the cities by day, not that daytime air exposure is equal. At night the effect was {{air_night_for}} °C ({{air_night_for_lo}} to {{air_night_for_hi}}) between 1 km cells at the 10th and the 90th percentile of the foreign share, and the shares of older residents ({{air_night_a65}} °C) and of children ({{air_night_u18}} °C) went with cooler nights. Without adjustment, the estimated foreign residents lived in cells {{air_night_gapAll}} °C warmer at night than other residents (a different quantity from the cell contrast just above, with a similar value; {{air_night_gapA}} °C on the primary-model cells), and {{air_day_gapAll}} °C warmer by day.
+
+**Thermal resolution and number of observations (D18).** When the six continuous regressors were replaced by their means over the cell and its eight neighbours (a 300 m window, close to the effective footprint of the thermal signal), the foreign-share effect stayed supported and became larger ({{d18a_for}} °C, {{d18a_for_lo}} to {{d18a_for_hi}}, with the percentiles of the smoothed share), and the shares of older residents ({{d18a_a65}} °C) and of children ({{d18a_u18}} °C) became negative with intervals below zero; rent stayed inconclusive. So the main result does not depend on contrasts finer than the sensor, while the age results depend on the scale. The number of valid observations per cell was almost unrelated to the foreign share, rent and imperviousness (Spearman correlations of about 0.05), and on the {{d18b_n}} cells with at least 12 of 16 observations the foreign-share effect was {{d18b_for}} °C, as in the primary model.
+
+The vacancy rate of dwellings (an extra census variable, not in the hypotheses) went with a hotter surface ({{vac_b}} °C per 10 points, {{vac_n}} cells), but {{vac_zero}}% of these cells have no vacancy, so I do not interpret it. The preregistered interaction of rent with tree cover was not significant (p = {{q25_p_het}} with errors allowed to differ between cells). Treating census dashes as missing instead of zero left the foreign-share result supported (Supplementary Table S1).
+
+## 4. Discussion
+
+### 4.1 What the results say
+
+In the denser part of the Ruhr covered by the primary model, summer daytime surface heat goes with the share of foreign citizens much more clearly than with rent or age. The foreign-share association survives a conservative inference rule, every pooled sensitivity analysis and the city fixed effects; it is positive in every city, though significant in only {{s10_sup}} of the 11. Its size depends on the estimator: about {{e_for_it}} to {{e_for}} °C between cells at the 10th and the 90th percentile in the spatial model, and about {{eols_for}} °C in OLS. Rent, a common proxy for socio-economic position that measures housing price rather than income, gives no clear answer, and the models that compare whole neighbourhoods even point the other way.
+
+This matches the national pattern of Chawla et al. (2026), who found foreigners in hotter areas in most German cities and called rent "a complex indicator". It also matches König (2024): non-nationals disadvantaged in environmental quality, with no gradient by socio-economic status. Klopfer and Pfeiffer (2023) found a positive correlation with the non-German share in all eight of their cities, significant in five; the pooled within-city model on the 100 m grid, with its adjustment and sensitivity analyses, shows that the pattern is consistent across the region even where single cities are not significant. It differs from the clearer income gradients found in US cities (Chakraborty et al., 2019; Hsu et al., 2021), where the history of segregation and the structure of rents are different.
+
+### 4.2 Why the spatial model and OLS differ
+
+The OLS coefficients are larger in size than the spatial ones for every variable (for the foreign share, {{ratio_for}} times as large). OLS compares any two cells of the same city; the spatial error model mainly compares a cell with its own surroundings. Both are legitimate questions, but they are not the same question. The drop suggests that much of the association lies at the scale of whole neighbourhoods. Part of the spatial error is also the blur of the thermal sensor, which spreads heat over neighbouring cells, so I do not read the within-neighbourhood comparison as a fine-grained finding. The H3 result fits this: tree cover and sealing go with part of the gap between neighbourhoods (OLS), not with the smaller gap within them (spatial model).
+
+### 4.3 What it means for planning
+
+In the denser part of the Ruhr covered by the primary model ({{share_cells_A}}% of the cells, {{share_pop_A}}% of the residents), the results show where daytime surface heat and the share of foreign citizens coincide: mostly in dense, sealed parts of the cities. They do not show that greening or unsealing these places would reduce the gap, and surface heat is not the air or indoor temperature people feel. Still, cooling measures in these quarters could reach a disproportionate share of foreign citizens. Such measures can also raise rents and push out the residents they are meant to help; Anguelovski et al. (2019) call this green "climate gentrification". Tenant protection and the participation of the people who live there belong to any such plan. The LANUK maps (2026) show where sensitive groups live under modelled heat; this study adds that, in these denser cells, the gap is measurable and follows the share of foreign citizens. Because the MGWR bandwidths of the foreign share are regional, this is a question for regional as well as city planning.
+
+### 4.4 Limitations
+
+- **Surface, daytime, not air or indoors.** LST measures the surface seen from above in the late morning of clear hot days, mostly roofs and streets. At the scale of whole cities, satellites showed urban heat islands about six times stronger than air temperature from weather stations during the 2019 heat wave in Europe (Venter et al., 2021); the surface heat island exceeded the air heat island in 96% of cities by day and 80% at night. Chawla et al. (2026) found disparities against foreigners most often in night-time air temperature. Section 3.7 adds an exploratory check with interpolated, modelled air temperature, which points the same way at night; indoor heat and housing quality (for example top-floor flats or crowding) are not measured.
+- **Cells, not people.** The results describe cells (ecological fallacy). The resident gaps assume that every resident of a cell lives with that cell's mean heat.
+- **A selective sample.** The primary model uses {{share_cells_A}}% of the cells and {{share_pop_A}}% of the residents, the denser and hotter part of the region. Rent is missing where nobody rents.
+- **Density as a pathway.** The adjusted effects hold log population fixed. If foreign citizens live in hotter cells partly because they live in denser ones, the adjusted effects understate the disparity they experience; the observed gap ({{rc_all_pooled}} °C on all usable cells, {{rc_A_pooled}} °C on the primary-model cells) is the descriptive disparity.
+- **Estimator dependence and resolution.** OLS and the spatial model disagree, and the size of the foreign-share effect depends on the estimated λ, which the intervals do not include. The thermal data are recorded at 100 m and blurred beyond that, so neighbouring cells share signal; the residual correlation also extends beyond 2 km, so the bootstrap intervals may be a little narrow.
+- **Time and scale.** Census 2022, land cover 2021 and 2022, heat {{first_year}} to {{last_year}} with no hot-day scene from the census year; {{n_june}} of the {{n_scenes}} scenes are from June, and two pairs are on consecutive days. Results can change with the cell size (MAUP; S7 shows the 1 km version).
+- **Measurement.** The tree cover of Hamm is unusually low in the Copernicus 2022 layer (median {{tree_med_hamm}}% of the cell against {{tree_med_others_lo}} to {{tree_med_others_hi}}% in the other cities); the raster covers the city completely, and I could not tell whether this is real or a product artefact. The city dummies absorb its mean level, but not its effect on the slopes of Model B. Census values are perturbed for confidentiality, which tends to pull coefficients toward zero. Emissivity comes from the ASTER database, so errors are systematic across scenes and can differ between roof materials; neither the anomaly nor the average over scenes removes them.
+- **Not causal.** Nothing here says why foreign citizens live in hotter places: housing markets and discrimination are possible (König, 2024), and so, in my own reading of the Ruhr, is the location of former workers' housing near industry; none was measured.
+
+### 4.5 Generalisability
+
+The Ruhr is a polycentric, post-industrial region. The method (a 100 m census grid, a hot-day LST composite, a spatial model and a conservative inference rule) can be applied to any German region with the open code of this study. The size of the gap may not transfer.
+
+## 5. Conclusion
+
+In the denser part of the 11 cities of the Ruhr, the share of foreign citizens is the clearest social marker of daytime surface heat at the scale of city blocks, more than rent or age. Most of this association appears between neighbourhoods rather than within them. Density goes with much of the resident gap, and tree cover and sealing with about a third of the association between neighbourhoods. An exploratory check with interpolated, modelled air temperature at 1 km points the same way at night. These are cell-level results: they show where heat and a social group coincide, not why, and not how hot people's homes are.
+
+## Declarations
+
+**Data and code availability.** All data are open. Code, the analysis table, results, the verification scripts and their logs are in the public repository of this study (link given on publication, archived on OSF). The preregistration is at https://doi.org/10.17605/OSF.IO/CMXS2.
+
+**Data sources and licences.** Zensus 2022: © Statistische Ämter des Bundes und der Länder, Datenlizenz Deutschland Namensnennung 2.0. Landsat 8 and 9: courtesy of the U.S. Geological Survey. Copernicus Land Monitoring Service, European Union (Tree Cover Density, Imperviousness Density). ESA WorldCover 2021 (CC BY 4.0). Elevation: Geobasis NRW (dl-de/zero-2-0). Boundaries: © BKG (dl-de/by-2-0). Weather and air temperature: Deutscher Wetterdienst (HOSTRADA v1.0; Krähenmann et al., 2018). Modelled heat: LANUK NRW.
+
+**Funding.** None.
+
+**Competing interests.** None.
+
+**Acknowledgements.** [ACKNOWLEDGEMENTS: written in the submitted version.]
+
+## References
+
+Anderson, C. C., & Hasler, N. (2026). Urban heat and public green space: Assessing risk, equity, and the lived experiences of residents in Bochum, Germany. *International Journal of Disaster Risk Reduction*, 143, 106299. https://doi.org/10.1016/j.ijdrr.2026.106299
+
+Anguelovski, I., Connolly, J. J. T., Pearsall, H., Shokry, G., Checker, M., Maantay, J., Gould, K., Lewis, T., Maroko, A., & Roberts, J. T. (2019). Why green "climate gentrification" threatens poor and vulnerable populations (Opinion). *Proceedings of the National Academy of Sciences*, 116(52), 26139-26143. https://doi.org/10.1073/pnas.1920490117
+
+Arraiz, I., Drukker, D. M., Kelejian, H. H., & Prucha, I. R. (2010). A spatial Cliff-Ord-type model with heteroskedastic innovations: Small and large sample results. *Journal of Regional Science*, 50(2), 592-614. https://doi.org/10.1111/j.1467-9787.2009.00618.x
+
+Chakraborty, T., Hsu, A., Manya, D., & Sheriff, G. (2019). Disproportionately higher exposure to urban heat in lower-income neighborhoods: A multi-city perspective. *Environmental Research Letters*, 14(10), 105003. https://doi.org/10.1088/1748-9326/ab3b99
+
+Chawla, J., Keller, P., & Benz, S. (2026). Comparing land surface temperature and air temperature for assessing socio-demographic inequalities in urban heat exposure: Evidence from Germany. *Environmental Research Letters*, 21(15), 154033. https://doi.org/10.1088/1748-9326/ae929e
+
+Cook, M., Schott, J., Mandel, J., & Raqueno, N. (2014). Development of an operational calibration methodology for the Landsat thermal data archive and initial testing of the atmospheric compensation component of a land surface temperature (LST) product from the archive. *Remote Sensing*, 6(11), 11244-11266. https://doi.org/10.3390/rs61111244
+
+Drukker, D. M., Egger, P., & Prucha, I. R. (2013). On two-step estimation of a spatial autoregressive model with autoregressive disturbances and endogenous regressors. *Econometric Reviews*, 32(5-6), 686-733. https://doi.org/10.1080/07474938.2013.741020
+
+Fotheringham, A. S., Yang, W., & Kang, W. (2017). Multiscale geographically weighted regression (MGWR). *Annals of the American Association of Geographers*, 107(6), 1247-1265. https://doi.org/10.1080/24694452.2017.1352480
+
+Friesen, J., Heinz, S., Droin, A., Wurm, M., Leichtle, T., Marconcini, M., & Taubenböck, H. (2026). Assessing pedestrian accessibility to urban land surface temperature cold spots in Bavarian cities. *REAL CORP 2026 Proceedings*. https://doi.org/10.48494/REALCORP2026.4148
+
+Hsu, A., Sheriff, G., Chakraborty, T., & Manya, D. (2021). Disproportionate exposure to urban heat island intensity across major US cities. *Nature Communications*, 12, 2721. https://doi.org/10.1038/s41467-021-22799-5
+
+Jia, P., Yu, C., Remais, J. V., Stein, A., Liu, Y., Brownson, R. C., et al. (2020). Spatial Lifecourse Epidemiology Reporting Standards (ISLE-ReSt) statement. *Health & Place*, 61, 102243. https://doi.org/10.1016/j.healthplace.2019.102243
+
+Klopfer, F., & Pfeiffer, A. (2023). Determining spatial disparities and similarities regarding heat exposure, green provision, and social structure of urban areas: A study on the city district level in the Ruhr area, Germany. *Heliyon*, 9(6), e16185. https://doi.org/10.1016/j.heliyon.2023.e16185
+
+König, C. (2024). Neighbourhood structure and environmental quality: A fine-grained analysis of spatial inequalities in urban Germany. *Urban Studies*, 61(10), 1968-1989. https://doi.org/10.1177/00420980231224224
+
+Krähenmann, S., Walter, A., Brienen, S., Imbery, F., & Matzarakis, A. (2018). High-resolution grids of hourly meteorological variables for Germany. *Theoretical and Applied Climatology*, 131, 899-926. https://doi.org/10.1007/s00704-016-2003-7
+
+Kühnl, M., Leichtle, T., Rupp, S., Hiete, M., Beck, C., Geiß, C., & Taubenböck, H. (2026). Identifying vulnerable population under heat stress: A data-driven urban risk assessment using remote sensing, citizen science and census data. *REAL CORP 2026 Proceedings*. https://doi.org/10.48494/realcorp2026.0144
+
+LANUK NRW (2026). *Klimaanalyse NRW 2026: Methoden- und Ergebnisüberblick*. Fachbericht 171. Landesamt für Natur, Umwelt und Klima Nordrhein-Westfalen.
+
+Oshan, T. M., Li, Z., Kang, W., Wolf, L. J., & Fotheringham, A. S. (2019). mgwr: A Python implementation of multiscale geographically weighted regression for investigating process spatial heterogeneity and scale. *ISPRS International Journal of Geo-Information*, 8(6), 269. https://doi.org/10.3390/ijgi8060269
+
+Pace, R. K., & LeSage, J. P. (2008). A spatial Hausman test. *Economics Letters*, 101(3), 282-284. https://doi.org/10.1016/j.econlet.2008.09.003
+
+U.S. Geological Survey. *Landsat 8-9 Collection 2 (C2) Level 2 Science Product (L2SP) Guide*, LSDS-1619, version 6.0.
+
+van den Akker, O. R., Weston, S., Campbell, L., Chopik, B., Damian, R., Davis-Kean, P., Hall, A., Kosie, J., Kruse, E., Olsen, J., Ritchie, S., Valentine, K., van 't Veer, A., & Bakker, M. (2021). Preregistration of secondary data analysis: A template and tutorial. *Meta-Psychology*, 5. https://doi.org/10.15626/MP.2020.2625
+
+Venter, Z. S., Chakraborty, T., & Lee, X. (2021). Crowdsourced air temperatures contrast satellite measures of the urban heat island and its mechanisms. *Science Advances*, 7(22), eabb9569. https://doi.org/10.1126/sciadv.abb9569
+
+von Elm, E., Altman, D. G., Egger, M., Pocock, S. J., Gøtzsche, P. C., & Vandenbroucke, J. P. (2007). The Strengthening the Reporting of Observational Studies in Epidemiology (STROBE) statement: Guidelines for reporting observational studies. *The Lancet*, 370(9596), 1453-1457. https://doi.org/10.1016/S0140-6736(07)61602-X

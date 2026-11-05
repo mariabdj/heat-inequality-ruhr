@@ -1665,3 +1665,8 @@ Manual checks:
 - [ ] [MARIA] reads the final article (06_manuscript/submission/Boudjelal_heat_inequality_Ruhr.pdf) and confirms the use-of-AI statement is true for her, then approves publication (article in the repository, preprint, OSF data deposit). Not done yet.
 AUTOMATIC CHECKS: ALL PASSED
 RESULT: OPEN (waiting for the [MARIA] item; all other checks passed)
+
+### Gate 9 run 1: closing the [MARIA] item (2026-11-05)
+- [x] [MARIA] read the final article (06_manuscript/submission/Boudjelal_heat_inequality_Ruhr.pdf), confirmed that the use-of-AI statement (Section 2.9) is true for her, and approved publication (article in the repository, preprint, OSF data deposit). Her answer in the working session, 2026-11-05: "Approved".
+All automatic and manual checks of Gate 9 run 1 passed.
+RESULT: PASSED

@@ -1,0 +1,778 @@
+{
+ "air_day_for": {
+  "value": 0.023428399824737666,
+  "printed": "0.02"
+ },
+ "air_day_for_hi": {
+  "value": 0.0911232984496,
+  "printed": "0.09"
+ },
+ "air_day_for_lo": {
+  "value": 0.0048337793524781125,
+  "printed": "0.00"
+ },
+ "air_day_gapAll": {
+  "value": 0.07756794064911521,
+  "printed": "0.08"
+ },
+ "air_day_sd": {
+  "value": 0.30011915577094667,
+  "printed": "0.30"
+ },
+ "air_n1km": {
+  "value": 742.0,
+  "printed": "742"
+ },
+ "air_night_a65": {
+  "value": -0.16533307238344422,
+  "printed": "−0.17"
+ },
+ "air_night_for": {
+  "value": 0.4621657392334029,
+  "printed": "0.46"
+ },
+ "air_night_for_hi": {
+  "value": 1.0859939625568984,
+  "printed": "1.09"
+ },
+ "air_night_for_lo": {
+  "value": 0.26208138527140834,
+  "printed": "0.26"
+ },
+ "air_night_gapA": {
+  "value": 0.2629251308806897,
+  "printed": "0.26"
+ },
+ "air_night_gapAll": {
+  "value": 0.45716534147088494,
+  "printed": "0.46"
+ },
+ "air_night_sd": {
+  "value": 1.1186118008940846,
+  "printed": "1.12"
+ },
+ "air_night_u18": {
+  "value": -0.31385563654106874,
+  "printed": "−0.31"
+ },
+ "bB_ols_rent": {
+  "value": -0.03273811431750074,
+  "printed": "−0.033"
+ },
+ "b_a65": {
+  "value": -0.0014814100043408515,
+  "printed": "−0.001"
+ },
+ "b_a65_hi": {
+  "value": 0.023970825903475997,
+  "printed": "0.024"
+ },
+ "b_a65_lo": {
+  "value": -0.11407823671684993,
+  "printed": "−0.114"
+ },
+ "b_for": {
+  "value": 0.10595688448244862,
+  "printed": "0.106"
+ },
+ "b_for_hi": {
+  "value": 0.25938985495149947,
+  "printed": "0.259"
+ },
+ "b_for_lo": {
+  "value": 0.08424875268296128,
+  "printed": "0.084"
+ },
+ "b_rent": {
+  "value": -0.01605269788947404,
+  "printed": "−0.016"
+ },
+ "b_rent_hi": {
+  "value": 0.14709561923326578,
+  "printed": "0.147"
+ },
+ "b_rent_lo": {
+  "value": -0.04454716605231428,
+  "printed": "−0.045"
+ },
+ "b_u18": {
+  "value": -0.019353234449104546,
+  "printed": "−0.019"
+ },
+ "b_u18_hi": {
+  "value": 0.013838983255331536,
+  "printed": "0.014"
+ },
+ "b_u18_lo": {
+  "value": -0.33222222985095334,
+  "printed": "−0.332"
+ },
+ "bols_a65": {
+  "value": -0.07441440560889569,
+  "printed": "−0.074"
+ },
+ "bols_for": {
+  "value": 0.2157638332096575,
+  "printed": "0.216"
+ },
+ "bols_rent": {
+  "value": 0.09142748080180525,
+  "printed": "0.091"
+ },
+ "bols_u18": {
+  "value": -0.2736819828946026,
+  "printed": "−0.274"
+ },
+ "bw_foreign10": {
+  "value": 740.0,
+  "printed": "740"
+ },
+ "bw_imperviousness": {
+  "value": 167.0,
+  "printed": "167"
+ },
+ "bw_intercept": {
+  "value": 30.0,
+  "printed": "30"
+ },
+ "d18a_a65": {
+  "value": -0.25768352039558967,
+  "printed": "−0.26"
+ },
+ "d18a_b_for": {
+  "value": 0.22354839151495487,
+  "printed": "0.224"
+ },
+ "d18a_expgap": {
+  "value": 11.297155260128537,
+  "printed": "11.3"
+ },
+ "d18a_for": {
+  "value": 0.9320791821932014,
+  "printed": "0.93"
+ },
+ "d18a_for_hi": {
+  "value": 1.3431503870348698,
+  "printed": "1.34"
+ },
+ "d18a_for_lo": {
+  "value": 0.674963489036848,
+  "printed": "0.67"
+ },
+ "d18a_implied": {
+  "value": 0.2525460887096446,
+  "printed": "0.25"
+ },
+ "d18a_u18": {
+  "value": -0.19100757798134457,
+  "printed": "−0.19"
+ },
+ "d18b_for": {
+  "value": 0.480106726956276,
+  "printed": "0.48"
+ },
+ "d18b_n": {
+  "value": 12124.0,
+  "printed": "12,124"
+ },
+ "dg_lp_share": {
+  "value": 81.12870597415981,
+  "printed": "81"
+ },
+ "dg_sem1": {
+  "value": 0.1611892072835713,
+  "printed": "0.16"
+ },
+ "dg_semit": {
+  "value": 0.10385071878082412,
+  "printed": "0.10"
+ },
+ "dor_rent": {
+  "value": -0.1502791064111763,
+  "printed": "−0.15"
+ },
+ "dor_rent_hi": {
+  "value": -0.018251141000045257,
+  "printed": "−0.02"
+ },
+ "dor_rent_lo": {
+  "value": -0.6538644753536231,
+  "printed": "−0.65"
+ },
+ "e_a65": {
+  "value": -0.004038619953834029,
+  "printed": "0.00"
+ },
+ "e_a65_hi": {
+  "value": 0.06534926557805626,
+  "printed": "0.07"
+ },
+ "e_a65_lo": {
+  "value": -0.31100008893747627,
+  "printed": "−0.31"
+ },
+ "e_for": {
+  "value": 0.47756886973929247,
+  "printed": "0.48"
+ },
+ "e_for_2b": {
+  "value": 0.34966086597176416,
+  "printed": "0.35"
+ },
+ "e_for_hi": {
+  "value": 1.1691219542373985,
+  "printed": "1.17"
+ },
+ "e_for_it": {
+  "value": 0.3076872901454252,
+  "printed": "0.31"
+ },
+ "e_for_lo": {
+  "value": 0.3797259780926431,
+  "printed": "0.38"
+ },
+ "e_rent": {
+  "value": 0.03515540837794816,
+  "printed": "0.04"
+ },
+ "e_rent_hi": {
+  "value": 0.09755829365456828,
+  "printed": "0.10"
+ },
+ "e_rent_lo": {
+  "value": -0.3221394061208521,
+  "printed": "−0.32"
+ },
+ "e_u18": {
+  "value": -0.05576053909476003,
+  "printed": "−0.06"
+ },
+ "e_u18_hi": {
+  "value": 0.03987287855526123,
+  "printed": "0.04"
+ },
+ "e_u18_lo": {
+  "value": -0.957198688646567,
+  "printed": "−0.96"
+ },
+ "eols_for": {
+  "value": 0.9724907490425683,
+  "printed": "0.97"
+ },
+ "exp_gap": {
+  "value": 15.212716764078857,
+  "printed": "15.2"
+ },
+ "expo_for": {
+  "value": 37.79816192327444,
+  "printed": "37.8"
+ },
+ "expo_rest": {
+  "value": 22.585445159195583,
+  "printed": "22.6"
+ },
+ "first_year": {
+  "value": 2018.0,
+  "printed": "2018"
+ },
+ "grp_foreign_members": {
+  "value": 3.779223746609779,
+  "printed": "3.8"
+ },
+ "grp_foreign_rest": {
+  "value": 2.8980528974554054,
+  "printed": "2.9"
+ },
+ "h3_for": {
+  "value": 0.07466385061486411,
+  "printed": "0.075"
+ },
+ "h3_for_R": {
+  "value": 34.60443277456668,
+  "printed": "35"
+ },
+ "h3_for_hi": {
+  "value": 0.1060305737112647,
+  "printed": "0.106"
+ },
+ "h3_for_lo": {
+  "value": 0.03718872530165941,
+  "printed": "0.037"
+ },
+ "h3_for_p": {
+  "value": 0.002,
+  "printed": ".002"
+ },
+ "h3_rent": {
+  "value": 0.124165595119306,
+  "printed": "0.124"
+ },
+ "h3_rent_hi": {
+  "value": 0.1618310847713865,
+  "printed": "0.162"
+ },
+ "h3_rent_lo": {
+  "value": 0.08336575404572022,
+  "printed": "0.083"
+ },
+ "h3sem_for": {
+  "value": -0.015123318671710656,
+  "printed": "−0.015"
+ },
+ "h3sem_rent": {
+  "value": -0.028404341403779343,
+  "printed": "−0.028"
+ },
+ "imp_med_A": {
+  "value": 57.45,
+  "printed": "57"
+ },
+ "imp_med_rule4": {
+  "value": 47.19,
+  "printed": "47"
+ },
+ "islands": {
+  "value": 1712.0,
+  "printed": "1,712"
+ },
+ "islands_pct": {
+  "value": 13.577603299230708,
+  "printed": "13.6"
+ },
+ "lam_2b": {
+  "value": 0.7789171521624406,
+  "printed": "0.78"
+ },
+ "lam_it": {
+  "value": 0.8184375990920558,
+  "printed": "0.82"
+ },
+ "lanuk_rho": {
+  "value": 0.6365736496572204,
+  "printed": "0.64"
+ },
+ "last_year": {
+  "value": 2025.0,
+  "printed": "2025"
+ },
+ "lm_err": {
+  "value": 789.1466945244766,
+  "printed": "789"
+ },
+ "lm_lag": {
+  "value": 449.5821706773088,
+  "printed": "450"
+ },
+ "lst1km_for": {
+  "value": 0.5303540255411391,
+  "printed": "0.53"
+ },
+ "lst_pw_A": {
+  "value": 3.5898124947108747,
+  "printed": "3.6"
+ },
+ "lst_pw_rule4": {
+  "value": 2.9079654850787344,
+  "printed": "2.9"
+ },
+ "lst_sd": {
+  "value": 2.165225784151646,
+  "printed": "2.2"
+ },
+ "medpop_A": {
+  "value": 104.0,
+  "printed": "104"
+ },
+ "medpop_rule4": {
+  "value": 50.0,
+  "printed": "50"
+ },
+ "mg_aicc": {
+  "value": 741.8782048245397,
+  "printed": "741.9"
+ },
+ "mg_for_sig": {
+  "value": 100.0,
+  "printed": "100"
+ },
+ "mg_n": {
+  "value": 742.0,
+  "printed": "742"
+ },
+ "mg_ols_aicc": {
+  "value": 901.8895399847463,
+  "printed": "901.9"
+ },
+ "mg_ols_r2": {
+  "value": 0.8079025132447571,
+  "printed": "0.81"
+ },
+ "mg_r2": {
+  "value": 0.8796898038616509,
+  "printed": "0.88"
+ },
+ "moran_age65": {
+  "value": 0.2287735243817203,
+  "printed": "0.23"
+ },
+ "moran_foreign": {
+  "value": 0.6082380664680695,
+  "printed": "0.61"
+ },
+ "moran_lst": {
+  "value": 0.7511404890149231,
+  "printed": "0.75"
+ },
+ "moran_rent": {
+  "value": 0.4089207808855516,
+  "printed": "0.41"
+ },
+ "moran_under18": {
+  "value": 0.22280425729938966,
+  "printed": "0.22"
+ },
+ "mul_rent": {
+  "value": 0.43221286431270056,
+  "printed": "0.43"
+ },
+ "mul_rent_hi": {
+  "value": 0.8994427936730436,
+  "printed": "0.90"
+ },
+ "mul_rent_lo": {
+  "value": 0.19800753738056923,
+  "printed": "0.20"
+ },
+ "n_A": {
+  "value": 12609.0,
+  "printed": "12,609"
+ },
+ "n_blocks": {
+  "value": 1189.0,
+  "printed": "1,189"
+ },
+ "n_cand": {
+  "value": 115.0,
+  "printed": "115"
+ },
+ "n_hotday": {
+  "value": 51.0,
+  "printed": "51"
+ },
+ "n_june": {
+  "value": 9.0,
+  "printed": "9"
+ },
+ "n_p196": {
+  "value": 8.0,
+  "printed": "8"
+ },
+ "n_p197": {
+  "value": 8.0,
+  "printed": "8"
+ },
+ "n_rm_lst": {
+  "value": 302.0,
+  "printed": "302"
+ },
+ "n_rm_pop": {
+  "value": 9739.0,
+  "printed": "9,739"
+ },
+ "n_rm_water": {
+  "value": 8.0,
+  "printed": "8"
+ },
+ "n_rule1": {
+  "value": 61458.0,
+  "printed": "61,458"
+ },
+ "n_rule4": {
+  "value": 51409.0,
+  "printed": "51,409"
+ },
+ "n_scenes": {
+  "value": 16.0,
+  "printed": "16"
+ },
+ "n_scenes_l8": {
+  "value": 9.0,
+  "printed": "9"
+ },
+ "n_scenes_l9": {
+  "value": 7.0,
+  "printed": "7"
+ },
+ "n_sens_distinct": {
+  "value": 20.0,
+  "printed": "20"
+ },
+ "n_use_foreign": {
+  "value": 34940.0,
+  "printed": "34,940"
+ },
+ "ols_moran": {
+  "value": 0.6641591393375827,
+  "printed": "0.66"
+ },
+ "onepath_A": {
+  "value": 21.0,
+  "printed": "21"
+ },
+ "onepath_only": {
+  "value": 223.0,
+  "printed": "223"
+ },
+ "onepath_partly": {
+  "value": 270.0,
+  "printed": "270"
+ },
+ "p10_a65": {
+  "value": 8.448,
+  "printed": "8.4"
+ },
+ "p10_for": {
+  "value": 0.0,
+  "printed": "0.0"
+ },
+ "p10_rent": {
+  "value": 5.05,
+  "printed": "5.05"
+ },
+ "p10_u18": {
+  "value": 0.0,
+  "printed": "0.0"
+ },
+ "p90_a65": {
+  "value": 35.71,
+  "printed": "35.7"
+ },
+ "p90_for": {
+  "value": 45.072,
+  "printed": "45.1"
+ },
+ "p90_rent": {
+  "value": 7.24,
+  "printed": "7.24"
+ },
+ "p90_u18": {
+  "value": 28.812000000000005,
+  "printed": "28.8"
+ },
+ "p_a65": {
+  "value": 0.9091752317579922,
+  "printed": ".909"
+ },
+ "p_for": {
+  "value": 0.008,
+  "printed": ".008"
+ },
+ "p_rent": {
+  "value": 0.7593546647381094,
+  "printed": ".759"
+ },
+ "p_u18": {
+  "value": 0.7593546647381094,
+  "printed": ".759"
+ },
+ "pop_A": {
+  "value": 1416492.0,
+  "printed": "1,416,492"
+ },
+ "pop_rule4": {
+  "value": 3241368.0,
+  "printed": "3,241,368"
+ },
+ "q25_p_het": {
+  "value": 0.14838875603592866,
+  "printed": ".148"
+ },
+ "ratio_for": {
+  "value": 2.0363361405308025,
+  "printed": "2.0"
+ },
+ "rc_A_pooled": {
+  "value": 0.49725109940961865,
+  "printed": "0.50"
+ },
+ "rc_A_sv_ols": {
+  "value": 0.7759952122340912,
+  "printed": "0.78"
+ },
+ "rc_A_within": {
+  "value": 0.4820740171763722,
+  "printed": "0.48"
+ },
+ "rc_all_pooled": {
+  "value": 0.8811708491543735,
+  "printed": "0.88"
+ },
+ "s10_nmax": {
+  "value": 2218.0,
+  "printed": "2,218"
+ },
+ "s10_nmin": {
+  "value": 398.0,
+  "printed": "398"
+ },
+ "s10_pos": {
+  "value": 11.0,
+  "printed": "11"
+ },
+ "s10_sup": {
+  "value": 3.0,
+  "printed": "3"
+ },
+ "s18_for_beta_eff": {
+  "value": 0.5406487399127703,
+  "printed": "0.54"
+ },
+ "s18_rent_eff": {
+  "value": -0.2409376101590822,
+  "printed": "−0.24"
+ },
+ "s18_rent_eff_hi": {
+  "value": -0.12669315269434772,
+  "printed": "−0.13"
+ },
+ "s18_rent_eff_lo": {
+  "value": -0.35518206762381666,
+  "printed": "−0.36"
+ },
+ "s20_for": {
+  "value": 0.2812412543233705,
+  "printed": "0.28"
+ },
+ "s3_for": {
+  "value": 1.0088599757367018,
+  "printed": "1.01"
+ },
+ "s7_a65": {
+  "value": -0.7048873902186708,
+  "printed": "−0.70"
+ },
+ "s7_for_1km": {
+  "value": 0.5303540255411391,
+  "printed": "0.53"
+ },
+ "s7_for_n": {
+  "value": 742.0,
+  "printed": "742"
+ },
+ "s7_rent": {
+  "value": -0.45832347619425734,
+  "printed": "−0.46"
+ },
+ "s7_u18": {
+  "value": -1.9485776523273735,
+  "printed": "−1.95"
+ },
+ "s8_a65": {
+  "value": -0.18376985736434143,
+  "printed": "−0.18"
+ },
+ "s8_for": {
+  "value": 0.854109508701422,
+  "printed": "0.85"
+ },
+ "s8_rent": {
+  "value": -0.23798305174505505,
+  "printed": "−0.24"
+ },
+ "s8_rent_hi": {
+  "value": -0.1376594057329884,
+  "printed": "−0.14"
+ },
+ "s8_rent_lo": {
+  "value": -0.32682056181850533,
+  "printed": "−0.33"
+ },
+ "s8_u18": {
+  "value": -0.6712583605723811,
+  "printed": "−0.67"
+ },
+ "scene_med_max": {
+  "value": 40.08586120605469,
+  "printed": "40.1"
+ },
+ "scene_med_min": {
+  "value": 30.030046463012695,
+  "printed": "30.0"
+ },
+ "sens_for_max": {
+  "value": 1.0088599757367018,
+  "printed": "1.01"
+ },
+ "sens_for_min": {
+  "value": 0.19077898451384526,
+  "printed": "0.19"
+ },
+ "share_cells_A": {
+  "value": 24.52683382287148,
+  "printed": "24.5"
+ },
+ "share_pop_A": {
+  "value": 43.70043759301628,
+  "printed": "44"
+ },
+ "stqa_gt3": {
+  "value": 7.699034244487872,
+  "printed": "7.7"
+ },
+ "stqa_med": {
+  "value": 2.2100000381469727,
+  "printed": "2.21"
+ },
+ "sv_A_sem": {
+  "value": 0.4478268402767279,
+  "printed": "0.45"
+ },
+ "sv_for": {
+  "value": 0.14247611101274457,
+  "printed": "0.14"
+ },
+ "sv_for_hi": {
+  "value": 0.19875800718882203,
+  "printed": "0.20"
+ },
+ "sv_for_lo": {
+  "value": 0.08619421483666714,
+  "printed": "0.09"
+ },
+ "sv_for_n": {
+  "value": 34940.0,
+  "printed": "34,940"
+ },
+ "tab_disagree": {
+  "value": 0.0,
+  "printed": "| Analysis | Rent (sign reversed) | Aged 65+ | Under 18 | Foreign citizens |\n|---|---|---|---|---|\n| Primary: spatial error model (reported hull) | 0.04 (−0.32 to 0.10) | 0.00 (−0.31 to 0.07) | −0.06 (−0.96 to 0.04) | 0.48 (0.38 to 1.17) |\n| OLS, block bootstrap 95% interval | −0.20 (−0.32 to −0.07) | −0.20 (−0.31 to −0.09) | −0.79 (−0.96 to −0.58) | 0.97 (0.74 to 1.17) |\n| S3 population-weighted OLS | −0.45 (−0.62 to −0.29) | −0.59 (−0.73 to −0.43) | −1.46 (−1.66 to −1.21) | 1.01 (0.76 to 1.23) |\n| S7 1 km grid (100 m percentiles) | −0.46 (−0.93 to 0.13) | −0.70 (−1.21 to −0.23) | −1.95 (−2.92 to −1.24) | 0.80 (0.27 to 1.45) |\n| S8 spatial lag model, total effect | −0.24 (−0.33 to −0.14) | −0.18 (−0.29 to −0.07) | −0.67 (−0.84 to −0.49) | 0.85 (0.72 to 0.99) |\n| S18 own cell plus neighbours (β + θ), descriptive | −0.24 (−0.36 to −0.13) | −0.07 (−0.27 to 0.12) | −0.18 (−0.46 to 0.11) | 1.38 (1.14 to 1.63) |"
+ },
+ "tree_med_hamm": {
+  "value": 0.5599994660988473,
+  "printed": "0.6"
+ },
+ "tree_med_others_hi": {
+  "value": 8.440003967149941,
+  "printed": "8.4"
+ },
+ "tree_med_others_lo": {
+  "value": 3.2300000014439463,
+  "printed": "3.2"
+ },
+ "vac_b": {
+  "value": 0.15911551621552414,
+  "printed": "0.16"
+ },
+ "vac_n": {
+  "value": 8023.0,
+  "printed": "8,023"
+ },
+ "vac_zero": {
+  "value": 93.65573974822385,
+  "printed": "94"
+ },
+ "vif_max": {
+  "value": 1.776104054186203,
+  "printed": "1.8"
+ }
+}
