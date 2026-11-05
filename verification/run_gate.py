@@ -21,7 +21,7 @@ GATES = {
     6: [[RS, V / "verify_zonal.R"], [PY, V / "verify_zonal.py"]],
     7: [[RS, V / "verify_deciles.R"], [PY, V / "verify_step7.py"]],
     8: [[PY, V / "verify_data_register.py"], [RS, V / "verify_models.R"], [RS, V / "verify_mgwr.R"], [PY, V / "verify_variants.py"]],
-    9: [[PY, V / "verify_public_release.py"]],
+    9: [[PY, V / "verify_manuscript_numbers.py"], [PY, V / "verify_references.py"], [PY, V / "verify_public_release.py"]],
 }
 
 n = int(sys.argv[1])

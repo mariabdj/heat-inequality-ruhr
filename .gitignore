@@ -28,3 +28,6 @@ __pycache__/
 
 # No-data declarations rebuilt by 04_grid_join/step6_join.py (local paths)
 04_grid_join/*.vrt
+
+# Raw search answers of the repeated novelty search (large JSON)
+00_setup/novelty_rerun_2026-11-05/novelty_search/raw/
