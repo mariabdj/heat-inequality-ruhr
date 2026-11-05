@@ -1670,3 +1670,293 @@ RESULT: OPEN (waiting for the [MARIA] item; all other checks passed)
 - [x] [MARIA] read the final article (06_manuscript/submission/Boudjelal_heat_inequality_Ruhr.pdf), confirmed that the use-of-AI statement (Section 2.9) is true for her, and approved publication (article in the repository, preprint, OSF data deposit). Her answer in the working session, 2026-11-05: "Approved".
 All automatic and manual checks of Gate 9 run 1 passed.
 RESULT: PASSED
+
+## GATE 9: Writing and publication | run 2 | 2026-11-05 16:53
+### verify_manuscript_numbers.py: PASS
+```
+PASS    n_rule1: article 61458.0, recomputed 61458.0
+PASS    n_rule4: article 51409.0, recomputed 51409.0
+PASS    n_A: article 12609.0, recomputed 12609.0
+PASS    pop_rule4: article 3241368.0, recomputed 3241368.0
+PASS    pop_A: article 1416492.0, recomputed 1416492.0
+PASS    share_cells_A: article 24.52683382287148, recomputed 24.52683382287148
+PASS    share_pop_A: article 43.70043759301628, recomputed 43.70043759301628
+PASS    lst_pw_A: article 3.5898124947108747, recomputed 3.5898124947108747
+PASS    lst_pw_rule4: article 2.9079654850787344, recomputed 2.9079654850787344
+PASS    n_scenes: article 16.0, recomputed 16.0
+PASS    scene_med_min: article 30.030046463012695, recomputed 30.030046463012695
+PASS    scene_med_max: article 40.08586120605469, recomputed 40.08586120605469
+PASS    b_for: article 0.10595688448244862, recomputed 0.10595688448244862
+PASS    p_for: article 0.008, recomputed 0.008
+PASS    p_rent: article 0.7593546647381094, recomputed 0.7593546647381094
+PASS    e_for: article 0.47756886973929247, recomputed 0.4775688697392925
+PASS    e_rent: article 0.03515540837794816, recomputed 0.03515540837794816
+PASS    e_for_lo: article 0.3797259780926431, recomputed 0.3797259780926432
+PASS    e_for_hi: article 1.1691219542373985, recomputed 1.1691219542373987
+PASS    p90_for: article 45.072, recomputed 45.07200000000001
+PASS    p10_rent: article 5.05, recomputed 5.05
+PASS    p90_rent: article 7.24, recomputed 7.24
+PASS    eols_for: article 0.9724907490425683, recomputed 0.9724907490425685
+PASS    ratio_for: article 2.0363361405308025, recomputed 2.0363361405308025
+PASS    h3_rent: article 0.124165595119306, recomputed 0.124165595119306
+PASS    h3_for: article 0.07466385061486411, recomputed 0.07466385061486411
+PASS    expo_for: article 37.79816192327444, recomputed 37.79816192327444
+PASS    expo_rest: article 22.585445159195583, recomputed 22.585445159195583
+PASS    exp_gap: article 15.212716764078857, recomputed 15.21271676407886
+PASS    rc_A_pooled: article 0.49725109940961865, recomputed 0.49725109940961865
+PASS    dg_sem1: article 0.1611892072835713, recomputed 0.1611892072835713
+PASS    s10_sup: article 3.0, recomputed 3.0
+PASS    s10_pos: article 11.0, recomputed 11.0
+PASS    s3_for: article 1.0088599757367018, recomputed 1.0088599757367018
+PASS    mg_r2: article 0.8796898038616509, recomputed 0.8796898038616509
+PASS    mg_aicc: article 741.8782048245397, recomputed 741.8782048245397
+PASS    bw_intercept: article 30.0, recomputed 30.0
+PASS    moran_lst: article 0.7511404890149231, recomputed 0.7511404890149231
+PASS    islands: article 1712.0, recomputed 1712.0
+note    air_day_gapA: not used in the article
+PASS    air_day_gapAll: article 0.07756794064911521, recomputed 0.07756794064911521
+PASS    air_night_gapA: article 0.2629251308806897, recomputed 0.2629251308806897
+PASS    air_night_gapAll: article 0.45716534147088494, recomputed 0.45716534147088494
+note    d18b_cor_max: not used in the article
+note    n_sens_for: not used in the article
+note    n_sens_for_sup: not used in the article
+checked: 46 recomputed, 194 names present in the text
+typed numbers in the template (manual check): 00, 0, 0.0001, 0.05, 0.3, 1, 1,, 01, 2,, 2, 02, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 4.0, 4, 4.1, 4.2, 4.3, 4.4, 4.5, 5, 8,, 8, 9, 10, 11, 12, 15, 16, 18, 20, 21, 24,, 25, 27, 30, 42, 50, 60, 65, 70, 80, 90, 95, 96, 100, 196, 197, 197,, 275, 300, 999, 1619, 2007, 2008, 2010, 2013, 2014, 2017, 2018, 2019, 2020, 2021, 2021,, 2022,, 2022, 2023, 2024, 2026,, 2026, 3035, 32632
+RESULT: PASSED
+```
+### verify_references.py: PASS
+```
+PASS    10.1016/j.ijdrr.2026.106299: title words 100%, year 2026 vs 2026, first author anderson
+PASS    10.1073/pnas.1920490117: title words 100%, year 2019 vs 2019, first author anguelovski
+MANUAL  10.1111/j.1467-9787.2009.00618.x: year 2010 (issue 50(2)) not on Crossref, which has only online 2009
+PASS    10.1088/1748-9326/ab3b99: title words 100%, year 2019 vs 2019, first author chakraborty
+PASS    10.1088/1748-9326/ae929e: title words 100%, year 2026 vs 2026, first author chawla
+PASS    10.3390/rs61111244: title words 100%, year 2014 vs 2014, first author cook
+PASS    10.1080/07474938.2013.741020: title words 100%, year 2013 vs 2013, first author drukker
+PASS    10.1080/24694452.2017.1352480: title words 100%, year 2017 vs 2017, first author fotheringham
+PASS    10.48494/REALCORP2026.4148: title words 100%, year 2026 vs 2026, first author friesen
+PASS    10.1038/s41467-021-22799-5: title words 100%, year 2021 vs 2021, first author hsu
+PASS    10.1016/j.healthplace.2019.102243: title words 100%, year 2020 vs 2020, first author jia
+PASS    10.1016/j.heliyon.2023.e16185: title words 100%, year 2023 vs 2023, first author klopfer
+PASS    10.1177/00420980231224224: title words 100%, year 2024 vs 2024, first author konig
+PASS    10.1007/s00704-016-2003-7: title words 100%, year 2018 vs 2016/2018, first author krahenmann
+PASS    10.48494/realcorp2026.0144: title words 100%, year 2026 vs 2026, first author kuhnl
+MANUAL  no DOI: LANUK NRW (2026). *Klimaanalyse NRW 2026: Methoden- und Ergebnis�berblick*. Fachbericht 171. Landesamt f�r Nat
+PASS    10.3390/ijgi8060269: title words 100%, year 2019 vs 2019, first author oshan
+PASS    10.1016/j.econlet.2008.09.003: title words 100%, year 2008 vs 2008, first author pace
+MANUAL  no DOI: U.S. Geological Survey. *Landsat 8-9 Collection 2 (C2) Level 2 Science Product (L2SP) Guide*, LSDS-1619, versi
+PASS    10.15626/MP.2020.2625: title words 100%, year 2021 vs 2021, first author akker
+PASS    10.1126/sciadv.abb9569: title words 100%, year 2021 vs 2021, first author venter
+PASS    10.1016/S0140-6736(07)61602-X: title words 100%, year 2007 vs 2007, first author elm
+CHECK   cited in text but no entry (or not a citation): ('august', '2018')
+CHECK   cited in text but no entry (or not a citation): ('copernicus', '2022')
+CHECK   cited in text but no entry (or not a citation): ('density', '2021')
+CHECK   cited in text but no entry (or not a citation): ('density', '2022')
+CHECK   cited in text but no entry (or not a citation): ('keller', '2026')
+CHECK   cited in text but no entry (or not a citation): ('may', '2022')
+CHECK   cited in text but no entry (or not a citation): ('worldcover', '2021')
+RESULT: PASSED
+```
+### verify_public_release.py: PASS
+```
+RESULT: PASSED (no AI traces in shareable files or git history; all commits by Maria)
+```
+Manual checks: (fill in: each manual item of the gate, with evidence)
+AUTOMATIC CHECKS: ALL PASSED
+RESULT: (write PASSED only when automatic AND manual checks all pass)
+
+## GATE 9: Writing and publication | run 3 | 2026-11-05 16:54
+### verify_manuscript_numbers.py: PASS
+```
+PASS    n_rule1: article 61458.0, recomputed 61458.0
+PASS    n_rule4: article 51409.0, recomputed 51409.0
+PASS    n_A: article 12609.0, recomputed 12609.0
+PASS    pop_rule4: article 3241368.0, recomputed 3241368.0
+PASS    pop_A: article 1416492.0, recomputed 1416492.0
+PASS    share_cells_A: article 24.52683382287148, recomputed 24.52683382287148
+PASS    share_pop_A: article 43.70043759301628, recomputed 43.70043759301628
+PASS    lst_pw_A: article 3.5898124947108747, recomputed 3.5898124947108747
+PASS    lst_pw_rule4: article 2.9079654850787344, recomputed 2.9079654850787344
+PASS    n_scenes: article 16.0, recomputed 16.0
+PASS    scene_med_min: article 30.030046463012695, recomputed 30.030046463012695
+PASS    scene_med_max: article 40.08586120605469, recomputed 40.08586120605469
+PASS    b_for: article 0.10595688448244862, recomputed 0.10595688448244862
+PASS    p_for: article 0.008, recomputed 0.008
+PASS    p_rent: article 0.7593546647381094, recomputed 0.7593546647381094
+PASS    e_for: article 0.47756886973929247, recomputed 0.4775688697392925
+PASS    e_rent: article 0.03515540837794816, recomputed 0.03515540837794816
+PASS    e_for_lo: article 0.3797259780926431, recomputed 0.3797259780926432
+PASS    e_for_hi: article 1.1691219542373985, recomputed 1.1691219542373987
+PASS    p90_for: article 45.072, recomputed 45.07200000000001
+PASS    p10_rent: article 5.05, recomputed 5.05
+PASS    p90_rent: article 7.24, recomputed 7.24
+PASS    eols_for: article 0.9724907490425683, recomputed 0.9724907490425685
+PASS    ratio_for: article 2.0363361405308025, recomputed 2.0363361405308025
+PASS    h3_rent: article 0.124165595119306, recomputed 0.124165595119306
+PASS    h3_for: article 0.07466385061486411, recomputed 0.07466385061486411
+PASS    expo_for: article 37.79816192327444, recomputed 37.79816192327444
+PASS    expo_rest: article 22.585445159195583, recomputed 22.585445159195583
+PASS    exp_gap: article 15.212716764078857, recomputed 15.21271676407886
+PASS    rc_A_pooled: article 0.49725109940961865, recomputed 0.49725109940961865
+PASS    dg_sem1: article 0.1611892072835713, recomputed 0.1611892072835713
+PASS    s10_sup: article 3.0, recomputed 3.0
+PASS    s10_pos: article 11.0, recomputed 11.0
+PASS    s3_for: article 1.0088599757367018, recomputed 1.0088599757367018
+PASS    mg_r2: article 0.8796898038616509, recomputed 0.8796898038616509
+PASS    mg_aicc: article 741.8782048245397, recomputed 741.8782048245397
+PASS    bw_intercept: article 30.0, recomputed 30.0
+PASS    moran_lst: article 0.7511404890149231, recomputed 0.7511404890149231
+PASS    islands: article 1712.0, recomputed 1712.0
+note    air_day_gapA: not used in the article
+PASS    air_day_gapAll: article 0.07756794064911521, recomputed 0.07756794064911521
+PASS    air_night_gapA: article 0.2629251308806897, recomputed 0.2629251308806897
+PASS    air_night_gapAll: article 0.45716534147088494, recomputed 0.45716534147088494
+note    d18b_cor_max: not used in the article
+note    n_sens_for: not used in the article
+note    n_sens_for_sup: not used in the article
+checked: 46 recomputed, 194 names present in the text
+typed numbers in the template (manual check): 00, 0, 0.0001, 0.05, 0.3, 1, 1,, 01, 2, 2.0, 2,, 02, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 4.0, 4, 4.1, 4.2, 4.3, 4.4, 4.5, 5, 8,, 8, 9, 10, 11, 12, 15, 16, 18, 20, 21, 24,, 25, 27, 30, 42, 50, 60, 65, 70, 80, 90, 95, 96, 100, 196, 197, 197,, 275, 300, 999, 1619, 2007, 2008, 2010, 2013, 2014, 2017, 2018, 2019, 2020, 2021,, 2021, 2022,, 2022, 2023, 2024, 2026, 2026,, 3035, 32632
+RESULT: PASSED
+```
+### verify_references.py: PASS
+```
+PASS    10.1016/j.ijdrr.2026.106299: title words 100%, year 2026 vs 2026, first author anderson
+PASS    10.1073/pnas.1920490117: title words 100%, year 2019 vs 2019, first author anguelovski
+MANUAL  10.1111/j.1467-9787.2009.00618.x: year 2010 (issue 50(2)) not on Crossref, which has only online 2009
+PASS    10.1088/1748-9326/ab3b99: title words 100%, year 2019 vs 2019, first author chakraborty
+PASS    10.1088/1748-9326/ae929e: title words 100%, year 2026 vs 2026, first author chawla
+PASS    10.3390/rs61111244: title words 100%, year 2014 vs 2014, first author cook
+PASS    10.1080/07474938.2013.741020: title words 100%, year 2013 vs 2013, first author drukker
+PASS    10.1080/24694452.2017.1352480: title words 100%, year 2017 vs 2017, first author fotheringham
+PASS    10.48494/REALCORP2026.4148: title words 100%, year 2026 vs 2026, first author friesen
+PASS    10.1038/s41467-021-22799-5: title words 100%, year 2021 vs 2021, first author hsu
+PASS    10.1016/j.healthplace.2019.102243: title words 100%, year 2020 vs 2020, first author jia
+PASS    10.1016/j.heliyon.2023.e16185: title words 100%, year 2023 vs 2023, first author klopfer
+PASS    10.1177/00420980231224224: title words 100%, year 2024 vs 2024, first author konig
+PASS    10.1007/s00704-016-2003-7: title words 100%, year 2018 vs 2016/2018, first author krahenmann
+PASS    10.48494/realcorp2026.0144: title words 100%, year 2026 vs 2026, first author kuhnl
+MANUAL  no DOI: LANUK NRW (2026). *Klimaanalyse NRW 2026: Methoden- und Ergebnis�berblick*. Fachbericht 171. Landesamt f�r Nat
+PASS    10.3390/ijgi8060269: title words 100%, year 2019 vs 2019, first author oshan
+PASS    10.1016/j.econlet.2008.09.003: title words 100%, year 2008 vs 2008, first author pace
+MANUAL  no DOI: U.S. Geological Survey. *Landsat 8-9 Collection 2 (C2) Level 2 Science Product (L2SP) Guide*, LSDS-1619, versi
+PASS    10.15626/MP.2020.2625: title words 100%, year 2021 vs 2021, first author akker
+PASS    10.1126/sciadv.abb9569: title words 100%, year 2021 vs 2021, first author venter
+PASS    10.1016/S0140-6736(07)61602-X: title words 100%, year 2007 vs 2007, first author elm
+CHECK   cited in text but no entry (or not a citation): ('august', '2018')
+CHECK   cited in text but no entry (or not a citation): ('copernicus', '2022')
+CHECK   cited in text but no entry (or not a citation): ('density', '2021')
+CHECK   cited in text but no entry (or not a citation): ('density', '2022')
+CHECK   cited in text but no entry (or not a citation): ('keller', '2026')
+CHECK   cited in text but no entry (or not a citation): ('may', '2022')
+CHECK   cited in text but no entry (or not a citation): ('worldcover', '2021')
+RESULT: PASSED
+```
+### verify_public_release.py: PASS
+```
+RESULT: PASSED (no AI traces in shareable files or git history; all commits by Maria)
+```
+Manual checks: (fill in: each manual item of the gate, with evidence)
+AUTOMATIC CHECKS: ALL PASSED
+RESULT: (write PASSED only when automatic AND manual checks all pass)
+
+## GATE 9: Writing and publication | run 4 | 2026-11-05 17:06
+### verify_manuscript_numbers.py: PASS
+```
+PASS    n_rule1: article 61458.0, recomputed 61458.0
+PASS    n_rule4: article 51409.0, recomputed 51409.0
+PASS    n_A: article 12609.0, recomputed 12609.0
+PASS    pop_rule4: article 3241368.0, recomputed 3241368.0
+PASS    pop_A: article 1416492.0, recomputed 1416492.0
+PASS    share_cells_A: article 24.52683382287148, recomputed 24.52683382287148
+PASS    share_pop_A: article 43.70043759301628, recomputed 43.70043759301628
+PASS    lst_pw_A: article 3.5898124947108747, recomputed 3.5898124947108747
+PASS    lst_pw_rule4: article 2.9079654850787344, recomputed 2.9079654850787344
+PASS    n_scenes: article 16.0, recomputed 16.0
+PASS    scene_med_min: article 30.030046463012695, recomputed 30.030046463012695
+PASS    scene_med_max: article 40.08586120605469, recomputed 40.08586120605469
+PASS    b_for: article 0.10595688448244862, recomputed 0.10595688448244862
+PASS    p_for: article 0.008, recomputed 0.008
+PASS    p_rent: article 0.7593546647381094, recomputed 0.7593546647381094
+PASS    e_for: article 0.47756886973929247, recomputed 0.4775688697392925
+PASS    e_rent: article 0.03515540837794816, recomputed 0.03515540837794816
+PASS    e_for_lo: article 0.3797259780926431, recomputed 0.3797259780926432
+PASS    e_for_hi: article 1.1691219542373985, recomputed 1.1691219542373987
+PASS    p90_for: article 45.072, recomputed 45.07200000000001
+PASS    p10_rent: article 5.05, recomputed 5.05
+PASS    p90_rent: article 7.24, recomputed 7.24
+PASS    eols_for: article 0.9724907490425683, recomputed 0.9724907490425685
+PASS    ratio_for: article 2.0363361405308025, recomputed 2.0363361405308025
+PASS    h3_rent: article 0.124165595119306, recomputed 0.124165595119306
+PASS    h3_for: article 0.07466385061486411, recomputed 0.07466385061486411
+PASS    expo_for: article 37.79816192327444, recomputed 37.79816192327444
+PASS    expo_rest: article 22.585445159195583, recomputed 22.585445159195583
+PASS    exp_gap: article 15.212716764078857, recomputed 15.21271676407886
+PASS    rc_A_pooled: article 0.49725109940961865, recomputed 0.49725109940961865
+PASS    dg_sem1: article 0.1611892072835713, recomputed 0.1611892072835713
+PASS    s10_sup: article 3.0, recomputed 3.0
+PASS    s10_pos: article 11.0, recomputed 11.0
+PASS    s3_for: article 1.0088599757367018, recomputed 1.0088599757367018
+PASS    mg_r2: article 0.8796898038616509, recomputed 0.8796898038616509
+PASS    mg_aicc: article 741.8782048245397, recomputed 741.8782048245397
+PASS    bw_intercept: article 30.0, recomputed 30.0
+PASS    moran_lst: article 0.7511404890149231, recomputed 0.7511404890149231
+PASS    islands: article 1712.0, recomputed 1712.0
+note    air_day_gapA: not used in the article
+PASS    air_day_gapAll: article 0.07756794064911521, recomputed 0.07756794064911521
+PASS    air_night_gapA: article 0.2629251308806897, recomputed 0.2629251308806897
+PASS    air_night_gapAll: article 0.45716534147088494, recomputed 0.45716534147088494
+note    d18b_cor_max: not used in the article
+note    n_sens_for: not used in the article
+note    n_sens_for_sup: not used in the article
+checked: 46 recomputed, 194 names present in the text
+typed numbers in the template (manual check): 00, 0, 0.0001, 0.05, 0.3, 01, 1,, 1, 2.0, 02, 2, 2,, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 4.0, 4, 4.1, 4.2, 4.3, 4.4, 4.5, 5, 8,, 8, 9, 10, 11, 12, 15, 16, 18, 20, 21, 24,, 25, 27, 30, 42, 50, 60, 65, 70, 80, 90, 95, 96, 100, 196, 197,, 197, 275, 300, 999, 1619, 2007, 2008, 2010, 2013, 2014, 2017, 2018, 2019, 2020, 2021,, 2021, 2022,, 2022, 2023, 2024, 2026,, 2026, 3035, 32632
+RESULT: PASSED
+```
+### verify_references.py: PASS
+```
+PASS    10.1016/j.ijdrr.2026.106299: title words 100%, year 2026 vs 2026, first author anderson
+PASS    10.1073/pnas.1920490117: title words 100%, year 2019 vs 2019, first author anguelovski
+MANUAL  10.1111/j.1467-9787.2009.00618.x: year 2010 (issue 50(2)) not on Crossref, which has only online 2009
+PASS    10.1088/1748-9326/ab3b99: title words 100%, year 2019 vs 2019, first author chakraborty
+PASS    10.1088/1748-9326/ae929e: title words 100%, year 2026 vs 2026, first author chawla
+PASS    10.3390/rs61111244: title words 100%, year 2014 vs 2014, first author cook
+PASS    10.1080/07474938.2013.741020: title words 100%, year 2013 vs 2013, first author drukker
+PASS    10.1080/24694452.2017.1352480: title words 100%, year 2017 vs 2017, first author fotheringham
+PASS    10.48494/REALCORP2026.4148: title words 100%, year 2026 vs 2026, first author friesen
+PASS    10.1038/s41467-021-22799-5: title words 100%, year 2021 vs 2021, first author hsu
+PASS    10.1016/j.healthplace.2019.102243: title words 100%, year 2020 vs 2020, first author jia
+PASS    10.1016/j.heliyon.2023.e16185: title words 100%, year 2023 vs 2023, first author klopfer
+PASS    10.1177/00420980231224224: title words 100%, year 2024 vs 2024, first author konig
+PASS    10.1007/s00704-016-2003-7: title words 100%, year 2018 vs 2016/2018, first author krahenmann
+PASS    10.48494/realcorp2026.0144: title words 100%, year 2026 vs 2026, first author kuhnl
+MANUAL  no DOI: LANUK NRW (2026). *Klimaanalyse NRW 2026: Methoden- und Ergebnis�berblick*. Fachbericht 171. Landesamt f�r Nat
+PASS    10.3390/ijgi8060269: title words 100%, year 2019 vs 2019, first author oshan
+PASS    10.1016/j.econlet.2008.09.003: title words 100%, year 2008 vs 2008, first author pace
+MANUAL  no DOI: U.S. Geological Survey. *Landsat 8-9 Collection 2 (C2) Level 2 Science Product (L2SP) Guide*, LSDS-1619, versi
+PASS    10.15626/MP.2020.2625: title words 100%, year 2021 vs 2021, first author akker
+PASS    10.1126/sciadv.abb9569: title words 100%, year 2021 vs 2021, first author venter
+PASS    10.1016/S0140-6736(07)61602-X: title words 100%, year 2007 vs 2007, first author elm
+CHECK   cited in text but no entry (or not a citation): ('august', '2018')
+CHECK   cited in text but no entry (or not a citation): ('copernicus', '2022')
+CHECK   cited in text but no entry (or not a citation): ('density', '2021')
+CHECK   cited in text but no entry (or not a citation): ('density', '2022')
+CHECK   cited in text but no entry (or not a citation): ('keller', '2026')
+CHECK   cited in text but no entry (or not a citation): ('may', '2022')
+CHECK   cited in text but no entry (or not a citation): ('worldcover', '2021')
+RESULT: PASSED
+```
+### verify_public_release.py: PASS
+```
+RESULT: PASSED (no AI traces in shareable files or git history; all commits by Maria)
+```
+Manual checks: (fill in: each manual item of the gate, with evidence)
+AUTOMATIC CHECKS: ALL PASSED
+RESULT: (write PASSED only when automatic AND manual checks all pass)
+Note on runs 2 and 3: run 2 and run 3 were started while the article was being changed for the journal (the console could not print one character, so the gate was started twice); their manual checks are those of run 4 below.
+Manual checks (run 4, after the changes for submission to Urban Climate):
+- [x] What changed since run 1: the abstract was shortened to the journal limit (Urban Climate guide for authors: at most 250 words; now 250 words, every number still a token); the data sentence now names the GitHub repository and the OSF data DOI (https://doi.org/10.17605/OSF.IO/FSV6C, public, CC BY 4.0; SHA-256 of the three files on OSF equal to the local files: README fc3c1986..., parquet ab38a426..., CSV zip 3373363d...); the use-of-AI declaration section title follows the current Elsevier wording; highlights and title page added (private submission folder).
+- [x] Expert check of the changes: one reviewer (journal reviewer and science editor) read the new abstract, the highlights and the data sentence against the full text and the earlier panel log. 10 points found (lost caveats: "24.5% of the cells", "practically negligible ... when it varies little inside cities", "in the spatial model", "cells", "models disagreed" instead of "methods"; highlights 1 to 3 reworded; data sentence wrong about the file size). All 10 applied; the reviewer's replacement abstract was used word for word with tokens.
+- [x] verify_manuscript_numbers.py, verify_references.py and verify_public_release.py: PASSED (above).
+- [x] [MARIA] approval of run 1 still covers these changes: content and claims unchanged, caveats restored; Maria asked on 5 November 2026 for the submission to be prepared ("fais tout toi-même") and made the OSF data component public and created its DOI herself.
+AUTOMATIC CHECKS: ALL PASSED
+RESULT: PASSED

@@ -4,7 +4,7 @@ Maria Boudjelal, independent researcher, Algiers, Algeria (ORCID 0009-0002-6434-
 
 **Question.** In the 11 independent cities of the Ruhr (Germany), are the 100 m census grid cells with lower rents, more foreign citizens, more older people or more children hotter on summer days, as seen by Landsat land surface temperature, and how much of that gap goes with tree cover and sealed surfaces?
 
-**Status (November 2026).** The analysis plan was preregistered on OSF before any data were opened: https://osf.io/cmxs2/ (DOI https://doi.org/10.17605/OSF.IO/CMXS2), registered 2 November 2026. Data processing, models, sensitivity analyses and their independent checks are done (Steps 2 to 8). The article is in preparation and will be added here with its preprint.
+**Status (November 2026).** The analysis plan was preregistered on OSF before any data were opened: https://osf.io/cmxs2/ (DOI https://doi.org/10.17605/OSF.IO/CMXS2), registered 2 November 2026. Data processing, models, sensitivity analyses and their independent checks are done. The article is in `06_manuscript/manuscript.md` (built from the results by `06_manuscript/build_manuscript.py`); a link to the preprint will be added here. The analysis table (one row per 100 m cell) is archived on OSF: https://doi.org/10.17605/OSF.IO/FSV6C.
 
 **Main result so far.** Cells with a higher share of foreign citizens have a hotter daytime surface, in every preregistered sensitivity analysis; for rent and age the results are inconclusive. These are results about grid cells, not people, and about surface temperature in the late morning of hot days, not the air or indoor temperature people live with. Correlation, not causation.
 
