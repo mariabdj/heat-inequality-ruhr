@@ -553,3 +553,971 @@ Manual checks:
 - [x] LEARNING_NOTEBOOK.md Step 7 chapter written (worked examples checked by code: Moran's I example I = 0.5; FDR back-calculation 0.0111849 x 50,796 / 0.05 = 11,363 = 6,908 + 4 + 4,447 + 4).
 AUTOMATIC CHECKS: ALL PASSED
 RESULT: PASSED
+
+## Step 8 decision record (before any model was fitted) | 2026-11-05 11:23
+- Tolerances for the independent R recomputation (verification/verify_models.R), fixed now because the preregistration does not give them (guide rule A10):
+  - OLS coefficients (R lm vs spreg OLS): |difference| <= 1e-8 in model units.
+  - Spatial error model, GMM (R sphet 2.1.1, same estimators as spreg 1.9.1: heteroskedastic, Arraiz et al. 2010; homoskedastic, Drukker et al. 2013): each beta within 0.01 standard errors of the spreg value, and lambda within 0.005. If the two programs differ only by their default numerical settings, this is reported rather than hidden.
+  - Block bootstrap: Python saves the drawn blocks of every replicate; R recomputes every replicate's OLS coefficients from those draws: |difference| <= 1e-8. Seed of the Python draws: 20261102.
+- Package versions: spreg 1.9.1 (as preregistered), mgwr 2.2.1, libpysal 4.15.1; R spatialreg 1.4.3, spdep 1.4.2, sphet 2.1.1, GWmodel 2.4.1.
+- City dummies: 10 dummies with Bochum (first in alphabetical order) as the reference city.
+- Step 8 is done in three parts with a check after each: 8a primary models and H1 to H3; 8b sensitivity analyses on the existing table (S1 to S3, S7 to S11, S17 to S20) and MGWR; 8c sensitivity analyses needing new LST composites (S4 to S6b, S12 to S16).
+
+## Step 8 check record: why the R check of the spatial error model was changed | 2026-11-05 11:31
+- First run of verification/verify_models.R with sphet 2.1.1 (as fixed in the decision record): OLS matched (max |diff| 8.1e-13), islands matched (1,712), all 999 bootstrap replicates matched (4.3e-14), but the GMM spatial error coefficients differed by up to 6.4 standard errors and lambda by 0.03 to 0.07. RESULT: FAILED. (A run before that stopped on a format error: sphet cannot convert a neighbour list with empty rows; the sparse matrix is now passed instead.)
+- Investigation (scratch scripts, data unchanged, no tolerance changed):
+  1. Islands are not the cause: on the 10,897 cells with at least one neighbour, spreg and sphet still differ (Het betas spreg 0.0206, 0.0624, -0.0313, -0.0501; sphet 0.0627, 0.1301, -0.0711, -0.1638).
+  2. For a given lambda, the coefficients of the spatial error model are OLS of (y - lambda Wy) on (X - lambda WX). spreg's betas are reproduced to 0.0001 at lambda = 0.665, which is its first-step estimate (the lambda it reports, 0.768, is the second-step re-estimate). sphet's betas correspond to no lambda on the grid (closest 0.395, gap 0.004).
+  3. The first-step lambda was computed by hand from the moment conditions of Arraiz et al. (2010): 0.6652, equal to spreg's. sphet's own verbose output shows the same first-step lambda (0.6652). So all three agree on lambda; sphet's betas then follow another computation that I could not identify. Its starting value is not the cause (0.2 and 0.6 give the same result), nor the use of the transposed W.
+  4. The homoskedastic estimator was reproduced by hand too, with the scaling of Drukker et al. (2013), A1 = v [W'W - n^-1 tr(W'W) I], v = 1 / (1 + (n^-1 tr(W'W))^2): first-step lambda 0.6589, betas 0.0214, 0.0639, -0.0320, -0.0522, identical to spreg.
+- Change to the check (made after the failure; reason above): the gate now compares spreg's betas with the published two-step procedure written out by hand in R (moment conditions, then spatial Cochrane-Orcutt), tolerance unchanged (each beta within 0.01 SE). The lambda comparison is replaced by this check of the betas, which depend on the first-step lambda; spreg's second-step lambda is not recomputed. sphet is still run and its differences printed for information. To be reviewed by the expert panel (spatial econometrician).
+
+## Step 8b decision record (before any sensitivity model was fitted) | 2026-11-05 11:49
+- Shared rules: every sensitivity analysis uses the Q19 estimator, fallback and inference rule (GM_Error_Het, GM_Error_Hom and the OLS block bootstrap, B = 999, seed 20261102, largest of the three p-values, hull of the three intervals, Holm across the social variables of that model), and the Q20 effects with P10 and P90 fixed at the values of the primary sample (Q20: "treated as fixed"). H3 is recomputed wherever the sample changes. Results go to 05_analysis/results/step8b_sensitivity.csv and results.json ("step8b").
+- Consistency test written before use: the shared functions (05_analysis/step8_lib.py), run on the primary specification, must reproduce the Step 8a inference table exactly.
+- S3 (population-weighted models): spreg 1.9.1 has no weights for the GMM spatial error estimators, so the two GM p-values cannot be computed. S3 therefore uses weighted least squares (weights = population) with the block bootstrap alone (percentile interval and bootstrap p), as the inference rule allows when both GM fits are unavailable. Deviation D9, written before S3 is run.
+- S7 and MGWR (same 1 km aggregation): included 100 m cells = cells of the Model B sample (identical to Model A); shares weighted by population, rent by the number of rented dwellings (n_dwellings, AnzahlWohnungen), LST anomaly, tree cover, imperviousness and elevation as means over the included 100 m cells (each 100 m cell has the same area), ln of the summed population; 1 km cells with fewer than 5 included cells dropped; queen W on the 1 km grid (centres <= 1,420 m apart).
+- S17: tree cover and imperviousness recomputed with exactextract over a 300 m x 300 m square centred on each Model A cell, from the same rasters with the same no-data declaration as Step 6.
+- S18: the bootstrap part of the inference rule uses OLS with the same lagged columns WX (computed once on the full sample).
+- Tolerance for the R recomputation of MGWR with GWmodel 2.4.1 (gwr.multiscale, adaptive bisquare, AICc), fixed now: for each covariate, the selected bandwidth within 10% of the mgwr bandwidth (or both at the global maximum), and the Pearson correlation of the local coefficients at least 0.95. MGWR is descriptive, so a failure is reported and investigated but changes no hypothesis verdict.
+- Exploratory (labelled as such): D2's "dash as missing" refit of Model A; Q25 rent x tree cover interaction. The Q25 vacancy rate (Leerstandsquote) needs a new census file and is moved to Step 8c with the other new-data analyses; the LANUK comparison was done at Step 4; ECOSTRESS is decided at Step 8c.
+
+## Step 8b check record: S11 sample | 2026-11-05 11:58
+- First run of 05_analysis/step8_sensitivity.py: "S11 population >= 3" gave n = 12,609, the same as the primary sample, which is not plausible (9,739 inhabited cells have 3 to 9 inhabitants, many with usable census values).
+- Cause: Step 2 computed the water share (rule 3) only for cells with at least 10 inhabitants (01_data/step2_build_grid.py, "only for cells passing rules 1 and 2"), so water_share was missing for every smaller cell and the condition "water share < 0.5" removed them all. That first S11 (>= 3) result is not used.
+- Fix: 01_data/step8_water_small_cells.py applies the same Earth Engine calculation (ESA WorldCover v200 class 80, area-weighted mean at 10 m over the 100 m cell in EPSG:3035) to the 9,739 cells with 1 to 9 inhabitants: 0 without a value, 9 with at least 50% water. S11 now takes rule 3 from these values for cells under 10 inhabitants. The whole sensitivity script is rerun.
+
+## Step 8b check record: MGWR in R | 2026-11-05 12:21
+- verification/verify_mgwr.R (GWmodel 2.4.1, gwr.multiscale, adaptive bisquare, AICc, same 1 km table, same z-standardisation): 8 of 9 bandwidths within 10% and every correlation of local coefficients >= 0.96 (rent 0.966, foreign 0.960, 65+ 0.999, under 18 1.000, elevation 0.988, ln population 0.994, tree cover 0.998, imperviousness 0.998, intercept 0.979). The intercept bandwidth differs: mgwr 45, GWmodel 30 neighbours (33%). RESULT: FAILED under the tolerance as written ("for each covariate"; the intercept was included in the check, and the tolerance is not reinterpreted after the result).
+- Investigation: AICc of mgwr's model at its own bandwidths 748.16 (R2 0.8685); at GWmodel's bandwidths 742.21 (R2 0.8799); mgwr's bandwidths with the intercept set to 30: 741.90 (R2 0.8797). So the preregistered golden-section search in mgwr stopped at a worse value of its own criterion for the intercept; GWmodel found a better one. The bandwidths of the four social variables are global (741 of 742 cells, 740 in GWmodel) in both programs, and their local coefficients correlate 0.96 to 1.00.
+- Effect: none on any hypothesis (MGWR is descriptive). How to report it (the preregistered mgwr output with this note, and/or the better-AICc intercept bandwidth) is left to the expert panel and Maria.
+- Earlier attempt of this check stopped while reading results.json: Python had written NaN, which is not valid JSON. results.json is now written with null (step8_sensitivity.py) and the file was cleaned once; the R check reads it with NaN replaced by null.
+
+## Step 8c decision record (before any variant composite was built) | 2026-11-05 12:28
+- Variant composites are built with the same masks, grid and rules as the primary one (Q12; 02_lst/lst_pipeline.py), changing only what the sensitivity analysis names; pixels with fewer than 5 valid observations are missing (Q12.6). Built locally from the per-scene LST files of the 16 hot-day scenes (02_lst/exports/scenes/), except S4 (one more scene, 1_LC08_197024_20250620, downloaded with the same pipeline functions) and S16 (ST_QA band of each scene, downloaded on the same grid).
+  - S4: the 17 scenes passing the 80% rule (hot day or not). S5: mean of the absolute LST in C over the 16 scenes. S6: the 9 Landsat 8 scenes. S6b: the 8 scenes of path 196, and the 8 of path 197 (cells lost are counted per city). S12: the 6 scenes with at least 95% valid core reference pixels. S14: per pixel, the mean anomaly of each year, then the mean of the yearly means (the 5-observation rule counts all observations). S15: per scene, (LST minus median) divided by the interquartile range of the valid core reference pixels. S16: pixels with ST_QA x 0.01 > 3 K also masked, and each scene median recomputed on the remaining valid core reference pixels; the distribution of ST_QA of retained pixels is reported.
+  - S13 (not fully specified in Q24): each scene's anomaly uses the median of the valid core reference pixels of the city containing the pixel (pixel-centre city mask, as Q12.4). If a city has fewer than 1,000 such pixels in a scene, that scene gives no anomaly for that city's pixels (counted and reported).
+- Each variant raster is joined to the 100 m cells exactly as in Step 6 (exactextract mean and coverage share); rule 4 (at least 70% coverage) is recomputed for each variant, and the Model A sample is rule 3, the variant's rule 4, the four usable social variables and the covariates. Model A and B, the inference rule, Q20 effects with P10 and P90 fixed at the primary sample, and H3, through 05_analysis/step8_lib.py.
+- Exploratory (Q25): vacancy rate (Leerstandsquote) from the official Destatis grid file Leerstandsquote_in_Gitterzellen.zip, registered like the other census files, parsed with the same rules (dash = 0, brackets = uncertain); added to Model A per 10 points on the cells where it is usable; labelled exploratory, no Holm, no hypothesis.
+- ECOSTRESS (Q25, exploratory) needs a NASA Earthdata account: not done unless Maria creates the account herself; recorded as not done.
+
+## Step 8c check record | 2026-11-05 13:02
+- 02_lst/step8c_variants.py: downloads (Earth Engine) of the S4 scene 1_LC08_197024_20250620 and the ST_QA band of the 17 used scenes; build reproduced the primary composite before building any variant (max |diff| 1.5e-6 C, float32 storage). S13: no city-scene pair below 1,000 valid core pixels. S16: ST_QA of valid pixels median 2.21 K, 90th percentile 2.91 K, 99th 3.36 K; 7.7% above 3 K (masked).
+- verification/verify_variants.py (new; scene selection, exact medians and each variant's rule written separately): 20 random pixels per variant, max |diff| <= 0.000004, observation counts identical for all 10 variants. RESULT: PASSED. Planted error (+0.05 on a copy of S5, checked by a copy of the script pointing to it): FAILED as expected.
+- 05_analysis/step8c_models.py: the primary composite joined the same way reproduced Step 6 (max |diff| 0, rule 4 identical) and Step 8a (max |diff| 0, verdicts identical) before any variant was run.
+- Correction: in the first run, S15 (standardised anomaly, not in C) had the +-0.3 C negligibility rule applied, which Q22 excludes ("all except S15"). Fixed in the code (step8_lib.infer, negligible_rule=False for S15) and the S15 verdicts recomputed with the same verdict function: foreign share "supported", the other three "inconclusive" (previously "practically negligible"). No other analysis has an outcome outside C.
+- Vacancy rate (exploratory): official file Leerstandsquote_in_Gitterzellen.zip downloaded and registered (verify_data_register.py: 20 files, PASSED); 56,682 study-area cells, 45,364 dashes, 10,551 bracketed.
+
+## Gate 8 round 1 decision record (before any new computation) | 2026-11-05 13:18
+- Corrections to earlier records (earlier entries are not edited):
+  - SEM check record, point 3: "sphet's own verbose output shows the same first-step lambda (0.6652)" refers to the 10,897-cell subsample without islands; on the full Model A sample the first-step lambda is 0.6615 (verify_models.R run 3). Cause of the sphet difference, found by the spatial econometrician and reproduced by them: sphet's error-only path estimates the betas by instrumental variables with the unfiltered X as instruments (exactly identified), not by OLS on the spatially filtered data; it is a different, less efficient estimator. spreg follows Arraiz et al. (2010): betas from step 2a at the step-1b lambda, reported lambda from step 2b.
+  - MGWR check record: "the golden-section search stopped at a worse value" is wrong. In mgwr 2.2.1 (sel_bw.py, _init_section) the search for each covariate starts at 40 + 2 x 1 = 42 neighbours, so GWmodel's optimum of 30 could not be reached. And 741 is "at the upper search limit (regional to global scale)", not "global".
+- New tolerances, fixed now:
+  - verify_models.R: the standard errors of the four social betas (Het: White sandwich on the spatially filtered X at the step-2b lambda; Hom: as Drukker et al. 2013) within 0.5% (relative) of spreg's; the step-2b lambda within 0.001 of spreg's reported lambda.
+  - MGWR refit (deviation D15): lower search floor of 20 neighbours for every covariate (multi_bw_min = 20), upper bound n; verify_mgwr.R rerun against the refit with the unchanged tolerance.
+- No formal spatial Hausman test is added: the four signs of misspecification (OLS outside the SEM intervals, lambda moving between steps, betas depending on lambda, a different consistent estimator giving different betas) are reported in a table instead, because the variance difference needed by the test is not guaranteed to be positive definite with heteroskedasticity-robust variances. To be judged by the panel in round 2.
+
+## Gate 8 round 1 check record (actions applied) | 2026-11-05 13:33
+- verification/verify_models.R extended (decision record above): the full two-step GMM written out by hand in R (step 1 lambda, spatial Cochrane-Orcutt betas, step-2b lambda with the efficient weighting of Arraiz et al. 2010 / Drukker et al. 2013, standard errors). Model A Het: lambda step 1 0.6615, step 2b 0.7789 (spreg 0.7789), betas within 0.00006 SE, standard errors identical (max relative difference 0.00000); Model A Hom: 0.6331, 0.6987 (spreg 0.6987), 0.00003 SE, 0.00000; Model B Het and Hom identical too. OLS 8.1e-13, islands 1,712, bootstrap 4.3e-14. RESULT: PASSED.
+- MGWR refit with a search floor of 20 neighbours (D15): intercept bandwidth 30 (interval 30 to 35), AICc 741.88 (default search: 748.16), R2 0.880; rent, foreign, under 18 and ln population at the upper search limit (740; rent interval 572 to the limit); 65+ 466, elevation 494, tree cover 457, imperviousness 167; 45 backfitting iterations, last change of the score 1.2e-6; Moran's I of the MGWR residuals -0.058 (p 0.013, 999 permutations); OLS on the same 742 cells: AICc 901.9, R2 0.808; local condition numbers above 30: 0. verify_mgwr.R against the refit, unchanged tolerance: all 9 bandwidths within 10% (intercept 30 vs 30), correlations of local coefficients 0.998 to 1.000. RESULT: PASSED. Default-search output kept as a footnote (results.json "step8_mgwr_default_search", step8_mgwr_local_default_search.csv).
+- 05_analysis/step8_reporting.py (new): misspecification table (all four OLS coefficients outside the SEM interval; lambda 0.6615 step 1, 0.7789 step 2b, 0.8184 iterated in 8 iterations; foreign beta 0.106 at step 1, 0.078 at step 2b, 0.068 iterated, labelled exploratory); H3 under the SEM with its own sign (rent -0.028, foreign -0.015; rent crosses zero under OLS); S18 beta + theta (foreign 0.307 [0.254, 0.361]; rent 0.110 [0.058, 0.162]); single-variable P10-P90 effects all within +-0.3 C (foreign +0.14 [0.09, 0.20], rent +0.04 [0.02, 0.07]: "practically negligible" by Q22); residents vs cells (adjusted cell contrast 0.48, unadjusted 0.14, estimated foreign residents vs others +0.88 pooled and +0.85 within city, exploratory); S3 reference row (unweighted OLS + bootstrap: rent also "contradicted", so S3's result reflects the estimator, not the weighting); S7 effects with 1 km percentiles (foreign 0.53).
+- step8_lib.py: point estimate when no spatial fit is attempted (S3, reference rows) = full-sample OLS; when both GM fits fail = bootstrap median, as step8_primary.py (never triggered; the earlier Step 8b and 8c outputs are unchanged by this).
+
+### Step 8, check record: Gate 8 panel round 2 fixes (5 November 2026)
+
+- Changes: 05_analysis/step8_reporting.py (P10-P90 effects at the step-1, step-2b and iterated lambda; same-sample residents-vs-cells rows on the Model A cells; notes; Step 9 writing obligations), 05_analysis/step8_mgwr.py (dead line removed; final_SOC, tol_multi, max_iter_multi reported; wording; Moran note), verification/verify_models.R (comment only, lines 44 to 46; no code or tolerance change).
+- step8_mgwr.py rerun (detached): bandwidths, AICc 741.878 and R2 0.880 unchanged; 45 iterations, final SOC 9.01e-6 < tol 1e-5 (max_iter 200); residual Moran's I -0.058 (one-sided permutation p 0.013, 5 islands).
+- verify_mgwr.R rerun: RESULT: PASSED (all nine bandwidths within tolerance; local coefficient correlations 0.998 to 1.000).
+- step8_reporting.py rerun: foreign P10-P90 effect 0.478 (step 1), 0.350 (step 2b), 0.308 (iterated). Same sample (Model A cells): single-variable SEM 0.448 [0.356, 0.540], single-variable OLS 0.776, resident means 0.497 pooled and 0.482 within city. These match the values the reviewers computed independently in round 2. Note: for 65+ and under 18 the sign of the small effect changes between lambda steps (-0.004 to +0.026; -0.056 to +0.055), consistent with their inconclusive verdicts.
+
+### Step 8, check record: Gate 8 panel round 3 fixes (5 November 2026)
+
+- 05_analysis/step8_reporting.py rerun (detached). Same-sample single-variable SEM row now with the Het and Hom hull: 0.448 [0.356, 0.547] (was Het only, [0.356, 0.540]). Exposure gap on the Model A cells: 15.21 points of foreign share; implied resident gaps 0.161 (adjusted SEM), 0.151 (single-variable SEM), 0.262 (single-variable OLS), against the observed 0.497 pooled and 0.482 within city. Same values as UP's independent computation (15.2; 0.16, 0.15, 0.26). Notes and Step 9 obligations (now 10) added; every interval row carries ci_definition.
+- step8_mgwr.py: Moran note text corrected (islands kept with a zero lag). results.json "step8_mgwr.residual_moran_I.note" patched to the same text by a one-off script; no refit, so I, p and every number are unchanged (AICc 741.878).
+- Pointer for the MGWR convergence numbers: the "last change of the score 1.2e-6" in the Gate 8 round 1 check record is the last difference between iterations; the convergence criterion itself is the final score of change, 9.01e-6 < tol 1e-5 (round 2 check record). Both are true; the second is the one to report.
+
+### Step 8, check record: Gate 8 panel round 4 fixes (5 November 2026)
+
+- 05_analysis/step8_reporting.py rerun (detached): new key "resident_gap_decomposition_exploratory" and file step8_reporting_resident_gap_decomposition.csv. Implied resident gap (slope x 15.21-point exposure gap), Model A cells: raw unweighted 0.611; raw population-weighted 0.497; city only 0.601; plus elevation and log population 0.262 (weighted 0.230); single-variable SEM 0.151; full Model A OLS 0.328; full SEM 0.161 (step 1), 0.118 (step 2b), 0.104 (iterated). Identity check: observed pooled gap 0.4972510994 = weighted slope x gap 0.4972510994 (difference below 1e-15). Same values as UP's and SE's independent round 4 computations. Step 9 obligations: 11.
+- Comment-only edits: step8_primary.py line 222 ("unadjusted disparities" -> "adjusted for elevation, log population and city only"); step8_reporting.py docstring. No code line of step8_primary.py changed, so the Step 8a outputs stay valid.
+
+### Step 8, check record: Gate 8 panel round 5 fixes (5 November 2026)
+
+- step8_reporting.py rerun (detached). New decomposition rows: city only weighted 0.4956; city + elevation 0.5364; city + log population 0.3259 (same as UP's round 5 computation: 0.4956, 0.536, 0.326). The reading note is now built by code from the computed rows: weighting -19%, city 0.61 to 0.60, elevation and log population -56% (almost all through log population), spatial filtering -42% (single-variable) and -51% to -68% (full Model A, by lambda step).
+- Line endings: the patch scripts had turned step8_primary.py, step8_reporting.py, step8_mgwr.py and verify_models.R into CRLF; set back to LF, content unchanged (byte check: 0 CRLF). Other project files with CRLF date from earlier steps (pandas CSV output, notebook); left as they are.
+
+### Step 8, check record: Gate 8 panel round 6 fixes (5 November 2026)
+
+- step8_reporting.py rerun (detached); only the reading note changed (numbers unchanged). It now reads "the observed resident gap on the Model A cells (0.50 C; not the 0.88 C of all usable cells)" and "mostly through log population: about 81% of the drop", both values printed from the computed rows. File kept in LF (0 CR bytes).
+
+## GATE 8: Models | run 1 | 2026-11-05 14:08
+### verify_data_register.py: PASS
+```
+files on disk: 20; registered: 20
+RESULT: PASSED
+```
+### verify_models.R: PASS
+```
+n Model A: 12609 (Python 12609 )
+OLS A: max |diff| over intercept and social betas 8.09e-13
+OLS B: max |diff| over intercept and social betas 3.08e-14
+islands: 1712 (Python 1712 )
+SEM A Het (hand, R): lambda step 1 0.6615, step 2b 0.7789 (spreg 0.7789); max |beta diff| / SE 0.00006; max relative SE diff 0.00000
+   (information) sphet: max |beta diff| / SE vs spreg = 5.313; lambda sphet 0.7490 vs spreg 0.7789
+SEM A Hom (hand, R): lambda step 1 0.6331, step 2b 0.6987 (spreg 0.6987); max |beta diff| / SE 0.00003; max relative SE diff 0.00000
+   (information) sphet: max |beta diff| / SE vs spreg = 6.436; lambda sphet 0.6702 vs spreg 0.6987
+SEM B Het (hand, R): lambda step 1 0.4398, step 2b 0.5996 (spreg 0.5996); max |beta diff| / SE 0.00000; max relative SE diff 0.00000
+   (information) sphet: max |beta diff| / SE vs spreg = 1.980; lambda sphet 0.5291 vs spreg 0.5996
+SEM B Hom (hand, R): lambda step 1 0.4249, step 2b 0.5339 (spreg 0.5339); max |beta diff| / SE 0.00000; max relative SE diff 0.00000
+   (information) sphet: max |beta diff| / SE vs spreg = 2.107; lambda sphet 0.4763 vs spreg 0.5339
+bootstrap: 999 replicates recomputed, max |diff| of social betas 4.32e-14
+RESULT: PASSED
+Warning message:
+In dnearneigh(as.matrix(A[, c("x_mp", "y_mp")]), 0, 142) :
+  neighbour object has 3029 sub-graphs
+```
+### verify_mgwr.R: PASS
+```
+------ Calculate the initial bandwidths for each independent variable ------
+Now select an optimum bandwidth for the model:  lst_anom~1 
+[1] "bws0[i]<-bw.gwr(lst_anom~1,data=regression.points,kernel=kernel,approach=approach,adaptive=adaptive,dMat=dMats[[var.dMat.indx[i]]], parallel.method=parallel.method,parallel.arg=parallel.arg)"
+Adaptive bandwidth (number of nearest neighbours): 466 AICc value: 2036.552 
+Adaptive bandwidth (number of nearest neighbours): 296 AICc value: 2000.38 
+Adaptive bandwidth (number of nearest neighbours): 190 AICc value: 1966.584 
+Adaptive bandwidth (number of nearest neighbours): 125 AICc value: 1916.567 
+Adaptive bandwidth (number of nearest neighbours): 84 AICc value: 1862.331 
+Adaptive bandwidth (number of nearest neighbours): 59 AICc value: 1814.658 
+Adaptive bandwidth (number of nearest neighbours): 43 AICc value: 1779.381 
+Adaptive bandwidth (number of nearest neighbours): 34 AICc value: 1751.887 
+Adaptive bandwidth (number of nearest neighbours): 27 AICc value: 1732.416 
+Adaptive bandwidth (number of nearest neighbours): 24 AICc value: 1723.087 
+Adaptive bandwidth (number of nearest neighbours): 21 AICc value: 1717.677 
+Adaptive bandwidth (number of nearest neighbours): 20 AICc value: 1717.144 
+Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 1714.859 
+Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 1714.859 
+Now select an optimum bandwidth for the model:  lst_anom~rent 
+[1] "bws0[i]<-bw.gwr(lst_anom~rent,data=regression.points,kernel=kernel,approach=approach,adaptive=adaptive,dMat=dMats[[var.dMat.indx[i]]], parallel.method=parallel.method,parallel.arg=parallel.arg)"
+Adaptive bandwidth (number of nearest neighbours): 466 AICc value: 2023.813 
+Adaptive bandwidth (number of nearest neighbours): 296 AICc value: 1986.127 
+Adaptive bandwidth (number of nearest neighbours): 190 AICc value: 1945.627 
+Adaptive bandwidth (number of nearest neighbours): 125 AICc value: 1892.099 
+Adaptive bandwidth (number of nearest neighbours): 84 AICc value: 1837.45 
+Adaptive bandwidth (number of nearest neighbours): 59 AICc value: 1798.49 
+Adaptive bandwidth (number of nearest neighbours): 43 AICc value: 1775.617 
+Adaptive bandwidth (number of nearest neighbours): 34 AICc value: 1758.063 
+Adaptive bandwidth (number of nearest neighbours): 27 AICc value: 1758.49 
+Adaptive bandwidth (number of nearest neighbours): 36 AICc value: 1759.031 
+Adaptive bandwidth (number of nearest neighbours): 30 AICc value: 1754.682 
+Adaptive bandwidth (number of nearest neighbours): 30 AICc value: 1754.682 
+Now select an optimum bandwidth for the model:  lst_anom~foreign10 
+[1] "bws0[i]<-bw.gwr(lst_anom~foreign10,data=regression.points,kernel=kernel,approach=approach,adaptive=adaptive,dMat=dMats[[var.dMat.indx[i]]], parallel.method=parallel.method,parallel.arg=parallel.arg)"
+Adaptive bandwidth (number of nearest neighbours): 466 AICc value: 1884.73 
+Adaptive bandwidth (number of nearest neighbours): 296 AICc value: 1844.813 
+Adaptive bandwidth (number of nearest neighbours): 190 AICc value: 1813.434 
+Adaptive bandwidth (number of nearest neighbours): 125 AICc value: 1781.584 
+Adaptive bandwidth (number of nearest neighbours): 84 AICc value: 1752.831 
+Adaptive bandwidth (number of nearest neighbours): 59 AICc value: 1729.503 
+Adaptive bandwidth (number of nearest neighbours): 43 AICc value: 1714.779 
+Adaptive bandwidth (number of nearest neighbours): 34 AICc value: 1703.125 
+Adaptive bandwidth (number of nearest neighbours): 27 AICc value: 1700.083 
+Adaptive bandwidth (number of nearest neighbours): 24 AICc value: 1706.246 
+Adaptive bandwidth (number of nearest neighbours): 30 AICc value: 1700.071 
+Adaptive bandwidth (number of nearest neighbours): 31 AICc value: 1703.371 
+Adaptive bandwidth (number of nearest neighbours): 28 AICc value: 1698.006 
+Adaptive bandwidth (number of nearest neighbours): 28 AICc value: 1698.006 
+Now select an optimum bandwidth for the model:  lst_anom~age65_10 
+[1] "bws0[i]<-bw.gwr(lst_anom~age65_10,data=regression.points,kernel=kernel,approach=approach,adaptive=adaptive,dMat=dMats[[var.dMat.indx[i]]], parallel.method=parallel.method,parallel.arg=parallel.arg)"
+Adaptive bandwidth (number of nearest neighbours): 466 AICc value: 1930.168 
+Adaptive bandwidth (number of nearest neighbours): 296 AICc value: 1894.249 
+Adaptive bandwidth (number of nearest neighbours): 190 AICc value: 1864.01 
+Adaptive bandwidth (number of nearest neighbours): 125 AICc value: 1829.077 
+Adaptive bandwidth (number of nearest neighbours): 84 AICc value: 1798.845 
+Adaptive bandwidth (number of nearest neighbours): 59 AICc value: 1772.491 
+Adaptive bandwidth (number of nearest neighbours): 43 AICc value: 1754.011 
+Adaptive bandwidth (number of nearest neighbours): 34 AICc value: 1740.155 
+Adaptive bandwidth (number of nearest neighbours): 27 AICc value: 1742.596 
+Adaptive bandwidth (number of nearest neighbours): 36 AICc value: 1739.712 
+Adaptive bandwidth (number of nearest neighbours): 40 AICc value: 1748.656 
+Adaptive bandwidth (number of nearest neighbours): 36 AICc value: 1739.712 
+Now select an optimum bandwidth for the model:  lst_anom~under18_10 
+[1] "bws0[i]<-bw.gwr(lst_anom~under18_10,data=regression.points,kernel=kernel,approach=approach,adaptive=adaptive,dMat=dMats[[var.dMat.indx[i]]], parallel.method=parallel.method,parallel.arg=parallel.arg)"
+Adaptive bandwidth (number of nearest neighbours): 466 AICc value: 2027.29 
+Adaptive bandwidth (number of nearest neighbours): 296 AICc value: 1987.089 
+Adaptive bandwidth (number of nearest neighbours): 190 AICc value: 1944.833 
+Adaptive bandwidth (number of nearest neighbours): 125 AICc value: 1894.612 
+Adaptive bandwidth (number of nearest neighbours): 84 AICc value: 1841.627 
+Adaptive bandwidth (number of nearest neighbours): 59 AICc value: 1807.169 
+Adaptive bandwidth (number of nearest neighbours): 43 AICc value: 1792.953 
+Adaptive bandwidth (number of nearest neighbours): 34 AICc value: 1784.911 
+Adaptive bandwidth (number of nearest neighbours): 27 AICc value: 1785.341 
+Adaptive bandwidth (number of nearest neighbours): 36 AICc value: 1784.789 
+Adaptive bandwidth (number of nearest neighbours): 40 AICc value: 1787.751 
+Adaptive bandwidth (number of nearest neighbours): 36 AICc value: 1784.789 
+Now select an optimum bandwidth for the model:  lst_anom~elevation 
+[1] "bws0[i]<-bw.gwr(lst_anom~elevation,data=regression.points,kernel=kernel,approach=approach,adaptive=adaptive,dMat=dMats[[var.dMat.indx[i]]], parallel.method=parallel.method,parallel.arg=parallel.arg)"
+Adaptive bandwidth (number of nearest neighbours): 466 AICc value: 1935.279 
+Adaptive bandwidth (number of nearest neighbours): 296 AICc value: 1917.016 
+Adaptive bandwidth (number of nearest neighbours): 190 AICc value: 1882.3 
+Adaptive bandwidth (number of nearest neighbours): 125 AICc value: 1838.445 
+Adaptive bandwidth (number of nearest neighbours): 84 AICc value: 1792.915 
+Adaptive bandwidth (number of nearest neighbours): 59 AICc value: 1758.77 
+Adaptive bandwidth (number of nearest neighbours): 43 AICc value: 1734.026 
+Adaptive bandwidth (number of nearest neighbours): 34 AICc value: 1719.103 
+Adaptive bandwidth (number of nearest neighbours): 27 AICc value: 1707.664 
+Adaptive bandwidth (number of nearest neighbours): 24 AICc value: 1708.247 
+Adaptive bandwidth (number of nearest neighbours): 30 AICc value: 1712.414 
+Adaptive bandwidth (number of nearest neighbours): 26 AICc value: 1707.977 
+Adaptive bandwidth (number of nearest neighbours): 28 AICc value: 1707.616 
+Adaptive bandwidth (number of nearest neighbours): 28 AICc value: 1707.616 
+Now select an optimum bandwidth for the model:  lst_anom~ln_pop 
+[1] "bws0[i]<-bw.gwr(lst_anom~ln_pop,data=regression.points,kernel=kernel,approach=approach,adaptive=adaptive,dMat=dMats[[var.dMat.indx[i]]], parallel.method=parallel.method,parallel.arg=parallel.arg)"
+Adaptive bandwidth (number of nearest neighbours): 466 AICc value: 1779.946 
+Adaptive bandwidth (number of nearest neighbours): 296 AICc value: 1729.448 
+Adaptive bandwidth (number of nearest neighbours): 190 AICc value: 1692.916 
+Adaptive bandwidth (number of nearest neighbours): 125 AICc value: 1654.399 
+Adaptive bandwidth (number of nearest neighbours): 84 AICc value: 1625.028 
+Adaptive bandwidth (number of nearest neighbours): 59 AICc value: 1592.702 
+Adaptive bandwidth (number of nearest neighbours): 43 AICc value: 1571.885 
+Adaptive bandwidth (number of nearest neighbours): 34 AICc value: 1558.563 
+Adaptive bandwidth (number of nearest neighbours): 27 AICc value: 1571.541 
+Adaptive bandwidth (number of nearest neighbours): 36 AICc value: 1562.341 
+Adaptive bandwidth (number of nearest neighbours): 30 AICc value: 1564.097 
+Adaptive bandwidth (number of nearest neighbours): 34 AICc value: 1558.563 
+Now select an optimum bandwidth for the model:  lst_anom~tree_cover 
+[1] "bws0[i]<-bw.gwr(lst_anom~tree_cover,data=regression.points,kernel=kernel,approach=approach,adaptive=adaptive,dMat=dMats[[var.dMat.indx[i]]], parallel.method=parallel.method,parallel.arg=parallel.arg)"
+Adaptive bandwidth (number of nearest neighbours): 466 AICc value: 1643.134 
+Adaptive bandwidth (number of nearest neighbours): 296 AICc value: 1611.924 
+Adaptive bandwidth (number of nearest neighbours): 190 AICc value: 1583.715 
+Adaptive bandwidth (number of nearest neighbours): 125 AICc value: 1531.206 
+Adaptive bandwidth (number of nearest neighbours): 84 AICc value: 1463.763 
+Adaptive bandwidth (number of nearest neighbours): 59 AICc value: 1400.408 
+Adaptive bandwidth (number of nearest neighbours): 43 AICc value: 1356.267 
+Adaptive bandwidth (number of nearest neighbours): 34 AICc value: 1330.974 
+Adaptive bandwidth (number of nearest neighbours): 27 AICc value: 1323.159 
+Adaptive bandwidth (number of nearest neighbours): 24 AICc value: 1326.899 
+Adaptive bandwidth (number of nearest neighbours): 30 AICc value: 1320.994 
+Adaptive bandwidth (number of nearest neighbours): 31 AICc value: 1325.313 
+Adaptive bandwidth (number of nearest neighbours): 28 AICc value: 1321.51 
+Adaptive bandwidth (number of nearest neighbours): 29 AICc value: 1320.682 
+Adaptive bandwidth (number of nearest neighbours): 31 AICc value: 1325.313 
+Adaptive bandwidth (number of nearest neighbours): 30 AICc value: 1320.994 
+Adaptive bandwidth (number of nearest neighbours): 30 AICc value: 1320.994 
+Adaptive bandwidth (number of nearest neighbours): 29 AICc value: 1320.682 
+Now select an optimum bandwidth for the model:  lst_anom~imperviousness 
+[1] "bws0[i]<-bw.gwr(lst_anom~imperviousness,data=regression.points,kernel=kernel,approach=approach,adaptive=adaptive,dMat=dMats[[var.dMat.indx[i]]], parallel.method=parallel.method,parallel.arg=parallel.arg)"
+Adaptive bandwidth (number of nearest neighbours): 466 AICc value: 1098.995 
+Adaptive bandwidth (number of nearest neighbours): 296 AICc value: 1021.194 
+Adaptive bandwidth (number of nearest neighbours): 190 AICc value: 967.6735 
+Adaptive bandwidth (number of nearest neighbours): 125 AICc value: 916.2282 
+Adaptive bandwidth (number of nearest neighbours): 84 AICc value: 884.2275 
+Adaptive bandwidth (number of nearest neighbours): 59 AICc value: 864.31 
+Adaptive bandwidth (number of nearest neighbours): 43 AICc value: 855.0645 
+Adaptive bandwidth (number of nearest neighbours): 34 AICc value: 853.706 
+Adaptive bandwidth (number of nearest neighbours): 27 AICc value: 855.0545 
+Adaptive bandwidth (number of nearest neighbours): 36 AICc value: 852.0065 
+Adaptive bandwidth (number of nearest neighbours): 40 AICc value: 855.9183 
+Adaptive bandwidth (number of nearest neighbours): 36 AICc value: 852.0065 
+------            The end for the initial selections              ------
+Calculate the initial beta0 from the above bandwidths.
+End of calculating the inital beta0.
+Find the optimum bandwidths for each independent variable.
+	Iteration 1
+Now select an optimum bandwidth for the variable: Intercept
+The newly selected bandwidth for variable: Intercept is 34
+The bandwidth used in the last iteration is: 18 and the difference in bandwidths is: 16
+The bandwidth for variable Intercept will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: rent
+The newly selected bandwidth for variable: rent is 296
+The bandwidth used in the last iteration is: 30 and the difference in bandwidths is: 266
+The bandwidth for variable rent will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: foreign10
+The newly selected bandwidth for variable: foreign10 is 224
+The bandwidth used in the last iteration is: 28 and the difference in bandwidths is: 196
+The bandwidth for variable foreign10 will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: age65_10
+The newly selected bandwidth for variable: age65_10 is 353
+The bandwidth used in the last iteration is: 36 and the difference in bandwidths is: 317
+The bandwidth for variable age65_10 will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: under18_10
+The newly selected bandwidth for variable: under18_10 is 635
+The bandwidth used in the last iteration is: 36 and the difference in bandwidths is: 599
+The bandwidth for variable under18_10 will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: elevation
+The newly selected bandwidth for variable: elevation is 143
+The bandwidth used in the last iteration is: 28 and the difference in bandwidths is: 115
+The bandwidth for variable elevation will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: ln_pop
+The newly selected bandwidth for variable: ln_pop is 204
+The bandwidth used in the last iteration is: 34 and the difference in bandwidths is: 170
+The bandwidth for variable ln_pop will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: tree_cover
+The newly selected bandwidth for variable: tree_cover is 198
+The bandwidth used in the last iteration is: 29 and the difference in bandwidths is: 169
+The bandwidth for variable tree_cover will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: imperviousness
+The newly selected bandwidth for variable: imperviousness is 157
+The bandwidth used in the last iteration is: 36 and the difference in bandwidths is: 121
+The bandwidth for variable imperviousness will be continually selected in the next iteration.
+Iteration 1 change of RSS (dCVR) is 0.387343.
+	Iteration 2
+Now select an optimum bandwidth for the variable: Intercept
+The newly selected bandwidth for variable: Intercept is 30
+The bandwidth used in the last iteration is: 34 and the difference in bandwidths is: 4
+The bandwidth for variable Intercept will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: rent
+The newly selected bandwidth for variable: rent is 677
+The bandwidth used in the last iteration is: 296 and the difference in bandwidths is: 381
+The bandwidth for variable rent will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: foreign10
+The newly selected bandwidth for variable: foreign10 is 736
+The bandwidth used in the last iteration is: 224 and the difference in bandwidths is: 512
+The bandwidth for variable foreign10 will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: age65_10
+The newly selected bandwidth for variable: age65_10 is 475
+The bandwidth used in the last iteration is: 353 and the difference in bandwidths is: 122
+The bandwidth for variable age65_10 will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: under18_10
+The newly selected bandwidth for variable: under18_10 is 699
+The bandwidth used in the last iteration is: 635 and the difference in bandwidths is: 64
+The bandwidth for variable under18_10 will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: elevation
+The newly selected bandwidth for variable: elevation is 198
+The bandwidth used in the last iteration is: 143 and the difference in bandwidths is: 55
+The bandwidth for variable elevation will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: ln_pop
+The newly selected bandwidth for variable: ln_pop is 312
+The bandwidth used in the last iteration is: 204 and the difference in bandwidths is: 108
+The bandwidth for variable ln_pop will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: tree_cover
+The newly selected bandwidth for variable: tree_cover is 246
+The bandwidth used in the last iteration is: 198 and the difference in bandwidths is: 48
+The bandwidth for variable tree_cover will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: imperviousness
+The newly selected bandwidth for variable: imperviousness is 149
+The bandwidth used in the last iteration is: 157 and the difference in bandwidths is: 8
+The bandwidth for variable imperviousness will be continually selected in the next iteration.
+Iteration 2 change of RSS (dCVR) is 0.0935184.
+	Iteration 3
+Now select an optimum bandwidth for the variable: Intercept
+The newly selected bandwidth for variable: Intercept is 30
+The bandwidth used in the last iteration is: 30 and the difference in bandwidths is: 0
+The bandwidth for variable Intercept seems to be converged for 1 times. It will be continually optimized in the next 4 times
+Now select an optimum bandwidth for the variable: rent
+The newly selected bandwidth for variable: rent is 740
+The bandwidth used in the last iteration is: 677 and the difference in bandwidths is: 63
+The bandwidth for variable rent will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: foreign10
+The newly selected bandwidth for variable: foreign10 is 740
+The bandwidth used in the last iteration is: 736 and the difference in bandwidths is: 4
+The bandwidth for variable foreign10 will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: age65_10
+The newly selected bandwidth for variable: age65_10 is 488
+The bandwidth used in the last iteration is: 475 and the difference in bandwidths is: 13
+The bandwidth for variable age65_10 will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: under18_10
+The newly selected bandwidth for variable: under18_10 is 718
+The bandwidth used in the last iteration is: 699 and the difference in bandwidths is: 19
+The bandwidth for variable under18_10 will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: elevation
+The newly selected bandwidth for variable: elevation is 265
+The bandwidth used in the last iteration is: 198 and the difference in bandwidths is: 67
+The bandwidth for variable elevation will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: ln_pop
+The newly selected bandwidth for variable: ln_pop is 397
+The bandwidth used in the last iteration is: 312 and the difference in bandwidths is: 85
+The bandwidth for variable ln_pop will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: tree_cover
+The newly selected bandwidth for variable: tree_cover is 281
+The bandwidth used in the last iteration is: 246 and the difference in bandwidths is: 35
+The bandwidth for variable tree_cover will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: imperviousness
+The newly selected bandwidth for variable: imperviousness is 157
+The bandwidth used in the last iteration is: 149 and the difference in bandwidths is: 8
+The bandwidth for variable imperviousness will be continually selected in the next iteration.
+Iteration 3 change of RSS (dCVR) is 0.0420465.
+	Iteration 4
+Now select an optimum bandwidth for the variable: Intercept
+The newly selected bandwidth for variable: Intercept is 30
+The bandwidth used in the last iteration is: 30 and the difference in bandwidths is: 0
+The bandwidth for variable Intercept seems to be converged for 2 times. It will be continually optimized in the next 3 times
+Now select an optimum bandwidth for the variable: rent
+The newly selected bandwidth for variable: rent is 740
+The bandwidth used in the last iteration is: 740 and the difference in bandwidths is: 0
+The bandwidth for variable rent seems to be converged for 1 times. It will be continually optimized in the next 4 times
+Now select an optimum bandwidth for the variable: foreign10
+The newly selected bandwidth for variable: foreign10 is 740
+The bandwidth used in the last iteration is: 740 and the difference in bandwidths is: 0
+The bandwidth for variable foreign10 seems to be converged for 1 times. It will be continually optimized in the next 4 times
+Now select an optimum bandwidth for the variable: age65_10
+The newly selected bandwidth for variable: age65_10 is 488
+The bandwidth used in the last iteration is: 488 and the difference in bandwidths is: 0
+The bandwidth for variable age65_10 seems to be converged for 1 times. It will be continually optimized in the next 4 times
+Now select an optimum bandwidth for the variable: under18_10
+The newly selected bandwidth for variable: under18_10 is 740
+The bandwidth used in the last iteration is: 718 and the difference in bandwidths is: 22
+The bandwidth for variable under18_10 will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: elevation
+The newly selected bandwidth for variable: elevation is 316
+The bandwidth used in the last iteration is: 265 and the difference in bandwidths is: 51
+The bandwidth for variable elevation will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: ln_pop
+The newly selected bandwidth for variable: ln_pop is 507
+The bandwidth used in the last iteration is: 397 and the difference in bandwidths is: 110
+The bandwidth for variable ln_pop will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: tree_cover
+The newly selected bandwidth for variable: tree_cover is 353
+The bandwidth used in the last iteration is: 281 and the difference in bandwidths is: 72
+The bandwidth for variable tree_cover will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: imperviousness
+The newly selected bandwidth for variable: imperviousness is 157
+The bandwidth used in the last iteration is: 157 and the difference in bandwidths is: 0
+The bandwidth for variable imperviousness seems to be converged for 1 times. It will be continually optimized in the next 4 times
+Iteration 4 change of RSS (dCVR) is 0.0467389.
+	Iteration 5
+Now select an optimum bandwidth for the variable: Intercept
+The newly selected bandwidth for variable: Intercept is 30
+The bandwidth used in the last iteration is: 30 and the difference in bandwidths is: 0
+The bandwidth for variable Intercept seems to be converged for 3 times. It will be continually optimized in the next 2 times
+Now select an optimum bandwidth for the variable: rent
+The newly selected bandwidth for variable: rent is 740
+The bandwidth used in the last iteration is: 740 and the difference in bandwidths is: 0
+The bandwidth for variable rent seems to be converged for 2 times. It will be continually optimized in the next 3 times
+Now select an optimum bandwidth for the variable: foreign10
+The newly selected bandwidth for variable: foreign10 is 740
+The bandwidth used in the last iteration is: 740 and the difference in bandwidths is: 0
+The bandwidth for variable foreign10 seems to be converged for 2 times. It will be continually optimized in the next 3 times
+Now select an optimum bandwidth for the variable: age65_10
+The newly selected bandwidth for variable: age65_10 is 475
+The bandwidth used in the last iteration is: 488 and the difference in bandwidths is: 13
+The bandwidth for variable age65_10 will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: under18_10
+The newly selected bandwidth for variable: under18_10 is 740
+The bandwidth used in the last iteration is: 740 and the difference in bandwidths is: 0
+The bandwidth for variable under18_10 seems to be converged for 1 times. It will be continually optimized in the next 4 times
+Now select an optimum bandwidth for the variable: elevation
+The newly selected bandwidth for variable: elevation is 316
+The bandwidth used in the last iteration is: 316 and the difference in bandwidths is: 0
+The bandwidth for variable elevation seems to be converged for 1 times. It will be continually optimized in the next 4 times
+Now select an optimum bandwidth for the variable: ln_pop
+The newly selected bandwidth for variable: ln_pop is 740
+The bandwidth used in the last iteration is: 507 and the difference in bandwidths is: 233
+The bandwidth for variable ln_pop will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: tree_cover
+The newly selected bandwidth for variable: tree_cover is 440
+The bandwidth used in the last iteration is: 353 and the difference in bandwidths is: 87
+The bandwidth for variable tree_cover will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: imperviousness
+The newly selected bandwidth for variable: imperviousness is 157
+The bandwidth used in the last iteration is: 157 and the difference in bandwidths is: 0
+The bandwidth for variable imperviousness seems to be converged for 2 times. It will be continually optimized in the next 3 times
+Iteration 5 change of RSS (dCVR) is 0.0475972.
+	Iteration 6
+Now select an optimum bandwidth for the variable: Intercept
+The newly selected bandwidth for variable: Intercept is 30
+The bandwidth used in the last iteration is: 30 and the difference in bandwidths is: 0
+The bandwidth for variable Intercept seems to be converged for 4 times. It will be continually optimized in the next 1 times
+Now select an optimum bandwidth for the variable: rent
+The newly selected bandwidth for variable: rent is 740
+The bandwidth used in the last iteration is: 740 and the difference in bandwidths is: 0
+The bandwidth for variable rent seems to be converged for 3 times. It will be continually optimized in the next 2 times
+Now select an optimum bandwidth for the variable: foreign10
+The newly selected bandwidth for variable: foreign10 is 740
+The bandwidth used in the last iteration is: 740 and the difference in bandwidths is: 0
+The bandwidth for variable foreign10 seems to be converged for 3 times. It will be continually optimized in the next 2 times
+Now select an optimum bandwidth for the variable: age65_10
+The newly selected bandwidth for variable: age65_10 is 466
+The bandwidth used in the last iteration is: 475 and the difference in bandwidths is: 9
+The bandwidth for variable age65_10 will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: under18_10
+The newly selected bandwidth for variable: under18_10 is 740
+The bandwidth used in the last iteration is: 740 and the difference in bandwidths is: 0
+The bandwidth for variable under18_10 seems to be converged for 2 times. It will be continually optimized in the next 3 times
+Now select an optimum bandwidth for the variable: elevation
+The newly selected bandwidth for variable: elevation is 351
+The bandwidth used in the last iteration is: 316 and the difference in bandwidths is: 35
+The bandwidth for variable elevation will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: ln_pop
+The newly selected bandwidth for variable: ln_pop is 740
+The bandwidth used in the last iteration is: 740 and the difference in bandwidths is: 0
+The bandwidth for variable ln_pop seems to be converged for 1 times. It will be continually optimized in the next 4 times
+Now select an optimum bandwidth for the variable: tree_cover
+The newly selected bandwidth for variable: tree_cover is 462
+The bandwidth used in the last iteration is: 440 and the difference in bandwidths is: 22
+The bandwidth for variable tree_cover will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: imperviousness
+The newly selected bandwidth for variable: imperviousness is 157
+The bandwidth used in the last iteration is: 157 and the difference in bandwidths is: 0
+The bandwidth for variable imperviousness seems to be converged for 3 times. It will be continually optimized in the next 2 times
+Iteration 6 change of RSS (dCVR) is 0.0173146.
+	Iteration 7
+Now select an optimum bandwidth for the variable: Intercept
+The newly selected bandwidth for variable: Intercept is 30
+The bandwidth used in the last iteration is: 30 and the difference in bandwidths is: 0
+The bandwidth for variable Intercept seems to be converged and will be kept the same in the following iterations.
+Now select an optimum bandwidth for the variable: rent
+The newly selected bandwidth for variable: rent is 740
+The bandwidth used in the last iteration is: 740 and the difference in bandwidths is: 0
+The bandwidth for variable rent seems to be converged for 4 times. It will be continually optimized in the next 1 times
+Now select an optimum bandwidth for the variable: foreign10
+The newly selected bandwidth for variable: foreign10 is 740
+The bandwidth used in the last iteration is: 740 and the difference in bandwidths is: 0
+The bandwidth for variable foreign10 seems to be converged for 4 times. It will be continually optimized in the next 1 times
+Now select an optimum bandwidth for the variable: age65_10
+The newly selected bandwidth for variable: age65_10 is 446
+The bandwidth used in the last iteration is: 466 and the difference in bandwidths is: 20
+The bandwidth for variable age65_10 will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: under18_10
+The newly selected bandwidth for variable: under18_10 is 740
+The bandwidth used in the last iteration is: 740 and the difference in bandwidths is: 0
+The bandwidth for variable under18_10 seems to be converged for 3 times. It will be continually optimized in the next 2 times
+Now select an optimum bandwidth for the variable: elevation
+The newly selected bandwidth for variable: elevation is 374
+The bandwidth used in the last iteration is: 351 and the difference in bandwidths is: 23
+The bandwidth for variable elevation will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: ln_pop
+The newly selected bandwidth for variable: ln_pop is 740
+The bandwidth used in the last iteration is: 740 and the difference in bandwidths is: 0
+The bandwidth for variable ln_pop seems to be converged for 2 times. It will be continually optimized in the next 3 times
+Now select an optimum bandwidth for the variable: tree_cover
+The newly selected bandwidth for variable: tree_cover is 462
+The bandwidth used in the last iteration is: 462 and the difference in bandwidths is: 0
+The bandwidth for variable tree_cover seems to be converged for 1 times. It will be continually optimized in the next 4 times
+Now select an optimum bandwidth for the variable: imperviousness
+The newly selected bandwidth for variable: imperviousness is 157
+The bandwidth used in the last iteration is: 157 and the difference in bandwidths is: 0
+The bandwidth for variable imperviousness seems to be converged for 4 times. It will be continually optimized in the next 1 times
+Iteration 7 change of RSS (dCVR) is 0.0261364.
+	Iteration 8
+Now select an optimum bandwidth for the variable: rent
+The newly selected bandwidth for variable: rent is 740
+The bandwidth used in the last iteration is: 740 and the difference in bandwidths is: 0
+The bandwidth for variable rent seems to be converged and will be kept the same in the following iterations.
+Now select an optimum bandwidth for the variable: foreign10
+The newly selected bandwidth for variable: foreign10 is 740
+The bandwidth used in the last iteration is: 740 and the difference in bandwidths is: 0
+The bandwidth for variable foreign10 seems to be converged and will be kept the same in the following iterations.
+Now select an optimum bandwidth for the variable: age65_10
+The newly selected bandwidth for variable: age65_10 is 447
+The bandwidth used in the last iteration is: 446 and the difference in bandwidths is: 1
+The bandwidth for variable age65_10 will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: under18_10
+The newly selected bandwidth for variable: under18_10 is 740
+The bandwidth used in the last iteration is: 740 and the difference in bandwidths is: 0
+The bandwidth for variable under18_10 seems to be converged for 4 times. It will be continually optimized in the next 1 times
+Now select an optimum bandwidth for the variable: elevation
+The newly selected bandwidth for variable: elevation is 374
+The bandwidth used in the last iteration is: 374 and the difference in bandwidths is: 0
+The bandwidth for variable elevation seems to be converged for 1 times. It will be continually optimized in the next 4 times
+Now select an optimum bandwidth for the variable: ln_pop
+The newly selected bandwidth for variable: ln_pop is 740
+The bandwidth used in the last iteration is: 740 and the difference in bandwidths is: 0
+The bandwidth for variable ln_pop seems to be converged for 3 times. It will be continually optimized in the next 2 times
+Now select an optimum bandwidth for the variable: tree_cover
+The newly selected bandwidth for variable: tree_cover is 462
+The bandwidth used in the last iteration is: 462 and the difference in bandwidths is: 0
+The bandwidth for variable tree_cover seems to be converged for 2 times. It will be continually optimized in the next 3 times
+Now select an optimum bandwidth for the variable: imperviousness
+The newly selected bandwidth for variable: imperviousness is 157
+The bandwidth used in the last iteration is: 157 and the difference in bandwidths is: 0
+The bandwidth for variable imperviousness seems to be converged and will be kept the same in the following iterations.
+Iteration 8 change of RSS (dCVR) is 0.0236283.
+	Iteration 9
+Now select an optimum bandwidth for the variable: age65_10
+The newly selected bandwidth for variable: age65_10 is 447
+The bandwidth used in the last iteration is: 447 and the difference in bandwidths is: 0
+The bandwidth for variable age65_10 seems to be converged for 1 times. It will be continually optimized in the next 4 times
+Now select an optimum bandwidth for the variable: under18_10
+The newly selected bandwidth for variable: under18_10 is 740
+The bandwidth used in the last iteration is: 740 and the difference in bandwidths is: 0
+The bandwidth for variable under18_10 seems to be converged and will be kept the same in the following iterations.
+Now select an optimum bandwidth for the variable: elevation
+The newly selected bandwidth for variable: elevation is 399
+The bandwidth used in the last iteration is: 374 and the difference in bandwidths is: 25
+The bandwidth for variable elevation will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: ln_pop
+The newly selected bandwidth for variable: ln_pop is 740
+The bandwidth used in the last iteration is: 740 and the difference in bandwidths is: 0
+The bandwidth for variable ln_pop seems to be converged for 4 times. It will be continually optimized in the next 1 times
+Now select an optimum bandwidth for the variable: tree_cover
+The newly selected bandwidth for variable: tree_cover is 462
+The bandwidth used in the last iteration is: 462 and the difference in bandwidths is: 0
+The bandwidth for variable tree_cover seems to be converged for 3 times. It will be continually optimized in the next 2 times
+Iteration 9 change of RSS (dCVR) is 0.0276761.
+	Iteration 10
+Now select an optimum bandwidth for the variable: age65_10
+The newly selected bandwidth for variable: age65_10 is 447
+The bandwidth used in the last iteration is: 447 and the difference in bandwidths is: 0
+The bandwidth for variable age65_10 seems to be converged for 2 times. It will be continually optimized in the next 3 times
+Now select an optimum bandwidth for the variable: elevation
+The newly selected bandwidth for variable: elevation is 414
+The bandwidth used in the last iteration is: 399 and the difference in bandwidths is: 15
+The bandwidth for variable elevation will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: ln_pop
+The newly selected bandwidth for variable: ln_pop is 740
+The bandwidth used in the last iteration is: 740 and the difference in bandwidths is: 0
+The bandwidth for variable ln_pop seems to be converged and will be kept the same in the following iterations.
+Now select an optimum bandwidth for the variable: tree_cover
+The newly selected bandwidth for variable: tree_cover is 462
+The bandwidth used in the last iteration is: 462 and the difference in bandwidths is: 0
+The bandwidth for variable tree_cover seems to be converged for 4 times. It will be continually optimized in the next 1 times
+Iteration 10 change of RSS (dCVR) is 0.0120666.
+	Iteration 11
+Now select an optimum bandwidth for the variable: age65_10
+The newly selected bandwidth for variable: age65_10 is 447
+The bandwidth used in the last iteration is: 447 and the difference in bandwidths is: 0
+The bandwidth for variable age65_10 seems to be converged for 3 times. It will be continually optimized in the next 2 times
+Now select an optimum bandwidth for the variable: elevation
+The newly selected bandwidth for variable: elevation is 428
+The bandwidth used in the last iteration is: 414 and the difference in bandwidths is: 14
+The bandwidth for variable elevation will be continually selected in the next iteration.
+Now select an optimum bandwidth for the variable: tree_cover
+The newly selected bandwidth for variable: tree_cover is 462
+The bandwidth used in the last iteration is: 462 and the difference in bandwidths is: 0
+The bandwidth for variable tree_cover seems to be converged and will be kept the same in the following iterations.
+Iteration 11 change of RSS (dCVR) is 0.0154778.
+	Iteration 12
+Now select an optimum bandwidth for the variable: age65_10
+The newly selected bandwidth for variable: age65_10 is 447
+The bandwidth used in the last iteration is: 447 and the difference in bandwidths is: 0
+The bandwidth for variable age65_10 seems to be converged for 4 times. It will be continually optimized in the next 1 times
+Now select an optimum bandwidth for the variable: elevation
+The newly selected bandwidth for variable: elevation is 454
+The bandwidth used in the last iteration is: 428 and the difference in bandwidths is: 26
+The bandwidth for variable elevation will be continually selected in the next iteration.
+Iteration 12 change of RSS (dCVR) is 0.0247795.
+	Iteration 13
+Now select an optimum bandwidth for the variable: age65_10
+The newly selected bandwidth for variable: age65_10 is 447
+The bandwidth used in the last iteration is: 447 and the difference in bandwidths is: 0
+The bandwidth for variable age65_10 seems to be converged and will be kept the same in the following iterations.
+Now select an optimum bandwidth for the variable: elevation
+The newly selected bandwidth for variable: elevation is 481
+The bandwidth used in the last iteration is: 454 and the difference in bandwidths is: 27
+The bandwidth for variable elevation will be continually selected in the next iteration.
+Iteration 13 change of RSS (dCVR) is 0.0229418.
+	Iteration 14
+Now select an optimum bandwidth for the variable: elevation
+The newly selected bandwidth for variable: elevation is 494
+The bandwidth used in the last iteration is: 481 and the difference in bandwidths is: 13
+The bandwidth for variable elevation will be continually selected in the next iteration.
+Iteration 14 change of RSS (dCVR) is 0.00742191.
+	Iteration 15
+Now select an optimum bandwidth for the variable: elevation
+The newly selected bandwidth for variable: elevation is 504
+The bandwidth used in the last iteration is: 494 and the difference in bandwidths is: 10
+The bandwidth for variable elevation will be continually selected in the next iteration.
+Iteration 15 change of RSS (dCVR) is 0.0139408.
+	Iteration 16
+Now select an optimum bandwidth for the variable: elevation
+The newly selected bandwidth for variable: elevation is 506
+The bandwidth used in the last iteration is: 504 and the difference in bandwidths is: 2
+The bandwidth for variable elevation will be continually selected in the next iteration.
+Iteration 16 change of RSS (dCVR) is 0.00199828.
+	Iteration 17
+Now select an optimum bandwidth for the variable: elevation
+The newly selected bandwidth for variable: elevation is 506
+The bandwidth used in the last iteration is: 506 and the difference in bandwidths is: 0
+The bandwidth for variable elevation seems to be converged for 1 times. It will be continually optimized in the next 4 times
+Iteration 17 change of RSS (dCVR) is 0.00555846.
+	Iteration 18
+Now select an optimum bandwidth for the variable: elevation
+The newly selected bandwidth for variable: elevation is 506
+The bandwidth used in the last iteration is: 506 and the difference in bandwidths is: 0
+The bandwidth for variable elevation seems to be converged for 2 times. It will be continually optimized in the next 3 times
+Iteration 18 change of RSS (dCVR) is 0.00834396.
+	Iteration 19
+Now select an optimum bandwidth for the variable: elevation
+The newly selected bandwidth for variable: elevation is 506
+The bandwidth used in the last iteration is: 506 and the difference in bandwidths is: 0
+The bandwidth for variable elevation seems to be converged for 3 times. It will be continually optimized in the next 2 times
+Iteration 19 change of RSS (dCVR) is 0.00837592.
+	Iteration 20
+Now select an optimum bandwidth for the variable: elevation
+The newly selected bandwidth for variable: elevation is 510
+The bandwidth used in the last iteration is: 506 and the difference in bandwidths is: 4
+The bandwidth for variable elevation will be continually selected in the next iteration.
+Iteration 20 change of RSS (dCVR) is 0.0130371.
+	Iteration 21
+Now select an optimum bandwidth for the variable: elevation
+The newly selected bandwidth for variable: elevation is 516
+The bandwidth used in the last iteration is: 510 and the difference in bandwidths is: 6
+The bandwidth for variable elevation will be continually selected in the next iteration.
+Iteration 21 change of RSS (dCVR) is 0.0136657.
+	Iteration 22
+Now select an optimum bandwidth for the variable: elevation
+The newly selected bandwidth for variable: elevation is 518
+The bandwidth used in the last iteration is: 516 and the difference in bandwidths is: 2
+The bandwidth for variable elevation will be continually selected in the next iteration.
+Iteration 22 change of RSS (dCVR) is 0.00755374.
+	Iteration 23
+Now select an optimum bandwidth for the variable: elevation
+The newly selected bandwidth for variable: elevation is 518
+The bandwidth used in the last iteration is: 518 and the difference in bandwidths is: 0
+The bandwidth for variable elevation seems to be converged for 1 times. It will be continually optimized in the next 4 times
+Iteration 23 change of RSS (dCVR) is 0.00402261.
+	Iteration 24
+Now select an optimum bandwidth for the variable: elevation
+The newly selected bandwidth for variable: elevation is 518
+The bandwidth used in the last iteration is: 518 and the difference in bandwidths is: 0
+The bandwidth for variable elevation seems to be converged for 2 times. It will be continually optimized in the next 3 times
+Iteration 24 change of RSS (dCVR) is 0.0068177.
+	Iteration 25
+Now select an optimum bandwidth for the variable: elevation
+The newly selected bandwidth for variable: elevation is 518
+The bandwidth used in the last iteration is: 518 and the difference in bandwidths is: 0
+The bandwidth for variable elevation seems to be converged for 3 times. It will be continually optimized in the next 2 times
+Iteration 25 change of RSS (dCVR) is 0.00683524.
+	Iteration 26
+Now select an optimum bandwidth for the variable: elevation
+The newly selected bandwidth for variable: elevation is 518
+The bandwidth used in the last iteration is: 518 and the difference in bandwidths is: 0
+The bandwidth for variable elevation seems to be converged for 4 times. It will be continually optimized in the next 1 times
+Iteration 26 change of RSS (dCVR) is 0.00652692.
+	Iteration 27
+Now select an optimum bandwidth for the variable: elevation
+The newly selected bandwidth for variable: elevation is 518
+The bandwidth used in the last iteration is: 518 and the difference in bandwidths is: 0
+The bandwidth for variable elevation seems to be converged and will be kept the same in the following iterations.
+Iteration 27 change of RSS (dCVR) is 0.00618978.
+	Iteration 28
+Iteration 28 change of RSS (dCVR) is 0.00586494.
+	Iteration 29
+Iteration 29 change of RSS (dCVR) is 0.00555314.
+	Iteration 30
+Iteration 30 change of RSS (dCVR) is 0.00525237.
+	Iteration 31
+Iteration 31 change of RSS (dCVR) is 0.00496209.
+	Iteration 32
+Iteration 32 change of RSS (dCVR) is 0.00468266.
+	Iteration 33
+Iteration 33 change of RSS (dCVR) is 0.00441467.
+	Iteration 34
+Iteration 34 change of RSS (dCVR) is 0.00415866.
+	Iteration 35
+Iteration 35 change of RSS (dCVR) is 0.00391495.
+	Iteration 36
+Iteration 36 change of RSS (dCVR) is 0.00368365.
+	Iteration 37
+Iteration 37 change of RSS (dCVR) is 0.00346469.
+	Iteration 38
+Iteration 38 change of RSS (dCVR) is 0.00325783.
+	Iteration 39
+Iteration 39 change of RSS (dCVR) is 0.00306269.
+	Iteration 40
+Iteration 40 change of RSS (dCVR) is 0.00287883.
+	Iteration 41
+Iteration 41 change of RSS (dCVR) is 0.00270574.
+	Iteration 42
+Iteration 42 change of RSS (dCVR) is 0.00254288.
+	Iteration 43
+Iteration 43 change of RSS (dCVR) is 0.00238971.
+	Iteration 44
+Iteration 44 change of RSS (dCVR) is 0.0022457.
+	Iteration 45
+Iteration 45 change of RSS (dCVR) is 0.00211031.
+	Iteration 46
+Iteration 46 change of RSS (dCVR) is 0.00198304.
+	Iteration 47
+Iteration 47 change of RSS (dCVR) is 0.0018634.
+	Iteration 48
+Iteration 48 change of RSS (dCVR) is 0.00175095.
+	Iteration 49
+Iteration 49 change of RSS (dCVR) is 0.00164525.
+	Iteration 50
+Iteration 50 change of RSS (dCVR) is 0.0015459.
+	Iteration 51
+Iteration 51 change of RSS (dCVR) is 0.00145251.
+	Iteration 52
+Iteration 52 change of RSS (dCVR) is 0.00136474.
+	Iteration 53
+Iteration 53 change of RSS (dCVR) is 0.00128224.
+	Iteration 54
+Iteration 54 change of RSS (dCVR) is 0.0012047.
+	Iteration 55
+Iteration 55 change of RSS (dCVR) is 0.00113182.
+	Iteration 56
+Iteration 56 change of RSS (dCVR) is 0.00106334.
+	Iteration 57
+Iteration 57 change of RSS (dCVR) is 0.000998976.
+	Iteration 58
+Iteration 58 change of RSS (dCVR) is 0.000938494.
+	Iteration 59
+Iteration 59 change of RSS (dCVR) is 0.000881659.
+	Iteration 60
+Iteration 60 change of RSS (dCVR) is 0.000828255.
+	Iteration 61
+Iteration 61 change of RSS (dCVR) is 0.000778074.
+	Iteration 62
+Iteration 62 change of RSS (dCVR) is 0.000730926.
+	Iteration 63
+Iteration 63 change of RSS (dCVR) is 0.000686626.
+	Iteration 64
+Iteration 64 change of RSS (dCVR) is 0.000645006.
+	Iteration 65
+Iteration 65 change of RSS (dCVR) is 0.000605903.
+	Iteration 66
+Iteration 66 change of RSS (dCVR) is 0.000569167.
+	Iteration 67
+Iteration 67 change of RSS (dCVR) is 0.000534654.
+	Iteration 68
+Iteration 68 change of RSS (dCVR) is 0.000502231.
+	Iteration 69
+Iteration 69 change of RSS (dCVR) is 0.000471772.
+	Iteration 70
+Iteration 70 change of RSS (dCVR) is 0.000443158.
+	Iteration 71
+Iteration 71 change of RSS (dCVR) is 0.000416278.
+	Iteration 72
+Iteration 72 change of RSS (dCVR) is 0.000391027.
+	Iteration 73
+Iteration 73 change of RSS (dCVR) is 0.000367307.
+	Iteration 74
+Iteration 74 change of RSS (dCVR) is 0.000345024.
+	Iteration 75
+Iteration 75 change of RSS (dCVR) is 0.000324093.
+	Iteration 76
+Iteration 76 change of RSS (dCVR) is 0.00030443.
+	Iteration 77
+Iteration 77 change of RSS (dCVR) is 0.00028596.
+	Iteration 78
+Iteration 78 change of RSS (dCVR) is 0.00026861.
+	Iteration 79
+Iteration 79 change of RSS (dCVR) is 0.000252313.
+	Iteration 80
+Iteration 80 change of RSS (dCVR) is 0.000237004.
+	Iteration 81
+Iteration 81 change of RSS (dCVR) is 0.000222623.
+	Iteration 82
+Iteration 82 change of RSS (dCVR) is 0.000209115.
+	Iteration 83
+Iteration 83 change of RSS (dCVR) is 0.000196426.
+	Iteration 84
+Iteration 84 change of RSS (dCVR) is 0.000184507.
+	Iteration 85
+Iteration 85 change of RSS (dCVR) is 0.000173311.
+	Iteration 86
+Iteration 86 change of RSS (dCVR) is 0.000162795.
+	Iteration 87
+Iteration 87 change of RSS (dCVR) is 0.000152916.
+	Iteration 88
+Iteration 88 change of RSS (dCVR) is 0.000143637.
+	Iteration 89
+Iteration 89 change of RSS (dCVR) is 0.000134921.
+	Iteration 90
+Iteration 90 change of RSS (dCVR) is 0.000126734.
+	Iteration 91
+Iteration 91 change of RSS (dCVR) is 0.000119043.
+	Iteration 92
+Iteration 92 change of RSS (dCVR) is 0.000111819.
+	Iteration 93
+Iteration 93 change of RSS (dCVR) is 0.000105034.
+	Iteration 94
+Iteration 94 change of RSS (dCVR) is 9.86601e-05.
+	Iteration 95
+Iteration 95 change of RSS (dCVR) is 9.2673e-05.
+	Iteration 96
+Iteration 96 change of RSS (dCVR) is 8.70493e-05.
+	Iteration 97
+Iteration 97 change of RSS (dCVR) is 8.17668e-05.
+	Iteration 98
+Iteration 98 change of RSS (dCVR) is 7.68049e-05.
+	Iteration 99
+Iteration 99 change of RSS (dCVR) is 7.21441e-05.
+	Iteration 100
+Iteration 100 change of RSS (dCVR) is 6.77661e-05.
+	Iteration 101
+Iteration 101 change of RSS (dCVR) is 6.36537e-05.
+	Iteration 102
+Iteration 102 change of RSS (dCVR) is 5.9791e-05.
+	Iteration 103
+Iteration 103 change of RSS (dCVR) is 5.61626e-05.
+	Iteration 104
+Iteration 104 change of RSS (dCVR) is 5.27544e-05.
+	Iteration 105
+Iteration 105 change of RSS (dCVR) is 4.9553e-05.
+	Iteration 106
+Iteration 106 change of RSS (dCVR) is 4.65459e-05.
+	Iteration 107
+Iteration 107 change of RSS (dCVR) is 4.37213e-05.
+	Iteration 108
+Iteration 108 change of RSS (dCVR) is 4.10681e-05.
+	Iteration 109
+Iteration 109 change of RSS (dCVR) is 3.85759e-05.
+	Iteration 110
+Iteration 110 change of RSS (dCVR) is 3.62349e-05.
+	Iteration 111
+Iteration 111 change of RSS (dCVR) is 3.4036e-05.
+	Iteration 112
+Iteration 112 change of RSS (dCVR) is 3.19705e-05.
+	Iteration 113
+Iteration 113 change of RSS (dCVR) is 3.00304e-05.
+	Iteration 114
+Iteration 114 change of RSS (dCVR) is 2.8208e-05.
+	Iteration 115
+Iteration 115 change of RSS (dCVR) is 2.64962e-05.
+	Iteration 116
+Iteration 116 change of RSS (dCVR) is 2.48883e-05.
+	Iteration 117
+Iteration 117 change of RSS (dCVR) is 2.3378e-05.
+	Iteration 118
+Iteration 118 change of RSS (dCVR) is 2.19593e-05.
+	Iteration 119
+Iteration 119 change of RSS (dCVR) is 2.06267e-05.
+	Iteration 120
+Iteration 120 change of RSS (dCVR) is 1.93749e-05.
+	Iteration 121
+Iteration 121 change of RSS (dCVR) is 1.81992e-05.
+	Iteration 122
+Iteration 122 change of RSS (dCVR) is 1.70948e-05.
+	Iteration 123
+Iteration 123 change of RSS (dCVR) is 1.60574e-05.
+	Iteration 124
+Iteration 124 change of RSS (dCVR) is 1.50829e-05.
+	Iteration 125
+Iteration 125 change of RSS (dCVR) is 1.41676e-05.
+	Iteration 126
+Iteration 126 change of RSS (dCVR) is 1.33078e-05.
+	Iteration 127
+Iteration 127 change of RSS (dCVR) is 1.25003e-05.
+	Iteration 128
+Iteration 128 change of RSS (dCVR) is 1.17417e-05.
+	Iteration 129
+Iteration 129 change of RSS (dCVR) is 1.10291e-05.
+	Iteration 130
+Iteration 130 change of RSS (dCVR) is 1.03599e-05.
+	Iteration 131
+Iteration 131 change of RSS (dCVR) is 9.73114e-06.
+intercept       bandwidth mgwr     30  GWmodel     30  ok | correlation of local coefficients 1.000
+rent            bandwidth mgwr    740  GWmodel    740  ok | correlation of local coefficients 1.000
+foreign10       bandwidth mgwr    740  GWmodel    740  ok | correlation of local coefficients 0.998
+age65_10        bandwidth mgwr    466  GWmodel    447  ok | correlation of local coefficients 0.999
+under18_10      bandwidth mgwr    740  GWmodel    740  ok | correlation of local coefficients 1.000
+elevation       bandwidth mgwr    494  GWmodel    518  ok | correlation of local coefficients 0.998
+ln_pop          bandwidth mgwr    740  GWmodel    740  ok | correlation of local coefficients 0.998
+tree_cover      bandwidth mgwr    457  GWmodel    462  ok | correlation of local coefficients 1.000
+imperviousness  bandwidth mgwr    167  GWmodel    157  ok | correlation of local coefficients 1.000
+RESULT: PASSED
+```
+### verify_variants.py: PASS
+```
+S12_valid95: 20 pixels, max |diff| 0.000000, observation counts differing 0
+S13_city_median: 20 pixels, max |diff| 0.000000, observation counts differing 0
+S14_yearly_mean: 20 pixels, max |diff| 0.000000, observation counts differing 0
+S15_standardised: 20 pixels, max |diff| 0.000000, observation counts differing 0
+S16_stqa3K: 20 pixels, max |diff| 0.000000, observation counts differing 0
+S4_all_summer: 20 pixels, max |diff| 0.000000, observation counts differing 0
+S5_absolute: 20 pixels, max |diff| 0.000004, observation counts differing 0
+S6_landsat8: 20 pixels, max |diff| 0.000001, observation counts differing 0
+S6b_path196: 20 pixels, max |diff| 0.000002, observation counts differing 0
+S6b_path197: 20 pixels, max |diff| 0.000000, observation counts differing 0
+RESULT: PASSED
+```
+Manual checks:
+- Expert panel (A7): 7 rounds, 44 findings (H1 to H44), all accepted; all three reviewers (spatial econometrician, MGWR specialist, quantitative urban planner) reported "No further problems" in the same round (round 7). Evidence: 00_protocol/expert_panel_log.md, Gate 8 rounds 1 to 7.
+- Main coefficients recomputed in R within the tolerance fixed before the run: verify_models.R (OLS 8.1e-13; SEM Het and Hom for Models A and B rebuilt by hand, betas within 0.00006 SE, SEs identical, step-2b lambda equal to spreg; bootstrap 4.3e-14) and verify_mgwr.R (GWmodel: all 9 bandwidths within 10%, local coefficient correlations 0.998 to 1.000). The guide names spatialreg; the SEM check is the by-hand GMM instead (D14: sphet estimates the betas by another estimator; change made after a failed run and logged as such).
+- Residual diagnostics saved: OLS R2 0.29, Moran's I of the residuals 0.664 (z 76.2), robust LM error 789.1 and lag 449.6 (results.json step8a.ols.A); residuals of Model A (step8_residuals_A.csv, 12,609 rows); residual correlogram by distance band (step8_residual_correlogram.csv: 0.664 at 0 to 142 m, 0.412 at 142 to 300 m, still positive at 2 to 3 km); MGWR residual Moran's I -0.058 (p 0.013).
+- Rules of Step 8: spatial lag (S8) read through impacts, not the coefficient (direct and indirect columns in step8b_sensitivity.csv, e.g. foreign direct 0.134, indirect 0.055, total 0.189); MGWR bandwidths and intervals reported (results.json step8_mgwr); every sensitivity result reported, including those that disagree (step8b_sensitivity.csv 24 analyses, 116 rows; step8c_sensitivity.csv 10 analyses, 60 rows; S3 rent "contradicted" and the S10 city results kept).
+- Deviations D9 to D16 written in 00_protocol/deviations.md; non-preregistered tables labelled exploratory in results.json; 11 Step 9 writing obligations stored (step8_reporting.step9_writing_obligations).
+- LEARNING_NOTEBOOK.md: Step 8 chapter written (all 12 sections, worked examples with the real numbers, rechecked against results.json: P10/P90, hull, bootstrap p, Holm, delta*, exposure gap 37.80% vs 22.59%).
+AUTOMATIC CHECKS: ALL PASSED
+RESULT: PASSED

@@ -1,0 +1,14 @@
+step,slope_per_10_points,implied_resident_gap_C
+"raw slope, unweighted",0.40161851104968965,0.6109708655810003
+"raw slope, population-weighted (identity: equals the observed pooled gap)",0.3268654160338786,0.4972510994096195
+"city dummies only, unweighted",0.39522126877847763,0.6012389221066863
+"city dummies only, population-weighted",0.3258030108375818,0.4956348924756246
+"city + elevation only, unweighted",0.35257472061905165,0.5363619362951867
+"city + log population only, unweighted",0.2142609666603587,0.325949139940178
+plus elevation and log population (single-variable OLS),0.17216791183752467,0.2619141678647162
+"same, population-weighted",0.1512536192636006,0.23009784693989777
+single-variable SEM (step-1 lambda),0.09935810265280616,0.15115066738734123
+"full Model A OLS (adds rent, 65+, under 18)",0.2157638332096575,0.3282354082550471
+"full Model A SEM, step-1 lambda (reported)",0.10595688448244862,0.1611892072835713
+"full Model A SEM, step-2b lambda (exploratory)",0.07757828939735627,0.11801765436437228
+"full Model A SEM, iterated lambda (exploratory)",0.06826572820052919,0.10385071878082412

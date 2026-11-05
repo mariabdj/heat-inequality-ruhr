@@ -220,3 +220,98 @@ SS: "No further problems" (islands key, +1 in the folded pseudo p, 9,999-permuta
 RS: "No further problems" (G48 fixed; G47 to be recorded in the Gate 7 entry). SS: "No further problems" (Step 7 outputs unchanged since the round 4 check). EJ: "No further problems".
 
 **Panel result: all three reviewers report no remaining problem in the same round (rule A7).** 48 findings over 5 rounds at Gate 7; all accepted (G14 in a modified form: the link with industry was not claimed).
+
+# Gate 8 panel (Step 8: models, sensitivity analyses, MGWR)
+
+## Gate 8, round 1 (5 November 2026)
+
+Reviewers: spatial econometrician (SE), MGWR specialist (MG), quantitative urban planner (UP). Read-only; each recomputed numbers with own code (SE reproduced spreg's SEs by hand and sphet's betas by a different estimator; UP recomputed the Holm values, effects and the H3 rules).
+
+| # | From | Severity | Finding (short) | Action |
+|---|---|---|---|---|
+| H1 | SE | MAJOR | SEM gate checks betas only; SEs (which drive every p and interval) and the step-2b lambda unchecked | Accepted. SE check (White sandwich on the filtered X, as spreg) and step-2b lambda added to verify_models.R; tolerances logged before the run |
+| H2 | SE | MAJOR | Gate change legitimate; cause of the sphet difference: sphet's error-only path uses the unfiltered X as instruments (exactly identified IV), not OLS on filtered data; the log's "0.6652" is the no-island subsample value (full sample 0.6615) | Accepted. Cause and correction written in the log; gate kept labelled as a post-failure change |
+| H3 | SE, UP | MAJOR | OLS-SEM disagreement must be reported fully: misspecification table, lambda instability (step 1, step 2, iterated) and the betas at each, S18 beta + theta; H1 and RQ2 described as estimator-dependent | Accepted. 05_analysis/step8_reporting.py writes these tables (labelled exploratory where not preregistered); formal spatial Hausman test not added (see log) |
+| H4 | SE, UP | MAJOR | H3 rests on OLS, which the data reject; under the SEM, delta* is negative for both variables; rent crosses zero (R = 136%) | Accepted. Preregistered verdicts kept; reported next to them: delta* under the SEM with its own sign, the zero crossing, "holds for the OLS estimand only" |
+| H5 | UP | MAJOR | +0.48 C needs context: unadjusted single-variable effects (Q22 negligibility rule applies to them too), group-weighted (D8) numbers, within vs across cities | Accepted. Single-variable P10-P90 effects with the Q22 rule; a residents-vs-cells table |
+| H6 | UP | MAJOR | Model A sample not representative (24.5% of cells, 44% of residents, hotter and more sealed) | Accepted. Already in step6_sample_comparison.csv and the notebook; to be stated in every policy sentence and the abstract (Step 9) |
+| H7 | UP, SE | MAJOR/MINOR | D9 overstates the protocol (S3 is a change of estimator, not the GM-failure fallback); need an unweighted OLS + bootstrap reference row | Accepted. D9 reworded; reference row added |
+| H8 | UP | MAJOR | Deviations incomplete (ECOSTRESS, vacancy moved, S13 rule, S18 WX, S11 water fix, P10/P90 fixed for S7, SEM check change, MGWR) | Accepted. D10 to D16 |
+| H9 | MG | MAJOR | Intercept bandwidth 45 is at mgwr's built-in lower search bound (40 + 2 x variables = 42; checked in sel_bw.py), so 30 was unreachable; log explanation wrong | Accepted. Refit with a lower search floor of 20 neighbours (deviation), mgwr default output kept as a footnote; log corrected; R check rerun under a new heading |
+| H10 | MG | MAJOR | Intercept bandwidth interval [45, 48] reflects the search path; upper ends at 741 cut by the limit | Accepted. Intervals from the refit, with the caveat; "to the limit" wording |
+| H11 | MG | MAJOR | 741 is not "global" (bisquare weight still reaches 0 at the 741st neighbour) | Accepted. "at the upper search limit (regional to global scale)", with the global OLS coefficient beside it |
+| H12 | MG | MINOR | Missing MGWR reporting: ENP and critical t per covariate, OLS AICc and R2 on the same cells, iterations and convergence, Moran's I of residuals; intercept interpretation; maps only with filtered estimates | Accepted (maps at Step 9) |
+| H13 | SE | MINOR | Residual correlogram still positive at 2 to 3 km: bootstrap intervals probably too narrow | Accepted. Range reported as beyond 3 km; limitation for H3 |
+| H14 | SE | MINOR | Fallback point estimate when both GM fits fail differs between step8_primary.py (bootstrap median) and step8_lib.py (OLS) | Accepted. step8_lib.py aligned with the primary script (never triggered) |
+| H15 | SE | MINOR | S18 judged on beta only; add beta + theta (delta method), descriptive | Accepted |
+| H16 | SE | MINOR | Islands 13.6% (1,712 in 3,029 components): say so next to S20 | Accepted |
+| H17 | UP | MINOR | Framing: surface temperature around midday on clear hot days; Q25 rent x tree: report the Het p (0.148); vacancy fragile (94% zeros); S10: same sign in all 11 cities | Accepted, for Step 9 writing. UP's statement that S10 is significant "only in Dortmund" is not correct: after Holm, foreign share is supported in Dortmund, Essen and Hagen (step8b_sensitivity.csv) |
+
+## Gate 8, round 2 (5 November 2026)
+
+SE confirmed the R reconstruction step by step and the round 1 reporting numbers. MG: no blocker or major. UP: two majors.
+
+| # | From | Severity | Finding (short) | Action |
+|---|---|---|---|---|
+| H18 | UP, SE | MAJOR | The adjusted foreign effect depends on the lambda step: about 0.48 C (step 1), 0.35 (step 2b), 0.31 (iterated); 0.31 is outside the reported interval [0.38, 1.17], which does not capture the uncertainty about lambda | Accepted. P10-P90 effect columns at each lambda added to the misspecification table (exploratory); the range is a Step 9 writing obligation (results.json "step9_writing_obligations") |
+| H19 | UP, SE | MAJOR | Residents-vs-cells table mixes samples (Model A, single-variable sample, all rule-4 cells), so adjustment and change of sample are confounded; P10/P90 source not stated; SEM effects are spatially filtered local contrasts | Accepted. Same-sample rows on the Model A cells (single-variable SEM and OLS, resident means pooled and within city) and notes added |
+| H20 | UP, SE | MINOR | step8_h3.csv "delta_star_sem" uses the OLS sign, next to "delta_star_sem_own_sign"; rent's SEM sign is arbitrary (its interval includes 0) | Accepted. Note in the reporting output (the verified primary script is not edited) |
+| H21 | UP | MINOR | S18 rent beta + theta (+0.11) and the S7 1 km effects (rent, 65+, under 18) run against H1 and expectations | Accepted. Step 9 writing obligation |
+| H22 | SE | MINOR | Stale comment in verify_models.R (says only betas are checked) | Accepted. Comment updated (no change to code or tolerances) |
+| H23 | SE | MINOR | Wording: the misspecification signs are not independent; "estimand is estimator-dependent", not "data reject OLS"; the OLS vs SEM interval comparison is descriptive | Accepted. Note in the misspecification table; Step 9 obligation |
+| H24 | MG | MINOR | Dead first aicc_ols line in step8_mgwr.py | Accepted. Removed |
+| H25 | MG | MINOR | Report the final score of change with tol and max_iter, not the last difference | Accepted. final_SOC, tol_multi, max_iter_multi; MGWR rerun |
+| H26 | MG | MINOR | "(n - 1)" wording; the upper bound is n = 742 | Accepted. Wording corrected |
+| H27 | MG | MINOR | Residual Moran's I -0.058 needs a reading: one-sided permutation p, islands excluded, likely slight overfit of the very local intercept | Accepted. Note added; intercept surface read as descriptive only |
+
+## Gate 8, round 3 (5 November 2026)
+
+All round 2 fixes confirmed. SE and UP each recomputed the P10-P90 effects at the three lambda steps and the four same-sample rows with their own code (own weights; SE: own GMM; UP: statsmodels); all match to 4 decimals. MG confirmed H24 to H27 against the mgwr source. New findings (the reviewers' own numbers are renumbered here):
+
+| # | From | Severity | Finding (short) | Action |
+|---|---|---|---|---|
+| H28 | MG | MINOR | Moran note says islands are excluded; esda keeps them in n with a zero lag | Accepted. Wording corrected in step8_mgwr.py and in the results.json note (text only, no refit: I and p unchanged) |
+| H29 | MG | MINOR | Log gives two convergence numbers (last change 1.2e-6; final SOC 9.01e-6) without a link | Accepted. Pointer in the round 3 check record (old record not edited) |
+| H30 | SE | MAJOR | Same-sample rows overturn the round 1 reading: on the Model A cells the single-variable foreign effect is 0.45, close to the adjusted 0.48; the 0.14 vs 0.48 gap came from the change of sample, and the Q22 "negligible" reading holds only on all usable cells; nothing recorded this | Accepted. Note and Step 9 obligation |
+| H31 | UP | MAJOR | Cell contrasts (45-point P10-P90 span) and resident differences (about 15-point exposure gap) are different quantities; 0.478 vs 0.482 is a coincidence of scale | Accepted. Note, implied-resident-gap rows (slope x exposure gap, exploratory), Step 9 obligation |
+| H32 | SE, UP | MINOR | Note says lambda 0.7 to 0.8; the betas are at the step-1 lambda (0.66 and 0.68); "local contrasts" too strong | Accepted. Reworded |
+| H33 | SE | MINOR | Interval definitions differ by row, unlabelled; same-sample SEM row Het only | Accepted. ci_definition per row; same-sample SEM row now uses the Het and Hom hull like row 2 |
+| H34 | UP | MINOR | "Unadjusted" hides adjustment for elevation, log population and city | Accepted. Labels and Step 9 obligation |
+| H35 | UP | MINOR | "joint specification is rejected" implies a formal test that was not run | Accepted. Reworded ("no formal test was run") |
+
+## Gate 8, round 4 (5 November 2026)
+
+MG: "No further problems" (Moran note identical in script and results.json; I recomputed without refit: -0.058148, p 0.013; dropping the 5 islands gives -0.057866). SE confirmed H30, H32, H33, H35 and recomputed the same-sample hull [0.3556, 0.5466]. UP confirmed H31, H32, H34, H35 and recomputed the exposure gap (15.2127) and the implied gaps.
+
+| # | From | Severity | Finding (short) | Action |
+|---|---|---|---|---|
+| H36 | UP | MAJOR | Implied gaps (0.15 to 0.26) sit beside the observed resident gap (0.50) with no reading; the difference is an exact decomposition (population-weighted raw slope x exposure gap = observed gap); elevation and log population remove about half; density may be a pathway, not only a confounder | Accepted. Decomposition table computed in step8_reporting.py (with an identity check), note, two Step 9 obligations (observed gap as the descriptive disparity; density as possible mediator in the limitations) |
+| H37 | SE, UP | MINOR | "adjustment barely changes it (0.45 to 0.48)" holds under the SEM only; OLS 0.78 to 0.97; the main adjusters are in both models | Accepted. Obligation reworded |
+| H38 | SE | MINOR | Implied gap rows: adjusted OLS row missing; SEM implied gap also depends on the lambda step | Accepted. Both in the decomposition table |
+| H39 | UP | MINOR | "unadjusted" still in two code comments (step8_reporting.py docstring; step8_primary.py line 222) | Accepted. Comment-only edits (step8_primary.py code unchanged) |
+
+## Gate 8, round 5 (5 November 2026)
+
+MG: "No further problems" (step8_mgwr keys intact after the reporting rerun; values unchanged). SE and UP confirmed H36 to H39 and recomputed the decomposition rows (all match to at least 8 decimals; identity exact). SE confirmed by diff that step8_primary.py changed only in the line 222 comment (and noted that the edit had turned LF into CRLF line endings).
+
+| # | From | Severity | Finding (short) | Action |
+|---|---|---|---|---|
+| H40 | SE, UP | MINOR | "Weighting and city change it little" is wrong for weighting (0.611 to 0.497, -19%) | Accepted. The reading is now built from the computed rows (no typed numbers) |
+| H41 | SE | MINOR | "Spatial filtering removes about 40%" holds only for the single-variable model; full Model A 51% to 68% depending on the lambda step | Accepted. Range given, computed |
+| H42 | UP | MINOR | Elevation and log population added in one step; almost all of the drop comes from log population | Accepted. Rows "city + elevation only" and "city + log population only" (and city only, weighted) added |
+| - | SE | housekeeping | CRLF line endings introduced by the patch scripts | step8_primary.py, step8_reporting.py, step8_mgwr.py and verify_models.R set back to LF (content unchanged) |
+
+## Gate 8, round 6 (5 November 2026)
+
+MG: "No further problems". SE and UP confirmed H40 to H42 and recomputed every number of the reading note from the rows (UP: all OLS rows to 10 decimals). SE compared step8_primary.py, verify_models.R and step8_mgwr.py with earlier session copies: only the logged edits differ.
+
+| # | From | Severity | Finding (short) | Action |
+|---|---|---|---|---|
+| H43 | UP, SE | MINOR | "almost all through log population" overstates: log population about 81% of the drop, elevation about 19% | Accepted. Share computed in code and printed ("about N% of the drop whichever is added first") |
+| H44 | SE | MINOR | Observed resident gap 0.50 C named without its sample; 0.88 C (all usable cells) is in the same block | Accepted. "on the Model A cells", with the all-cells value printed from the computed row |
+
+## Gate 8, round 7 (5 November 2026)
+
+MG: "No further problems" (step8_mgwr values unchanged; step8_mgwr.py SHA-256 ba54215bc05e686a070b10393866dee6bf62bd7d08897c7ea1ac896c7edf3bdd recorded). UP: "No further problems" (H43: log population 81.1% first, 80.9% second; H44: 0.88 C row is the 34,940-cell resident sample, consistent with every "all usable cells" mention). SE: "No further problems" (every number in the reading note checked against the rows; round 5 and 6 run outputs byte-identical; LF; no NaN tokens).
+
+**Panel result: all three reviewers report no remaining problem in the same round (rule A7).** 44 findings over 7 rounds at Gate 8 (H1 to H44); all accepted. One reviewer statement was not correct and is recorded (H17, S10 cities).

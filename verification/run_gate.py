@@ -19,7 +19,8 @@ GATES = {
     4: [[PY, V / "verify_data_register.py"], [PY, V / "verify_lst_pixels.py"]],
     5: [[PY, V / "verify_data_register.py"], [PY, V / "verify_covariates.py"]],
     6: [[RS, V / "verify_zonal.R"], [PY, V / "verify_zonal.py"]],
-    7: [[RS, V / "verify_deciles.R"], [PY, V / "verify_step7.py"]], 8: [],
+    7: [[RS, V / "verify_deciles.R"], [PY, V / "verify_step7.py"]],
+    8: [[PY, V / "verify_data_register.py"], [RS, V / "verify_models.R"], [RS, V / "verify_mgwr.R"], [PY, V / "verify_variants.py"]],
     9: [[PY, V / "verify_public_release.py"]],
 }
 

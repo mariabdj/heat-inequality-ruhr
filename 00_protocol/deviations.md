@@ -53,3 +53,40 @@ Every change to the registered plan is written here, with the date, what changed
 - **Addition (exploratory, not preregistered, descriptive only):** for the foreign, 65+ and under-18 shares, the mean LST anomaly of the estimated group members (weight share / 100 × population) against the rest of the residents (weight (1 − share / 100) × population), over each variable's usable cells, pooled across cities, not adjusted. Bracketed cells are left out and dash cells count as 0 members.
 - **Why:** population-weighted deciles describe cells, not the heat the average member of a group lives in; the expert panel (Gate 7 rounds 1 and 2) asked for the group-weighted view, labelled exploratory.
 - **Result seen before the addition?** Yes: decided after the decile tables had been seen. It does not replace any registered result and no hypothesis is tested with it.
+
+## D9. 2026-11-05: estimator of S3 (population-weighted models)
+- **Registered text (Q24):** "S3: population-weighted models", with the Q19 estimator, fallback and inference rule unless stated otherwise.
+- **Problem:** spreg 1.9.1 (the preregistered package) offers no weights for the GMM spatial error estimators (GM_Error_Het, GM_Error_Hom), so the two GM p-values of the inference rule cannot be computed for a weighted model.
+- **Change:** S3 is fitted by weighted least squares (weights = cell population), with the OLS block bootstrap of Q19 (1 km blocks by city, B = 999) giving the interval and the p-value. This is a change of estimator (no spatial term), not the Q19 fallback, which covers GM fits that raise an error. To separate the effect of weighting from the change of estimator, an unweighted OLS + bootstrap reference row is reported next to S3.
+- **Result seen before the change?** No. Decided and written before S3 was run (the Step 8a primary results had been seen).
+- **Effect:** S3 only.
+
+## D10. 2026-11-05: S13 rule for cities with few valid pixels (Step 8c)
+- **Registered text (Q24):** "S13: anomaly referenced to the median of each city (computed on the core reference domain)". No rule for a city with few valid pixels in a scene.
+- **Rule added:** if a city has fewer than 1,000 valid core reference pixels in a scene, that scene gives no anomaly for that city's pixels. Written before S13 was built; never triggered (0 city-scene pairs).
+
+## D11. 2026-11-05: S18 bootstrap design (Step 8b)
+- **Registered text:** S18 with the Q19 inference rule; the bootstrap part is not specified for lagged regressors.
+- **Choice:** the lagged columns WX are computed once on the full sample and kept fixed in every bootstrap replicate (resampled blocks are duplicated, so W cannot be rebuilt). Written before S18 was run.
+
+## D12. 2026-11-05: S11 needed water shares not computed at Step 2 (Step 8b)
+- **What happened:** Step 2 computed the water share (rule 3) only for cells with at least 10 inhabitants, so a first S11 run (minimum 3) silently gave the primary sample. The same Earth Engine calculation was then applied to the 9,739 cells with 1 to 9 inhabitants (01_data/step8_water_small_cells.py). The first S11 result was seen and is not used; the method of S11 is unchanged.
+
+## D13. 2026-11-05: effects of S7 on the 1 km grid
+- **Registered text (Q20):** P10 and P90 from the pooled analysis sample, treated as fixed. Applied to S7 too, with the 100 m values, as written.
+- **Note added:** 1 km values are averages, so their spread is smaller than at 100 m; the S7 effects computed with the 100 m P10 to P90 are therefore larger than a 1 km contrast would be. The 1 km P10 to P90 effects are reported next to them as a descriptive figure.
+
+## D14. 2026-11-05: R check of the spatial error model changed after it failed (Step 8a)
+- **Registered/decided:** recomputation with sphet 2.1.1, tolerance fixed before the run. It failed (betas up to 6.4 SE apart).
+- **Change:** the gate compares spreg with the published two-step procedure written out by hand in R (Arraiz et al. 2010; Drukker et al. 2013), same tolerance; sphet's difference was traced to a different estimator (instrumental variables with the unfiltered X as instruments). Logged as a post-failure change; standard errors and the step-2b lambda are checked too (Gate 8 round 1).
+
+## D15. 2026-11-05: MGWR bandwidth search floor
+- **Registered text (Q19):** golden-section search with AICc; the lower search bound is not mentioned.
+- **Problem:** mgwr 2.2.1 starts each covariate's search at 42 neighbours by default, so the AICc optimum for the intercept (about 30, found by GWmodel; AICc 741.9 vs 748.2) could not be reached.
+- **Change:** the search floor is set to 20 neighbours for every covariate so that the AICc optimum can be reached. The default output (intercept bandwidth 45, AICc 748.2) is kept as a footnote. MGWR is descriptive; no hypothesis depends on it.
+- **Result seen before the change?** Yes (the default output and the GWmodel comparison).
+
+## D16. 2026-11-05: exploratory analyses of Q25 (Steps 8b and 8c)
+- **Vacancy rate:** moved to Step 8c because it needs a new census file (Leerstandsquote_in_Gitterzellen.zip, registered); exploratory, no hypothesis.
+- **ECOSTRESS:** not done; it needs a NASA Earthdata account, which only Maria can create. Recorded as not done.
+- **Rent x tree cover:** done in Step 8b, exploratory; the primary (heteroskedastic) p-value is the one reported.
