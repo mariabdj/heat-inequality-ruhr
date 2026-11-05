@@ -41,12 +41,15 @@ C = json.loads((OUT / "contact.json").read_text(encoding="utf-8")) if (OUT / "co
 EMAIL, POSTAL = C.get("email", "[e-mail]"), C.get("postal", "[postal address], Algiers, Algeria")
 
 # preprint: same text, with the cover page EarthArXiv asks for
-cover = ("**This is a non-peer reviewed preprint submitted to EarthArXiv.** The manuscript has been submitted to "
+cover = ("**This is a non-peer reviewed preprint submitted to EarthArXiv.** The manuscript is being submitted to "
          "*Urban Climate* for peer review. Later versions may differ; if it is accepted, a link to the published article "
          "will be added.\n\nAuthor: Maria Boudjelal, independent researcher, Algiers, Algeria. "
          "ORCID: https://orcid.org/0009-0002-6434-784X. Contact: " + EMAIL + "\n\n{{< pagebreak >}}\n\n")
 pre_hdr = hdr.replace("  docx: default\n", "")
-(OUT / f"{name}_EarthArXiv.qmd").write_text(pre_hdr + cover + t, encoding="utf-8")
+supp = "".join("\n\n{{< pagebreak >}}\n\n" + (MS / f).read_text(encoding="utf-8").replace("\n# ", "\n## ").replace("# ", "## ", 1)
+               for f in ("supplementary_table_S0.md", "supplementary_table_S1.md"))   # one PDF only (EarthArXiv rule)
+small = "\n\n```{=typst}\n#set text(size: 7.5pt)\n```\n"   # wide supplementary tables
+(OUT / f"{name}_EarthArXiv.qmd").write_text(pre_hdr + cover + t + small + supp, encoding="utf-8")
 
 # highlights: 3 to 5 bullets, at most 85 characters each (journal rule)
 N = {k: v["printed"] for k, v in json.loads((MS / "numbers_used.json").read_text(encoding="utf-8")).items()}
